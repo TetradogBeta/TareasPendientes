@@ -30,10 +30,12 @@ namespace Tareas_Pendientes_v2
         private void HerenciasLista_Click(object sender, RoutedEventArgs e)
         {
             //abre una ventana para poder gestinar las herencias que posee la lista actual
+            //Activa el temporizador para el autoGuardado
         }
         private void CategoriasLista_Click(object sender, RoutedEventArgs e)
         {
             //abre una ventana para poder gestinar las categorias en las que se encuentra la lista actual
+            //Activa el temporizador para el autoGuardado
         }
 
         private void LimpiarCamposLista_Click(object sender, RoutedEventArgs e)
@@ -41,19 +43,25 @@ namespace Tareas_Pendientes_v2
             //limpia los campos
             txboxNombreLista.Text = "";
             stkTareas.Children.Clear();
+            //Activa el temporizador para el autoGuardado
         }
         private void AñadirLista_Click(object sender, RoutedEventArgs e)
         {
             //añade la lista creada al monton de listas (hasta entonces era temporal, y avisa que se van a perder los datos si se va a cambiar de lista o cerrar)
+            //Activa el temporizador para el autoGuardado
         }
         private void EliminarLista_Click(object sender, RoutedEventArgs e)
         {
             //eliminia la lista, si tiene "descendencia" preguntara si esta seguro y si lo esta se quita la herencia de todas sus descendientes.
+            //limpio los campos
+            LimpiarCamposLista_Click(null,null);
+            //Activa el temporizador para el autoGuardado
         }
 
         private void CategoriasManager_Click(object sender, RoutedEventArgs e)
         {
             //se abre una ventana para añadir, quitar(si tiene elementos se les quita esa categoria), si es la actual la que se quita o se modifica al cerrar la ventana se actualiza
+            //Activa el temporizador para el autoGuardado
         }
 
         private void BuscarLista_Click(object sender, RoutedEventArgs e)
@@ -64,11 +72,31 @@ namespace Tareas_Pendientes_v2
         private void EliminarElementoLista_Click(object sender, RoutedEventArgs e)
         {
             //abre una ventana para editar el contenido de la lista, los elementos de la herencia se ocultaran al "eliminarse de la lista"
+            //Activa el temporizador para el autoGuardado
         }
         private void AñadirElementoLista_Click(object sender, RoutedEventArgs e)
         {
             //añade al final un elemento
             stkTareas.Children.Add(new VisorTarea());
+            //Activa el temporizador para el autoGuardado
+        }
+
+        private void cmbCategorias_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //cambia los elementos de la lista por los que toquen.
+        }
+
+        private void lstListasPendientes_Selected(object sender, RoutedEventArgs e)
+        {
+            //cuando seleccionan una lista se visualiza a no ser que haya una lista temporal luego pregunto antes de hacer nada
+        }
+
+        private void txboxNombreLista_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //se a modificado el nombre de la lista.
+            //activa el temporizador para el auto guardado
+            //cambia de la lista
+            lstListasPendientes.Items.Refresh();
         }
     }
 }

@@ -8,10 +8,11 @@
         Title="Tareas Pendientes" Height="288.527" Width="530.949" ResizeMode="CanMinimize">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="30*"/>
-            <ColumnDefinition Width="70*"/>
+            <ColumnDefinition Width="59*"/>
+            <ColumnDefinition Width="98*"/>
+            <ColumnDefinition Width="368*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
+        <Grid Grid.Column="0" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="7*"/>
                 <RowDefinition Height="7*"/>
@@ -36,10 +37,10 @@
                 </MenuItem>
 
             </Menu>
-            <ComboBox Grid.Row="1" x:Name="cmbCategorias"/>
-            <ListBox Grid.Row="2" x:Name="lstListasPendientes"/>
+            <ComboBox Grid.Row="1" x:Name="cmbCategorias" SelectionChanged="cmbCategorias_SelectionChanged"/>
+            <ListBox Grid.Row="2" x:Name="lstListasPendientes" SelectionChanged="lstListasPendientes_Selected"/>
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="13*"/>
                 <RowDefinition Height="147*"/>
@@ -52,7 +53,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Nombre Lista" Grid.ColumnSpan="2"/>
-                    <TextBox Grid.Column="2" x:Name="txboxNombreLista" Text="Test" TextAlignment="Left" />
+                    <TextBox Grid.Column="2" x:Name="txboxNombreLista" Text="" TextAlignment="Left" TextChanged="txboxNombreLista_TextChanged"/>
                 </Grid>
             </Grid>
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
