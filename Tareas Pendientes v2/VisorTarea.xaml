@@ -13,7 +13,7 @@
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
         <TextBox Grid.Column="0" x:Name="txtBxDescripcionTarea" Text="Descripcion"/>
-        <TextBlock Grid.Column="1" x:Name="txtBlFechaHecho" Text="fecha hecho"/>
+        <TextBlock Grid.Column="1" x:Name="txtBlFechaHecho" Text="fecha hecho" TextAlignment="Right"/>
         <CheckBox Grid.Column="2" x:Name="ckHecho" Checked="ckHecho_Checked" Unchecked="ckHecho_Unchecked"/>
     </Grid>
 </UserControl>

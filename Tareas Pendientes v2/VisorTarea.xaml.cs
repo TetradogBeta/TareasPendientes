@@ -27,7 +27,7 @@ namespace Tareas_Pendientes_v2
 
         private void ckHecho_Checked(object sender, RoutedEventArgs e)
         {
-            txtBlFechaHecho.Text = DateTime.Now.ToShortTimeString();
+            txtBlFechaHecho.Text = DateTime.Now.ToString();
         }
 
         private void ckHecho_Unchecked(object sender, RoutedEventArgs e)

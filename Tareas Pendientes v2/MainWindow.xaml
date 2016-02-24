@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tareas_Pendientes_v2"
         mc:Ignorable="d"
-        Title="Tareas Pendientes" Height="350" Width="525">
+        Title="Tareas Pendientes" Height="288.527" Width="530.949" ResizeMode="CanMinimize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="30*"/>
@@ -17,25 +17,22 @@
                 <RowDefinition Height="7*"/>
                 <RowDefinition Height="93*"/>
             </Grid.RowDefinitions>
-            
+
             <Menu>
                 <MenuItem Header="Listas" Height="22" Width="73" >
                     <MenuItem Header="Lista visualizada">
-                        <MenuItem Header="Herencia"/>
-                        <MenuItem Header="Categorias"/>
-                        <MenuItem Header="Limpiar Campos"/>
-                        <MenuItem Header="Añadir"/>
-                        <MenuItem Header="Eliminar"/>
+                        <MenuItem Header="Herencia" Click="HerenciasLista_Click"/>
+                        <MenuItem Header="Categorias" Click="CategoriasLista_Click"/>
+                        <MenuItem Header="Limpiar Campos" Click="LimpiarCamposLista_Click"/>
+                        <MenuItem Header="Añadir" Click="AñadirLista_Click"/>
+                        <MenuItem Header="Eliminar" Click="EliminarLista_Click"/>
                     </MenuItem>
-                    <MenuItem Header="Categorias">
-                        <MenuItem Header="Añadir"/>
-                        <MenuItem Header="Eliminar"/>
-                    </MenuItem>
-                    <MenuItem Header="Buscar Lista"/>
+                    <MenuItem Header="Categorias" Click="CategoriasManager_Click"/>
+                    <MenuItem Header="Buscar Lista" Click="BuscarLista_Click"/>
                 </MenuItem>
                 <MenuItem Header="Elementos" Height="22" Width="73">
-                    <MenuItem Header="Añadir"/>
-                    <MenuItem Header="Eliminar"/>
+                    <MenuItem Header="Añadir" Click="AñadirElementoLista_Click"/>
+                    <MenuItem Header="Eliminar" Click="EliminarElementoLista_Click"/>
                 </MenuItem>
 
             </Menu>
@@ -55,7 +52,6 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Nombre Lista" Grid.ColumnSpan="2"/>
-
                     <TextBox Grid.Column="2" x:Name="txboxNombreLista" Text="Test" TextAlignment="Left" />
                 </Grid>
             </Grid>

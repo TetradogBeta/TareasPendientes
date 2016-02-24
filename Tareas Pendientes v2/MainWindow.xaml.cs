@@ -20,29 +20,55 @@ namespace Tareas_Pendientes_v2
     /// </summary>
     public partial class MainWindow : Window
     {
+        //cada x tiempo se guarda si hay cambios :) asi si hay algun problema cuando cierra no se perdera mucho :)//guarda las listas temporales 
+        //al abrir mira si hay un autoGuardado si lo hay mira la fecha de editado y si es mas reciente que la del guardadoNormal pregunta si quiere carga esa si dice que si la pone sino la elimina.
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void btnAñadir_Click(object sender, RoutedEventArgs e)
+        private void HerenciasLista_Click(object sender, RoutedEventArgs e)
         {
-
+            //abre una ventana para poder gestinar las herencias que posee la lista actual
+        }
+        private void CategoriasLista_Click(object sender, RoutedEventArgs e)
+        {
+            //abre una ventana para poder gestinar las categorias en las que se encuentra la lista actual
         }
 
-        private void btnLimpiar_Click(object sender, RoutedEventArgs e)
+        private void LimpiarCamposLista_Click(object sender, RoutedEventArgs e)
         {
-
+            //limpia los campos
+            txboxNombreLista.Text = "";
+            stkTareas.Children.Clear();
+        }
+        private void AñadirLista_Click(object sender, RoutedEventArgs e)
+        {
+            //añade la lista creada al monton de listas (hasta entonces era temporal, y avisa que se van a perder los datos si se va a cambiar de lista o cerrar)
+        }
+        private void EliminarLista_Click(object sender, RoutedEventArgs e)
+        {
+            //eliminia la lista, si tiene "descendencia" preguntara si esta seguro y si lo esta se quita la herencia de todas sus descendientes.
         }
 
-        private void btnEliminar_Click(object sender, RoutedEventArgs e)
+        private void CategoriasManager_Click(object sender, RoutedEventArgs e)
         {
-
+            //se abre una ventana para añadir, quitar(si tiene elementos se les quita esa categoria), si es la actual la que se quita o se modifica al cerrar la ventana se actualiza
         }
 
-        private void List_Click(object sender, RoutedEventArgs e)
+        private void BuscarLista_Click(object sender, RoutedEventArgs e)
         {
-
+            //sale una ventana con un comboBox con todas las listas, y otro combobox con todas las categorias(solo sirve para filtrar las que se ven)
+            //tiene un boton que pone View y si lo pulsas se pone como lista actual.¿pongo la categoria que es si no esta en la actual?
+        }
+        private void EliminarElementoLista_Click(object sender, RoutedEventArgs e)
+        {
+            //abre una ventana para editar el contenido de la lista, los elementos de la herencia se ocultaran al "eliminarse de la lista"
+        }
+        private void AñadirElementoLista_Click(object sender, RoutedEventArgs e)
+        {
+            //añade al final un elemento
+            stkTareas.Children.Add(new VisorTarea());
         }
     }
 }
