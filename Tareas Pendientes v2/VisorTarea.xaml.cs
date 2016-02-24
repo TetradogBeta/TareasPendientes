@@ -16,33 +16,23 @@ using System.Windows.Shapes;
 namespace Tareas_Pendientes_v2
 {
     /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
+    /// Lógica de interacción para VisorTarea.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class VisorTarea : UserControl
     {
-        public MainWindow()
+        public VisorTarea()
         {
             InitializeComponent();
         }
 
-        private void btnAñadir_Click(object sender, RoutedEventArgs e)
+        private void ckHecho_Checked(object sender, RoutedEventArgs e)
         {
-
+            txtBlFechaHecho.Text = DateTime.Now.ToShortTimeString();
         }
 
-        private void btnLimpiar_Click(object sender, RoutedEventArgs e)
+        private void ckHecho_Unchecked(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void btnEliminar_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void List_Click(object sender, RoutedEventArgs e)
-        {
-
+            txtBlFechaHecho.Text = "";
         }
     }
 }

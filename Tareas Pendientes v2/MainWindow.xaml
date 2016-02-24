@@ -5,8 +5,65 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tareas_Pendientes_v2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Tareas Pendientes" Height="350" Width="525">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="70*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="7*"/>
+                <RowDefinition Height="93*"/>
+            </Grid.RowDefinitions>
+            <ListBox Grid.Row="1" x:Name="lstListasPendientes"/>
+            <Menu>
+                <MenuItem Header="List" Height="22" Width="73" >
+                    <MenuItem Header="Añadir"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Elements" Height="22" Width="73"/>
+
+            </Menu>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="70*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="50*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15*"/>
+                        <ColumnDefinition Width="85*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Viewbox Grid.Column="0">
+                        <TextBlock Text="Nombre Lista"/>
+                    </Viewbox>
+                    <TextBox Grid.Column="1" x:Name="txboxNombreLista" Text="Test" TextAlignment="Left" />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15*"/>
+                        <ColumnDefinition Width="85*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Viewbox Grid.Column="0">
+                        <TextBlock Text="Herencia"/>
+                    </Viewbox>
+                    <TextBox Grid.Column="1" x:Name="txboxHerenciaLista" Text="Test" TextAlignment="Left" />
+
+                </Grid>
+            </Grid>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="stkTareas"/>
+            </ScrollViewer>
+        </Grid>
+
+
     </Grid>
 </Window>
