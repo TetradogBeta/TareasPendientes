@@ -19,6 +19,7 @@ namespace Tareas_Pendientes_v2
     /// </summary>
     public partial class BuscarTarea : Window
     {
+        //filtra las tareas por: fecha,texto contenido,hecho o no hecho,herencia(muestra cmb con las posibilidades)
         public BuscarTarea()
         {
             InitializeComponent();
