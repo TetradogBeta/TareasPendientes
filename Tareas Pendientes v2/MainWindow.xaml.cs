@@ -80,7 +80,12 @@ namespace Tareas_Pendientes_v2
             stkTareas.Children.Add(new VisorTarea());
             //Activa el temporizador para el autoGuardado
         }
-
+        private void BuscarElementoLista_Click(object sender, RoutedEventArgs e)
+        {
+            //sale una ventana con un comboBox con todas las tareas
+            //tiene un boton que pone View. si le da lo posiciona aunque de momento no se mover la lista...
+        }
+        
         private void cmbCategorias_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //cambia los elementos de la lista por los que toquen.

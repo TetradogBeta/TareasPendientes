@@ -34,6 +34,7 @@
                 <MenuItem Header="Elementos" Height="22" Width="73">
                     <MenuItem Header="Añadir" Click="AñadirElementoLista_Click"/>
                     <MenuItem Header="Eliminar" Click="EliminarElementoLista_Click"/>
+                    <MenuItem Header="Buscar elemento" Click="BuscarElementoLista_Click"/>
                 </MenuItem>
 
             </Menu>
