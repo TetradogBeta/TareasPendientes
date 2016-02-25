@@ -8,6 +8,7 @@ using Gabriel.Cat;
 using Gabriel.Cat.Extension;
 namespace Tareas_Pendientes_v2
 {
+    delegate void TareaEventHandler(Tarea tarea);
     class Lista:IClauUnicaPerObjecte,IEnumerable<Tarea>
     {
         static LlistaOrdenada<string, LlistaOrdenada<long,Lista>> listasPorCategoria;
@@ -20,7 +21,8 @@ namespace Tareas_Pendientes_v2
         LlistaOrdenada<long, Tarea> todasLasTareasLista;//estan las de la herencia asi no se tienen que ir poniendo siempre
         LlistaOrdenada<long, Tarea> tareasLista;
         LlistaOrdenada<long, Tarea> tareasHechas;
-
+        public event TareaEventHandler TareaNueva;
+        public event TareaEventHandler TareaEliminada;
 
         public string NombreLista
         {
@@ -102,12 +104,27 @@ namespace Tareas_Pendientes_v2
             //tener en cuenta si añaden o quitan tareas de las listas heredadas
             herencia.Afegir(listaHaHerededar.idUnico, listaHaHerededar);
             todasLasTareasLista.AfegirMolts(listaHaHerededar.todasLasTareasLista);
+            listaHaHerededar.TareaEliminada+=QuitarTareaHeredada;
+            listaHaHerededar.TareaNueva += AñadirTareaHeredada;
+        }
+
+        private void QuitarTareaHeredada(Tarea tareaHaQuitar)
+        {
+             if (todasLasTareasLista.Existeix(tareaHaQuitar.IdUnico))
+                todasLasTareasLista.Elimina(tareaHaQuitar.IdUnico); 
+        }
+        private void AñadirTareaHeredada(Tarea tareaHaAñadir)
+        {
+            if (!todasLasTareasLista.Existeix(tareaHaAñadir.IdUnico))
+                todasLasTareasLista.Afegir(tareaHaAñadir.IdUnico,tareaHaAñadir);
         }
         public void EliminarHerencia(Lista listaHaDesHeredar)
         {
             if (!herencia.Existeix(listaHaDesHeredar.idUnico))
                 throw new Exception("No se hereda de esta lista");
             todasLasTareasLista.Elimina(listaHaDesHeredar.todasLasTareasLista.KeysToArray());
+            listaHaDesHeredar.TareaEliminada -= QuitarTareaHeredada;
+            listaHaDesHeredar.TareaNueva -= AñadirTareaHeredada;
         }
         /// <summary>
         /// Mira que no se contenga la herencia la lista actual y las listas de su herencia
@@ -116,16 +133,10 @@ namespace Tareas_Pendientes_v2
         /// <returns></returns>
         public bool ContieneHerencia(Lista listaHaHerededar)
         {
-            //por testear
-            bool valida = !herencia.Existeix(listaHaHerededar.idUnico);//miro la lista actual
-            //miro los elementos de la herencia si contienen la lista en herencia
-            if(valida)
-            herencia.WhileEach((listaHeredada) =>
-            {
-                valida = listaHeredada.Value.ContieneHerencia(listaHaHerededar);
-                return valida;
-            });
-            return valida;
+            bool contiene = listaHaHerededar.todasLasTareasLista.Count != 0;
+            if(contiene)
+            contiene= todasLasTareasLista.Existeix(listaHaHerededar.todasLasTareasLista.ElementAt(0).Key);
+            return contiene;
         }
 
         public IComparable Clau()
