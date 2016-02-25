@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Gabriel.Cat;
+using System.Xml;
+using Gabriel.Cat.Extension;
 namespace Tareas_Pendientes_v2
 {
     class Tarea:IClauUnicaPerObjecte
@@ -19,7 +21,7 @@ namespace Tareas_Pendientes_v2
             this.fechaHecho = fechaHecho;
             this.idUnico = idUnico;
         }
-
+        public Tarea(XmlNode nodo):this(nodo.FirstChild.InnerText.DescaparCaracteresXML(),new DateTime(Convert.ToInt64(nodo.ChildNodes[1].InnerText)), Convert.ToInt64(nodo.LastChild.InnerText)) { }
         public string Contenido
         {
             get
@@ -71,6 +73,18 @@ namespace Tareas_Pendientes_v2
         public IComparable Clau()
         {
             return idUnico;
+        }
+        public XmlNode ToXml()
+        {
+            //por testear
+            text nodeText = "<Tarea>";
+            XmlDocument nodo = new XmlDocument();
+            nodeText &= "<Descripcion>" + Contenido.EscaparCaracteresXML() + "</Descripcion>";
+            nodeText &= "<FechaHecho>" + FechaHecho.ToBinary() + "</FechaHecho>";
+            nodeText &= "<IdUnico>" + IdUnico + "</IdUnico></Tarea>";
+            nodo.LoadXml(nodeText);
+            return nodo.ParentNode;//mirar si coge el nodo principal
+
         }
     }
 }
