@@ -22,6 +22,8 @@ namespace Tareas_Pendientes_v2
     {
         //cada x tiempo se guarda si hay cambios :) asi si hay algun problema cuando cierra no se perdera mucho :)//guarda las listas temporales 
         //al abrir mira si hay un autoGuardado si lo hay mira la fecha de editado y si es mas reciente que la del guardadoNormal pregunta si quiere carga esa si dice que si la pone sino la elimina.
+
+        Lista listaActual; 
         public MainWindow()
         {
             InitializeComponent();
