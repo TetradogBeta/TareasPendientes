@@ -58,9 +58,46 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BuscarLista.xaml.cs">
+      <DependentUpon>BuscarLista.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CategoriasManager.xaml.cs">
+      <DependentUpon>CategoriasManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorCategoriasLista.xaml.cs">
+      <DependentUpon>EditorCategoriasLista.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorHerenciaLista.xaml.cs">
+      <DependentUpon>EditorHerenciaLista.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EliminarTareas.xaml.cs">
+      <DependentUpon>EliminarTareas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Lista.cs" />
+    <Compile Include="Tarea.cs" />
     <Compile Include="VisorTarea.xaml.cs">
       <DependentUpon>VisorTarea.xaml</DependentUpon>
     </Compile>
+    <Page Include="BuscarLista.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CategoriasManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorCategoriasLista.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorHerenciaLista.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EliminarTareas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

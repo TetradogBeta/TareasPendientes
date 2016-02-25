@@ -94,9 +94,9 @@ namespace Tareas_Pendientes_v2
         private void txboxNombreLista_TextChanged(object sender, TextChangedEventArgs e)
         {
             //se a modificado el nombre de la lista.
-            //activa el temporizador para el auto guardado
-            //cambia de la lista
-            lstListasPendientes.Items.Refresh();
+              //activa el temporizador para el auto guardado
+              //cambia de la lista
+                lstListasPendientes.Items.Refresh();
         }
     }
 }
