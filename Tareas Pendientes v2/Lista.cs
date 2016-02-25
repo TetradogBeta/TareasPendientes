@@ -298,14 +298,19 @@ namespace Tareas_Pendientes_v2
         {
             return GetEnumerator();
         }
-        public static Lista[] LoadXml(XmlDocument xml)
+        /// <summary>
+        /// Carga las listas y las categorias
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <returns>devuelve la lista temporal si no hay es null</returns>
+        public static Lista LoadXml(XmlDocument xml)
         {
             LlistaOrdenada<long, Lista> listas = new LlistaOrdenada<long, Lista>();
             Lista listaCargada;
             //Categorias
-            //Listas
             for (int i = 0; i < xml.FirstChild.ChildNodes.Count; i++)
                 AñadirCategoria(xml.FirstChild.ChildNodes[i].InnerText.DescaparCaracteresXML());
+            //Listas
             for (int i = 0; i < xml.LastChild.ChildNodes.Count; i++)
             {
                 listaCargada = new Lista(xml.LastChild.ChildNodes[i]);
@@ -316,22 +321,39 @@ namespace Tareas_Pendientes_v2
             {
 
                 listaCargada = listas[Convert.ToInt64(xml.LastChild.ChildNodes[i].ChildNodes[1].InnerText)];//cojo la lista con el id
-                for (int j = 0; i < xml.LastChild.ChildNodes[i].ChildNodes[3].ChildNodes.Count; j++)//pongo la herencia
+                for (int j = 0; j < xml.LastChild.ChildNodes[i].ChildNodes[3].ChildNodes.Count; j++)//pongo la herencia
                 {
                     listaCargada.AñadirHerencia(listas[Convert.ToInt64(xml.LastChild.ChildNodes[i].ChildNodes[3].ChildNodes[j].InnerText)]);//hay solo el id de la lista de la que hereda
                 }
-                for (int j = 0; i < xml.LastChild.ChildNodes[i].ChildNodes[5].ChildNodes.Count; j++)//pongo las tareas ocultas
+                for (int j = 0; j < xml.LastChild.ChildNodes[i].ChildNodes[5].ChildNodes.Count; j++)//pongo las tareas ocultas
                 {
                     listaCargada.EliminarTarea(Convert.ToInt64(xml.LastChild.ChildNodes[i].ChildNodes[5].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
                 }
-                for (int j = 0; i < xml.LastChild.ChildNodes[i].ChildNodes[6].ChildNodes.Count; j++)//pongo las tareas ocultas
+                for (int j = 0; j < xml.LastChild.ChildNodes[i].ChildNodes[6].ChildNodes.Count; j++)//pongo las tareas ocultas
                 {
                     listaCargada.TareaHecha(Convert.ToInt64(xml.LastChild.ChildNodes[i].ChildNodes[6].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
                 }
             }
-            return listas.ValuesToArray();
+            listaCargada = null;
+            if(xml.ChildNodes[1].HasChildNodes)
+            {
+                listaCargada = new Lista(xml.ChildNodes[1].FirstChild);
+                for (int j = 0; j < xml.ChildNodes[1].ChildNodes[3].ChildNodes.Count; j++)//pongo la herencia
+                {
+                    listaCargada.AñadirHerencia(listas[Convert.ToInt64(xml.ChildNodes[1].ChildNodes[3].ChildNodes[j].InnerText)]);//hay solo el id de la lista de la que hereda
+                }
+                for (int j = 0; j< xml.ChildNodes[1].ChildNodes[5].ChildNodes.Count; j++)//pongo las tareas ocultas
+                {
+                    listaCargada.EliminarTarea(Convert.ToInt64(xml.ChildNodes[1].ChildNodes[5].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
+                }
+                for (int j = 0; j < xml.ChildNodes[1].ChildNodes[6].ChildNodes.Count; j++)//pongo las tareas ocultas
+                {
+                    listaCargada.TareaHecha(Convert.ToInt64(xml.ChildNodes[1].ChildNodes[6].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
+                }
+            }
+            return listaCargada;
         }
-        public static XmlDocument ToXml(Lista listaTemporal)
+        public static XmlDocument ToXml(Lista listaTemporal=null)
         {
             XmlDocument xml = new XmlDocument();
             text nodo = "<TareasPendientes>";
