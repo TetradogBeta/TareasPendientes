@@ -10,8 +10,8 @@ using System.Xml;
 
 namespace Tareas_Pendientes_v2
 {
-    delegate void TareaEventHandler(Tarea tarea);
-    class Lista : IClauUnicaPerObjecte, IEnumerable<Tarea>
+    public delegate void TareaEventHandler(Tarea tarea);
+    public  class Lista : IClauUnicaPerObjecte, IEnumerable<Tarea>
     {
         static LlistaOrdenada<string, LlistaOrdenada<long, Lista>> listasPorCategoria;
         static Llista<Lista> todasLasListas;
@@ -297,6 +297,10 @@ namespace Tareas_Pendientes_v2
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+        public override string ToString()
+        {
+            return NombreLista;
         }
         /// <summary>
         /// Carga las listas y las categorias

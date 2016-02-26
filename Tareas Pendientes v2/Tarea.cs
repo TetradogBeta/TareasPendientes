@@ -8,7 +8,7 @@ using System.Xml;
 using Gabriel.Cat.Extension;
 namespace Tareas_Pendientes_v2
 {
-    class Tarea:IClauUnicaPerObjecte
+    public class Tarea:IClauUnicaPerObjecte
     {
         string contenido;
         DateTime fechaHecho;
@@ -85,6 +85,10 @@ namespace Tareas_Pendientes_v2
             nodo.LoadXml(nodeText);
             return nodo.ParentNode;//mirar si coge el nodo principal
 
+        }
+        public override string ToString()
+        {
+            return Contenido;
         }
     }
 }

@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:Tareas_Pendientes_v2"
         mc:Ignorable="d"
         Title="EliminarTareas" Height="300" Width="300">
-    <Grid>
-        
-    </Grid>
+    <StackPanel>
+        <TextBlock x:Name="txblNombreLista"/>
+        <StackPanel x:Name="stkTareasLista"/>
+        <CheckBox x:Name="ckOmitirPregunta" Content="Omitir pregunta de seguridad"/>
+    </StackPanel>
 </Window>
