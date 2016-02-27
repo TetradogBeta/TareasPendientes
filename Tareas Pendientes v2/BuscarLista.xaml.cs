@@ -19,10 +19,18 @@ namespace Tareas_Pendientes_v2
     /// </summary>
     public partial class BuscarLista : Window
     {
-       //poder buscar una lista por el contenido de una tarea
+        private MainWindow mainWindow;
+
+        //poder buscar una lista por el contenido de una tarea
         public BuscarLista()
         {
             InitializeComponent();
+        }
+
+        public BuscarLista(MainWindow mainWindow):this()
+        {
+            this.mainWindow = mainWindow;//para poder seleccionar la lista             mainWindow.PonLista(lista);
+
         }
     }
 }

@@ -15,12 +15,14 @@ using System.Windows.Shapes;
 
 namespace Tareas_Pendientes_v2
 {
+
     /// <summary>
     /// Lógica de interacción para VisorTarea.xaml
     /// </summary>
     public partial class VisorTarea : UserControl
     {
         Tarea tarea;
+        public event EventHandler TareaEditada;
         public VisorTarea()
         {
             InitializeComponent();
@@ -56,6 +58,8 @@ namespace Tareas_Pendientes_v2
             {
                 txtBlFechaHecho.Text = DateTime.Now.ToString();
                 tarea.Hecho = true;
+                if (TareaEditada != null)
+                    TareaEditada(this, new EventArgs());
             }
         }
 
@@ -65,6 +69,8 @@ namespace Tareas_Pendientes_v2
             {
                 tarea.Hecho = false;
                 txtBlFechaHecho.Text = "";
+                if (TareaEditada != null)
+                    TareaEditada(this, new EventArgs());
             }
         }
 
@@ -73,6 +79,8 @@ namespace Tareas_Pendientes_v2
             if (txtBxDescripcionTarea != null && tarea != null)
             {
                 tarea.Contenido = txtBxDescripcionTarea.Text;
+                if (TareaEditada != null)
+                    TareaEditada(this, new EventArgs());
             }
         }
     }

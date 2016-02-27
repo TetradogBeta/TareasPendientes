@@ -7,6 +7,20 @@
         mc:Ignorable="d"
         Title="CategoriasManager" Height="300" Width="300">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="200*"/>
+            <RowDefinition Height="25*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80*"/>
+                <ColumnDefinition Width="20*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" x:Name="txtNombreCategoria"/>
+            <Button Grid.Column="1" Content="Añadir" Click="Button_Click"/>
+        </Grid>
+        <StackPanel Grid.Row="1" x:Name="stkCategorias"/>
+        <CheckBox Grid.Row="2" Content="Omitir pregunta de seguridad" x:Name="ckOmitirPregunta"/>
     </Grid>
 </Window>

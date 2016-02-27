@@ -19,9 +19,16 @@ namespace Tareas_Pendientes_v2
     /// </summary>
     public partial class EditorHerenciaLista : Window
     {
+        private Lista listaActual;
+
         public EditorHerenciaLista()
         {
             InitializeComponent();
+        }
+
+        public EditorHerenciaLista(Lista listaActual)
+        {
+            this.listaActual = listaActual;
         }
     }
 }

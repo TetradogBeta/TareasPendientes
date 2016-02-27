@@ -11,8 +11,12 @@ using System.Xml;
 namespace Tareas_Pendientes_v2
 {
     public delegate void TareaEventHandler(Tarea tarea);
-    public  class Lista : IClauUnicaPerObjecte, IEnumerable<Tarea>
+    public class Lista : IClauUnicaPerObjecte, IEnumerable<Tarea>
     {
+        enum NodoLista
+        {
+            Nombre, Id, Categoria, Herencia, TareasLista, TareasOcultas, TareasHechas
+        }
         static LlistaOrdenada<string, LlistaOrdenada<long, Lista>> listasPorCategoria;
         static Llista<Lista> todasLasListas;
         #region Atributos y eventos
@@ -37,7 +41,7 @@ namespace Tareas_Pendientes_v2
         public Lista(string nombreLista)
         {
             this.nombreLista = nombreLista;
-            idUnico = DateTime.Now.ToBinary();
+            idUnico = DateTime.Now.Ticks;
             categorias = new LlistaOrdenada<string, string>();
             herencia = new LlistaOrdenada<long, Lista>();
             todasLasTareasVisiblesLista = new LlistaOrdenada<long, Tarea>();
@@ -46,18 +50,19 @@ namespace Tareas_Pendientes_v2
             tareasOcultas = new LlistaOrdenada<long, Tarea>();
 
         }
-        private Lista(XmlNode nodo) : this(nodo.FirstChild.InnerText)
+        public Lista():this(""){}
+        private Lista(XmlNode nodo) : this(nodo.ChildNodes[(int)NodoLista.Nombre].InnerText)
         {
-            idUnico = Convert.ToInt64(nodo.ChildNodes[1].InnerText);
-            for(int i=0;i<nodo.ChildNodes[2].ChildNodes.Count;i++)//añado la lista en su categoria
+            idUnico = Convert.ToInt64(nodo.ChildNodes[(int)NodoLista.Id].InnerText);
+            for (int i = 0; i < nodo.ChildNodes[(int)NodoLista.Categoria].ChildNodes.Count; i++)//añado la lista en su categoria
             {
-                AñadirACategoria(nodo.ChildNodes[2].ChildNodes[i].InnerText.DescaparCaracteresXML());
+                AñadirCategoria(nodo.ChildNodes[(int)NodoLista.Categoria].ChildNodes[i].InnerText.DescaparCaracteresXML());
             }
             //la herencia la hago fuera
             //añado las tareas de la Lista
-            for (int i = 0; i < nodo.ChildNodes[4].ChildNodes.Count; i++)//añado la lista en su categoria
+            for (int i = 0; i < nodo.ChildNodes[(int)NodoLista.TareasLista].ChildNodes.Count; i++)//añado la lista en su categoria
             {
-                AñadirTarea(new Tarea(nodo.ChildNodes[4].ChildNodes[i]));//se añaden a sus listas
+                AñadirTarea(new Tarea(nodo.ChildNodes[(int)NodoLista.TareasLista].ChildNodes[i]));//se añaden a sus listas
             }
             //las tareas ocultas y hechas las pongo cuando ya estan todas
         }
@@ -74,19 +79,22 @@ namespace Tareas_Pendientes_v2
                 nombreLista = value;
             }
         }
-
-        public bool EsTemporal { get { return todasLasListas.Existeix(this); }
-            set {
+        public int Count
+        { get { return todasLasTareasVisiblesLista.Count; } }
+        public bool EsTemporal
+        {
+            get { return !todasLasListas.Existeix(this); }
+            set
+            {
                 string[] categorias;
                 if (value)
                 {
-                    if(todasLasListas.Existeix(this))
-                    {
-                        categorias = this.categorias.ValuesToArray();
-                        for (int i = 0; i < categorias.Length; i++)
+                    categorias = this.categorias.ValuesToArray();
+                    for (int i = 0; i < categorias.Length; i++)
+                        if (listasPorCategoria[categorias[i]].Existeix(idUnico))
                             listasPorCategoria[categorias[i]].Elimina(idUnico);
-                        todasLasListas.Elimina(this);
-                    }
+                    todasLasListas.Elimina(this);
+
                 }
                 else
                 {
@@ -94,11 +102,13 @@ namespace Tareas_Pendientes_v2
                     {
                         categorias = this.categorias.ValuesToArray();
                         for (int i = 0; i < categorias.Length; i++)
-                            listasPorCategoria[categorias[i]].Afegir(idUnico, this);
+                            if (!listasPorCategoria[categorias[i]].Existeix(idUnico))
+                                listasPorCategoria[categorias[i]].Afegir(idUnico, this);
                         todasLasListas.Afegir(this);
                     }
                 }
-            } }
+            }
+        }
 
         public bool TieneDescendencia { get { return TareaNueva != null; } }
         #region Categoria
@@ -107,30 +117,29 @@ namespace Tareas_Pendientes_v2
             return categorias.Existeix(categoria);
         }
 
-        public static void QuitarHerederosDeLaLista(Lista listaActual)
+        public static void QuitarHerederos(Lista listaActual)
         {
             for (int i = 0; i < todasLasListas.Count; i++)
-                if(todasLasListas[i].ContieneHerencia(listaActual))
+                if (todasLasListas[i].ContieneHerencia(listaActual))
                     todasLasListas[i].EliminarHerencia(listaActual);
         }
 
-        public void AñadirACategoria(string categoria)
+        public void AñadirHaCategoria(string categoria)
         {
             if (!listasPorCategoria.Existeix(categoria))
                 throw new Exception("La categoria no existe");
             if (this.categorias.Existeix(categoria))
                 throw new Exception("La lista ya esta en la categoria");
-            listasPorCategoria[categoria].Afegir(this.idUnico, this);
             this.categorias.Afegir(categoria, categoria);
 
         }
+
         public void EliminarDeCategoria(string categoria)
         {
             if (!listasPorCategoria.Existeix(categoria))
                 throw new Exception("La categoria no existe");
             if (!this.categorias.Existeix(categoria))
                 throw new Exception("La lista no esta en la categoria");
-            listasPorCategoria[categoria].Elimina(this.idUnico);
             this.categorias.Elimina(categoria);
 
 
@@ -151,6 +160,8 @@ namespace Tareas_Pendientes_v2
             {
                 tareasLista.Afegir(tarea.IdUnico, tarea);
                 todasLasTareasVisiblesLista.Afegir(tarea.IdUnico, tarea);
+                tarea.TareaHecha += TareaHecha;
+                tarea.TareaNoHecha += TareaNoHecha;
 
             }
             else
@@ -160,19 +171,24 @@ namespace Tareas_Pendientes_v2
             if (TareaNueva != null)//Aviso a mis herederos
                 TareaNueva(tarea);
             TareaHecha(tarea);
+
         }
         public void EliminarTarea(Tarea tarea)
         {
+            bool esPropia = false;
             if (tareasLista.Existeix(tarea.IdUnico))
             {
                 tareasLista.Elimina(tarea.IdUnico);
-
+                esPropia = true;
+                tarea.TareaHecha -= TareaHecha;
+                tarea.TareaNoHecha -= TareaNoHecha;
             }
             if (todasLasTareasVisiblesLista.Existeix(tarea.IdUnico))
             {
                 //la oculto
                 todasLasTareasVisiblesLista.Elimina(tarea.IdUnico);
-                tareasOcultas.Afegir(tarea.IdUnico, tarea);
+                if(!esPropia)
+                   tareasOcultas.Afegir(tarea.IdUnico, tarea);
 
             }
             else
@@ -200,7 +216,7 @@ namespace Tareas_Pendientes_v2
         }
         public void TareaHecha(Tarea tarea)
         {
-            if((todasLasTareasVisiblesLista.Existeix(tarea.IdUnico)||tareasOcultas.Existeix(tarea.IdUnico))&&!tareasHechas.Existeix(tarea.IdUnico)&&tarea.Hecho)
+            if ((todasLasTareasVisiblesLista.Existeix(tarea.IdUnico) || tareasOcultas.Existeix(tarea.IdUnico)) && !tareasHechas.Existeix(tarea.IdUnico) && tarea.Hecho)
             {
                 tareasHechas.Afegir(tarea.IdUnico, tarea);
             }
@@ -295,10 +311,10 @@ namespace Tareas_Pendientes_v2
         {
             return herencia.ValuesToArray();
         }
-#endregion
+        #endregion
         #region Xml
         public XmlNode ToXml()
-        {//por testear
+        {//por testear 
             XmlDocument xml = new XmlDocument();
             text nodo = "<Lista><Nombre>" + NombreLista.EscaparCaracteresXML() + "</Nombre>";//nombre
             //id
@@ -314,6 +330,11 @@ namespace Tareas_Pendientes_v2
                 nodo &= "<Herencia>" + herenciaId.Key + "</Herencia>";
             nodo &= "</Herencias>";
             //tareas ocultas solo ids
+            nodo &= "<TareasLista>";
+            foreach (KeyValuePair<long, Tarea> tareaLista in tareasLista)
+                nodo &=  tareaLista.Value.ToXml().OuterXml;
+            nodo &= "</TareasLista>";
+            //tareas ocultas solo ids
             nodo &= "<TareasOcultas>";
             foreach (KeyValuePair<long, Tarea> tareaOcultaId in tareasOcultas)
                 nodo &= "<TareasOculta>" + tareaOcultaId.Key + "</TareasOculta>";
@@ -327,7 +348,7 @@ namespace Tareas_Pendientes_v2
             nodo &= "</Lista>";
             xml.LoadXml(nodo);
             xml.Normalize();
-            return xml.ParentNode;//mirar si coge el nodo principal
+            return xml.FirstChild;//mirar si coge el nodo principal
         }
         #endregion
         #region Interficies
@@ -348,7 +369,7 @@ namespace Tareas_Pendientes_v2
         #region Override
         public override string ToString()
         {
-            return NombreLista;
+            return NombreLista != "" ? NombreLista : "'Sin nombre'";
         }
         #endregion
         #region Xml Clase
@@ -361,69 +382,86 @@ namespace Tareas_Pendientes_v2
         {
             LlistaOrdenada<long, Lista> listas = new LlistaOrdenada<long, Lista>();
             Lista listaCargada;
+            XmlNode xmlNodePrincipal = xml.FirstChild, xmlNode;
             //Categorias
-            for (int i = 0; i < xml.FirstChild.ChildNodes.Count; i++)
-                AñadirCategoria(xml.FirstChild.ChildNodes[i].InnerText.DescaparCaracteresXML());
+            for (int i = 0; i < xmlNodePrincipal.FirstChild.ChildNodes.Count; i++)
+                AñadirCategoria(xmlNodePrincipal.FirstChild.ChildNodes[i].InnerText.DescaparCaracteresXML());
             //Listas
-            for (int i = 0; i < xml.LastChild.ChildNodes.Count; i++)
-            {
-                listaCargada = new Lista(xml.LastChild.ChildNodes[i]);
+            for (int i = 0; i < xmlNodePrincipal.LastChild.ChildNodes.Count; i++)
+            {//pum
+                listaCargada = new Lista(xmlNodePrincipal.LastChild.ChildNodes[i]);
                 listas.Afegir(listaCargada.idUnico, listaCargada);
+                todasLasListas.Afegir(listaCargada);
             }
             //pongo herencia,tareas hechas y ocultas
-            for (int i = 0; i < xml.LastChild.ChildNodes.Count; i++)
+            for (int i = 0; i < xmlNodePrincipal.LastChild.ChildNodes.Count; i++)
             {
-
-                listaCargada = listas[Convert.ToInt64(xml.LastChild.ChildNodes[i].ChildNodes[1].InnerText)];//cojo la lista con el id
-                for (int j = 0; j < xml.LastChild.ChildNodes[i].ChildNodes[3].ChildNodes.Count; j++)//pongo la herencia
-                {
-                    listaCargada.AñadirHerencia(listas[Convert.ToInt64(xml.LastChild.ChildNodes[i].ChildNodes[3].ChildNodes[j].InnerText)]);//hay solo el id de la lista de la que hereda
-                }
-                for (int j = 0; j < xml.LastChild.ChildNodes[i].ChildNodes[5].ChildNodes.Count; j++)//pongo las tareas ocultas
-                {
-                    listaCargada.EliminarTarea(Convert.ToInt64(xml.LastChild.ChildNodes[i].ChildNodes[5].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
-                }
-                for (int j = 0; j < xml.LastChild.ChildNodes[i].ChildNodes[6].ChildNodes.Count; j++)//pongo las tareas ocultas
-                {
-                    listaCargada.TareaHecha(Convert.ToInt64(xml.LastChild.ChildNodes[i].ChildNodes[6].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
-                }
+                xmlNode = xmlNodePrincipal.LastChild.ChildNodes[i];
+                AcabarDeCargarLista(listas, xmlNode);
             }
             listaCargada = null;
-            if(xml.ChildNodes[1].HasChildNodes)
+            //lista temporal
+            if (xmlNodePrincipal.ChildNodes[1].HasChildNodes)
             {
-                listaCargada = new Lista(xml.ChildNodes[1].FirstChild);
-                for (int j = 0; j < xml.ChildNodes[1].ChildNodes[3].ChildNodes.Count; j++)//pongo la herencia
-                {
-                    listaCargada.AñadirHerencia(listas[Convert.ToInt64(xml.ChildNodes[1].ChildNodes[3].ChildNodes[j].InnerText)]);//hay solo el id de la lista de la que hereda
-                }
-                for (int j = 0; j< xml.ChildNodes[1].ChildNodes[5].ChildNodes.Count; j++)//pongo las tareas ocultas
-                {
-                    listaCargada.EliminarTarea(Convert.ToInt64(xml.ChildNodes[1].ChildNodes[5].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
-                }
-                for (int j = 0; j < xml.ChildNodes[1].ChildNodes[6].ChildNodes.Count; j++)//pongo las tareas ocultas
-                {
-                    listaCargada.TareaHecha(Convert.ToInt64(xml.ChildNodes[1].ChildNodes[6].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
-                }
+                xmlNode = xmlNodePrincipal.ChildNodes[1].FirstChild;//cojo el nodo de la lista temporal
+                listaCargada = new Lista(xmlNode);//lo creo
+                listas.Afegir(listaCargada.idUnico, listaCargada);//lo añado para usar el metodo
+                AcabarDeCargarLista(listas, xmlNode);//lo acabo de cargar
+                listaCargada.EsTemporal = true;//lo pongo como temporal
             }
             return listaCargada;
         }
-        public static XmlDocument ToXml(Lista listaTemporal=null)
+        public static void AñadirCategoria(string categoria)
+        {
+            if (listasPorCategoria.Existeix(categoria))
+                throw new Exception("Ya existe la categoria");
+            listasPorCategoria.Afegir(categoria, new LlistaOrdenada<long, Lista>());
+        }
+        public static void AñadirListaHaCategoria(Lista lista, string categoria)
+        {
+            if(!listasPorCategoria[categoria].Existeix(lista.idUnico))
+               listasPorCategoria[categoria].Afegir(lista.idUnico, lista);
+        }
+        public static void QuitarListaDeCategoria(Lista lista, string categoria)
+        {
+            listasPorCategoria[categoria].Elimina(lista.idUnico);
+        }
+        private static void AcabarDeCargarLista(LlistaOrdenada<long, Lista> listas, XmlNode xmlNode)
+        {
+            Lista listaCargada;
+            listaCargada = listas[Convert.ToInt64(xmlNode.ChildNodes[(int)NodoLista.Id].InnerText)];//cojo la lista con el id
+            for (int j = 0; j < xmlNode.ChildNodes[(int)NodoLista.Herencia].ChildNodes.Count; j++)//pongo la herencia
+            {
+                listaCargada.AñadirHerencia(listas[Convert.ToInt64(xmlNode.ChildNodes[(int)NodoLista.Herencia].ChildNodes[j].InnerText)]);//hay solo el id de la lista de la que hereda
+            }
+            for (int j = 0; j < xmlNode.ChildNodes[(int)NodoLista.TareasOcultas].ChildNodes.Count; j++)//pongo las tareas ocultas
+            {
+                listaCargada.EliminarTarea(Convert.ToInt64(xmlNode.ChildNodes[(int)NodoLista.TareasOcultas].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
+            }
+            for (int j = 0; j < xmlNode.ChildNodes[(int)NodoLista.TareasHechas].ChildNodes.Count; j++)//pongo las tareas hechas
+            {
+                listaCargada.TareaHecha(Convert.ToInt64(xmlNode.ChildNodes[(int)NodoLista.TareasHechas].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
+            }
+
+        }
+
+        public static XmlDocument ToXml(Lista listaTemporal = null)
         {
             XmlDocument xml = new XmlDocument();
             text nodo = "<TareasPendientes>";
             string[] categorias = TodasLasCategorias();
             //categorias
             nodo &= "<Categorias>";
-            for(int i=0;i<categorias.Length;i++)
-                nodo &= "<Categoria>"+categorias[i].EscaparCaracteresXML()+ "</Categoria>";
+            for (int i = 0; i < categorias.Length; i++)
+                nodo &= "<Categoria>" + categorias[i].EscaparCaracteresXML() + "</Categoria>";
             nodo &= "</Categorias>";
             //lista temporal
             nodo &= "<ListaTemporal>";
-            nodo &= listaTemporal != null ? listaTemporal.ToXml().OuterXml : "";
+            nodo &= listaTemporal != null && listaTemporal.EsTemporal ? listaTemporal.ToXml().OuterXml : "";
             nodo &= "</ListaTemporal>";
             //listas
             nodo &= "<Listas>";
-            for (int i = 0; i < categorias.Length; i++)
+            for (int i = 0; i < todasLasListas.Count; i++)
                 nodo &= todasLasListas[i].ToXml().OuterXml;
             nodo &= "</Listas>";
 
@@ -467,17 +505,15 @@ namespace Tareas_Pendientes_v2
                 lista.Value.categorias.Afegir(nombreNuevo, nombreNuevo);
             }
         }
-        public static void AñadirCategoria(string nombre)
+
+        public static void EliminarCategoria(string categoria)
         {
-            if (listasPorCategoria.Existeix(nombre))
-                throw new Exception("Ya existe la categoria");
-            listasPorCategoria.Afegir(nombre, new LlistaOrdenada<long, Lista>());
-        }
-        public static void EliminarCategoria(string nombre)
-        {
-            if (!listasPorCategoria.Existeix(nombre))
+            if (!listasPorCategoria.Existeix(categoria))
                 throw new Exception("No existe la categoria");
-            listasPorCategoria.Elimina(nombre);
+            foreach (KeyValuePair<long, Lista> listaHaQuitar in listasPorCategoria[categoria])
+                listaHaQuitar.Value.EliminarDeCategoria(categoria);
+
+            listasPorCategoria.Elimina(categoria);
         }
 
         public static bool ExisteCategoria(string categoria)

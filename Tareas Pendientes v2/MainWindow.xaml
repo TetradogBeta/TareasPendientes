@@ -21,6 +21,7 @@
 
             <Menu>
                 <MenuItem Header="Listas" Height="22" Width="73" >
+                    <MenuItem Header="Nueva Lista" Click="LimpiarCamposLista_Click"/>
                     <MenuItem Header="Lista visualizada">
                         <MenuItem Header="Herencia" Click="HerenciasLista_Click"/>
                         <MenuItem Header="Categorias" Click="CategoriasLista_Click"/>
@@ -43,8 +44,8 @@
         </Grid>
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="13*"/>
-                <RowDefinition Height="147*"/>
+                <RowDefinition Height="26*"/>
+                <RowDefinition Height="235*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid>

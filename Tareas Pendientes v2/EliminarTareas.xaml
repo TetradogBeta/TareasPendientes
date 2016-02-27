@@ -13,7 +13,9 @@
             <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" x:Name="txblNombreLista"/>
-        <StackPanel Grid.Row="1" x:Name="stkTareasLista"/>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+            <StackPanel x:Name="stkTareasLista"/>
+        </ScrollViewer>
         <CheckBox Grid.Row="2" x:Name="ckOmitirPregunta" Content="Omitir pregunta de seguridad"/>
     </Grid>
 </Window>
