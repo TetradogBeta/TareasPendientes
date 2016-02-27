@@ -114,6 +114,9 @@ namespace Tareas_Pendientes_v2
             new EditorCategoriasLista(listaActual,this).ShowDialog();
             cmbCategorias_SelectionChanged(null, null);//asi si la lista esta en la actualmente en la categoria puesta entonces se vera
 
+            //Errores
+            //a veces no lo quita de la lista actual...
+            //a veces cambiado de lista el objeto cambia por otro...pero mantiene el nombre...por mirar...
         }
 
         private void LimpiarCamposLista_Click(object sender, RoutedEventArgs e)
