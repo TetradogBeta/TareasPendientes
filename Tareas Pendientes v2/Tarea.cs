@@ -22,6 +22,11 @@ namespace Tareas_Pendientes_v2
             this.idUnico = idUnico;
         }
         public Tarea(XmlNode nodo):this(nodo.FirstChild.InnerText.DescaparCaracteresXML(),new DateTime(Convert.ToInt64(nodo.ChildNodes[1].InnerText)), Convert.ToInt64(nodo.LastChild.InnerText)) { }
+
+        public Tarea():this("")
+        {
+        }
+
         public string Contenido
         {
             get

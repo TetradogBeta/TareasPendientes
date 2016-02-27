@@ -15,7 +15,7 @@ namespace Tareas_Pendientes_v2
     {
         static LlistaOrdenada<string, LlistaOrdenada<long, Lista>> listasPorCategoria;
         static Llista<Lista> todasLasListas;
-
+        #region Atributos y eventos
         long idUnico;
         string nombreLista;
         LlistaOrdenada<string, string> categorias;
@@ -27,12 +27,13 @@ namespace Tareas_Pendientes_v2
 
         public event TareaEventHandler TareaNueva;
         public event TareaEventHandler TareaEliminada;
+        #endregion
         static Lista()
         {
             listasPorCategoria = new LlistaOrdenada<string, LlistaOrdenada<long, Lista>>();
             todasLasListas = new Llista<Lista>();
         }
-
+        #region Constructores
         public Lista(string nombreLista)
         {
             this.nombreLista = nombreLista;
@@ -60,6 +61,7 @@ namespace Tareas_Pendientes_v2
             }
             //las tareas ocultas y hechas las pongo cuando ya estan todas
         }
+        #endregion
         public string NombreLista
         {
             get
@@ -72,10 +74,46 @@ namespace Tareas_Pendientes_v2
                 nombreLista = value;
             }
         }
+
+        public bool EsTemporal { get { return todasLasListas.Existeix(this); }
+            set {
+                string[] categorias;
+                if (value)
+                {
+                    if(todasLasListas.Existeix(this))
+                    {
+                        categorias = this.categorias.ValuesToArray();
+                        for (int i = 0; i < categorias.Length; i++)
+                            listasPorCategoria[categorias[i]].Elimina(idUnico);
+                        todasLasListas.Elimina(this);
+                    }
+                }
+                else
+                {
+                    if (!todasLasListas.Existeix(this))
+                    {
+                        categorias = this.categorias.ValuesToArray();
+                        for (int i = 0; i < categorias.Length; i++)
+                            listasPorCategoria[categorias[i]].Afegir(idUnico, this);
+                        todasLasListas.Afegir(this);
+                    }
+                }
+            } }
+
+        public bool TieneDescendencia { get { return TareaNueva != null; } }
+        #region Categoria
         public bool EstaEnLaCategoria(string categoria)
         {
             return categorias.Existeix(categoria);
         }
+
+        public static void QuitarHerederosDeLaLista(Lista listaActual)
+        {
+            for (int i = 0; i < todasLasListas.Count; i++)
+                if(todasLasListas[i].ContieneHerencia(listaActual))
+                    todasLasListas[i].EliminarHerencia(listaActual);
+        }
+
         public void AñadirACategoria(string categoria)
         {
             if (!listasPorCategoria.Existeix(categoria))
@@ -101,6 +139,8 @@ namespace Tareas_Pendientes_v2
         {
             return categorias.ValuesToArray();
         }
+        #endregion
+        #region Tarea
         public void AñadirTarea(Tarea tarea)
         {
             if (tareasOcultas.Existeix(tarea.IdUnico))
@@ -201,6 +241,8 @@ namespace Tareas_Pendientes_v2
             tareas.Elimina(tareasQueNoCoinciden);
             return tareas.ToArray();
         }
+        #endregion
+        #region Herencia
         public void AñadirHerencia(Lista listaHaHerededar)
         {
             if (herencia.Existeix(listaHaHerededar.idUnico))
@@ -253,6 +295,8 @@ namespace Tareas_Pendientes_v2
         {
             return herencia.ValuesToArray();
         }
+#endregion
+        #region Xml
         public XmlNode ToXml()
         {//por testear
             XmlDocument xml = new XmlDocument();
@@ -285,6 +329,8 @@ namespace Tareas_Pendientes_v2
             xml.Normalize();
             return xml.ParentNode;//mirar si coge el nodo principal
         }
+        #endregion
+        #region Interficies
         public IComparable Clau()
         {
             return idUnico;
@@ -298,10 +344,14 @@ namespace Tareas_Pendientes_v2
         {
             return GetEnumerator();
         }
+        #endregion
+        #region Override
         public override string ToString()
         {
             return NombreLista;
         }
+        #endregion
+        #region Xml Clase
         /// <summary>
         /// Carga las listas y las categorias
         /// </summary>
@@ -383,8 +433,8 @@ namespace Tareas_Pendientes_v2
             return xml;
         }
 
-      
-
+        #endregion
+        #region Filtrar
         public static Lista[] FiltraPorCategoria(string categoria)
         {
             LlistaOrdenada<long, Lista> listasCategoria = listasPorCategoria[categoria];
@@ -402,6 +452,8 @@ namespace Tareas_Pendientes_v2
                     listas.Afegir(todasLasListas[i]);
             return listas.ToArray();
         }
+        #endregion
+        #region Categorias
         public static string[] TodasLasCategorias()
         {
             return listasPorCategoria.KeysToArray();
@@ -432,7 +484,7 @@ namespace Tareas_Pendientes_v2
         {
             return listasPorCategoria.Existeix(categoria);
         }
-
+        #endregion
 
     }
 }

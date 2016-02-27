@@ -12,7 +12,7 @@
             <ColumnDefinition Width="52*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" x:Name="txtBxDescripcionTarea" Text="Descripcion"/>
+        <TextBox Grid.Column="0" x:Name="txtBxDescripcionTarea" Text="Descripcion" TextChanged="txtBxDescripcionTarea_TextChanged"/>
         <TextBlock Grid.Column="1" x:Name="txtBlFechaHecho" Text="fecha hecho" TextAlignment="Right"/>
         <CheckBox Grid.Column="2" x:Name="ckHecho" Checked="ckHecho_Checked" Unchecked="ckHecho_Unchecked"/>
     </Grid>

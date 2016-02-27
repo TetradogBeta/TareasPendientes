@@ -6,9 +6,14 @@
         xmlns:local="clr-namespace:Tareas_Pendientes_v2"
         mc:Ignorable="d"
         Title="EliminarTareas" Height="300" Width="300">
-    <StackPanel>
-        <TextBlock x:Name="txblNombreLista"/>
-        <StackPanel x:Name="stkTareasLista"/>
-        <CheckBox x:Name="ckOmitirPregunta" Content="Omitir pregunta de seguridad"/>
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="77*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" x:Name="txblNombreLista"/>
+        <StackPanel Grid.Row="1" x:Name="stkTareasLista"/>
+        <CheckBox Grid.Row="2" x:Name="ckOmitirPregunta" Content="Omitir pregunta de seguridad"/>
+    </Grid>
 </Window>
