@@ -30,7 +30,7 @@ namespace Tareas_Pendientes_v2
             InitializeComponent();
             this.main = main;
             this.listaHaEditar = listaHaEditar;
-            txblNombreLista.Text ="Lista: "+ listaHaEditar.NombreLista;
+            txblNombreLista.Text ="Lista: "+ listaHaEditar.Nombre;
             ckOmitirPregunta.IsChecked = false;
             stkTareasLista.Children.Clear();
             stkTareasLista.Children.AddRange(listaHaEditar.ToObjViewerArray(TareaHaEliminar));
@@ -50,7 +50,7 @@ namespace Tareas_Pendientes_v2
         {
             if (ckOmitirPregunta.IsChecked.Value || MessageBox.Show("Se va a borrar de forma permanente, estas seguro?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
             {
-                listaHaEditar.EliminarTarea(visor.Object as Tarea);
+                (visor.Object as Tarea).Quitar(listaHaEditar);
                 main.ActivarTemporizadorAutoSave();
                 main.PonTareasLista();
                 stkTareasLista.Children.Remove(visor);

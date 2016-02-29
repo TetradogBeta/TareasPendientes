@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 using Gabriel.Cat.Extension;
+using Gabriel.Cat;
+
 namespace Tareas_Pendientes_v2
 {
     /// <summary>
@@ -30,7 +32,7 @@ namespace Tareas_Pendientes_v2
         Temporizador temporizadorAutoSave;//cuando deje de hacer si hay cosas sin guardar lo guardo
         const int TIEMPOAUTOSAVE = 5 * 1000;
         bool guardado;
-
+        Categoria todasLasCategorias;
         public MainWindow()
         {
             guardado = true;
@@ -51,26 +53,29 @@ namespace Tareas_Pendientes_v2
         private void Load()
         {
             Action act;
+
             if (File.Exists(NOMBREARCHIVO))
             {
                 XmlDocument xmlTareas = new XmlDocument();
                 xmlTareas.Load(NOMBREARCHIVO);
-                listaActual = Lista.LoadXml(xmlTareas);
+                Categoria.LoadXmlNodo(xmlTareas.ChildNodes[0]);
+                listaActual = Lista.LoadNodoXml(xmlTareas.ChildNodes[1]);
                 if (listaActual != null)
                 {
                     act = () =>
                     {
-                        txboxNombreLista.Text = listaActual.NombreLista;
+                        txboxNombreLista.Text = listaActual.Nombre;
                         PonTareasLista();
                     };
                     Dispatcher.BeginInvoke(act);
                 }
                 PonCategoriasCmb();
+                todasLasCategorias = Categoria.ObtenerCategoria(0);
             }
             else {
-
-                cmbCategorias.Items.Add(TODASLASLISTAS);
-                Lista.AñadirCategoria(TODASLASLISTAS);
+                todasLasCategorias = new Categoria(0, TODASLASLISTAS);
+                cmbCategorias.Items.Add(todasLasCategorias);
+                Categoria.CategoriasList.Afegir(todasLasCategorias.IdUnico,todasLasCategorias);
                 cmbCategorias.SelectedIndex = 0;
             }
         }
@@ -79,7 +84,13 @@ namespace Tareas_Pendientes_v2
         {
             try
             {
-                Lista.ToXml(listaActual.EsTemporal ? listaActual : null).Save(NOMBREARCHIVO);
+                XmlDocument xml = new XmlDocument();
+                text txtXml = "<TareasPendientes>";
+                txtXml&=Categoria.SaveXmlNodo().OuterXml;
+                txtXml &= Lista.SaveNodoXml(listaActual.EsTemporal ? listaActual : null).OuterXml;
+                txtXml &= "</TareasPendientes>";
+                xml.LoadXml(txtXml);
+                xml.Save(NOMBREARCHIVO);
                 guardado = true;
                 temporizadorAutoSave.StopAndAbort();
             }
@@ -102,17 +113,11 @@ namespace Tareas_Pendientes_v2
             new EditorHerenciaLista(listaActual, this).ShowDialog();
         }
 
-
-
         private void CategoriasLista_Click(object sender, RoutedEventArgs e)
         {
             //abre una ventana para poder gestinar las categorias en las que se encuentra la lista actual
             new EditorCategoriasLista(listaActual, this).ShowDialog();
             cmbCategorias_SelectionChanged(null, null);//asi si la lista esta en la actualmente en la categoria puesta entonces se vera
-
-            //Errores
-            //a veces no lo quita de la lista actual...
-            //a veces cambiado de lista el objeto cambia por otro...pero mantiene el nombre...por mirar...
         }
 
         private void LimpiarCamposLista_Click(object sender, RoutedEventArgs e)
@@ -134,30 +139,21 @@ namespace Tareas_Pendientes_v2
 
         private bool EsListaActualGuardable()
         {
-            return listaActual != null && (!listaActual.EsTemporal || listaActual.EsTemporal && (listaActual.Count != 0 || listaActual.NombreLista != ""));
+            return listaActual != null && (!listaActual.EsTemporal || listaActual.EsTemporal && (Tarea.TareasLista(listaActual).Length != 0 || listaActual.Nombre != ""));
         }
 
         private void AñadirLista_Click(object sender, RoutedEventArgs e)
         {
             //añade la lista creada al monton de listas (hasta entonces era temporal, y avisa que se van a perder los datos si se va a cambiar de lista o cerrar)
-            string categoria = cmbCategorias.SelectedItem.ToString();
+            Categoria categoria = cmbCategorias.SelectedItem as Categoria;
             if (EsListaActualGuardable())
             {
                 if (listaActual.EsTemporal)
                 {
-                    if (!listaActual.EstaEnLaCategoria(TODASLASLISTAS))
-                        listaActual.AñadirHaCategoria(TODASLASLISTAS);
-
-                    if (categoria != TODASLASLISTAS && !listaActual.EstaEnLaCategoria(categoria))
-                        listaActual.AñadirHaCategoria(categoria);
+                    todasLasCategorias.Añadir(listaActual);
+                    categoria.Añadir(listaActual); 
                     listaActual.EsTemporal = false;
-                    if (listaActual.EstaEnLaCategoria(categoria))
-                    {
-                        lstListasPendientes.Items.Clear();
-                        lstListasPendientes.Items.AddRange(Lista.FiltraPorCategoria(categoria));
-                    }
-                    Lista.AñadirListaHaCategoria(listaActual, TODASLASLISTAS);
-                    Lista.AñadirListaHaCategoria(listaActual, categoria);
+                    lstListasPendientes.Items.Add(listaActual);
                     //Activa el temporizador para el autoGuardado
                     ActivarTemporizadorAutoSave();
                 }
@@ -170,7 +166,6 @@ namespace Tareas_Pendientes_v2
         }
         private void EliminarLista_Click(object sender, RoutedEventArgs e)
         {
-            Lista aux;
             //eliminia la lista, si tiene "descendencia" preguntara si esta seguro y si lo esta se quita la herencia de todas sus descendientes.
 
             if (EsListaActualGuardable() && (!listaActual.TieneDescendencia || MessageBox.Show("Esta lista esta siendo usada por otras como herencia, sigues queriendo borrarla?", "Se requiere su atencion", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes))
@@ -180,10 +175,8 @@ namespace Tareas_Pendientes_v2
                     //quito la descendencia
                     Lista.QuitarHerederos(listaActual);
                 }
-                aux = listaActual;
+                listaActual.EsTemporal = true;
                 LimpiarCamposLista_Click(null, null);//limpio los campos
-                aux.EsTemporal = true;
-
                 cmbCategorias_SelectionChanged(null, null);
 
                 //Activa el temporizador para el autoGuardado
@@ -203,7 +196,7 @@ namespace Tareas_Pendientes_v2
         private void PonCategoriasCmb()
         {
             cmbCategorias.Items.Clear();
-            cmbCategorias.Items.AddRange(Lista.TodasLasCategorias());
+            cmbCategorias.Items.AddRange(Categoria.Categorias());
             cmbCategorias.SelectedIndex = 0;
         }
 
@@ -234,7 +227,7 @@ namespace Tareas_Pendientes_v2
         {
             //sale una ventana con un comboBox con todas las tareas
             //tiene un boton que pone View. si le da lo posiciona aunque de momento no se mover la lista...
-            new BuscarTarea().Show();
+            new BuscarTarea(listaActual).Show();
         }
         #endregion
         private void cmbCategorias_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -243,7 +236,7 @@ namespace Tareas_Pendientes_v2
             if (cmbCategorias.SelectedItem != null)
             {
                 lstListasPendientes.Items.Clear();
-                lstListasPendientes.Items.AddRange(Lista.FiltraPorCategoria(cmbCategorias.SelectedItem.ToString()));
+                lstListasPendientes.Items.AddRange((cmbCategorias.SelectedItem as Categoria).Listas());
             }
         }
 
@@ -259,12 +252,12 @@ namespace Tareas_Pendientes_v2
             if (lista != null)
             {
                 //cuando seleccionan una lista se visualiza a no ser que haya una lista temporal luego pregunto antes de hacer nada
-                if (listaActual.EsTemporal && (listaActual.Count != 0 || listaActual.NombreLista != "") && MessageBox.Show("Hay una lista sin guardar que se va a perder, deseas Guardarla?", "Se requiere tu atencion", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                if (listaActual.EsTemporal && (Tarea.TareasLista(listaActual).Length != 0 || listaActual.Nombre != "") && MessageBox.Show("Hay una lista sin guardar que se va a perder, deseas Guardarla?", "Se requiere tu atencion", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                 {
                     AñadirLista_Click(null, null);
                 }
                 listaActual = lista;
-                txboxNombreLista.Text = listaActual.NombreLista;
+                txboxNombreLista.Text = listaActual.Nombre;
                 PonTareasLista();
 
             }
@@ -295,7 +288,7 @@ namespace Tareas_Pendientes_v2
             if (listaActual != null)
             {
                 //se a modificado el nombre de la lista.
-                listaActual.NombreLista = txboxNombreLista.Text;
+                listaActual.Nombre = txboxNombreLista.Text;
                 //cambia de la lista
                 if (!listaActual.EsTemporal)
                     lstListasPendientes.Items.Refresh();

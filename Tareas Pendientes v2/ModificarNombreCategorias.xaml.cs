@@ -24,13 +24,13 @@ namespace Tareas_Pendientes_v2
         public ModificarNombreCategorias(MainWindow main)
         {
             TextBox txtCategoria;
-            String[] categorias;
+            Categoria[] categorias;
             InitializeComponent();
-            categorias = Lista.TodasLasCategorias();
+            categorias = Categoria.Categorias();
             for(int i=0;i<categorias.Length;i++)
             {
                 txtCategoria = new TextBox();
-                txtCategoria.Text = categorias[i];
+                txtCategoria.Text = categorias[i].Nombre;
                 txtCategoria.Tag = categorias[i];//es la version sin modificar y que se remplaza cuando se aplica
                 //no hay un evento para saber si esta acabdo de editar sino lo pondria y quitaria el boton   
                 if (txtCategoria.Text == MainWindow.TODASLASLISTAS)
@@ -44,20 +44,19 @@ namespace Tareas_Pendientes_v2
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             //comprueba que sean diferentes y luego lo aplica, sino avisa
-            SortedList<string, TextBox> listaDeCategorias = new SortedList<string, TextBox>();
-            string categoria;
+            SortedList<Categoria, TextBox> listaDeCategorias = new SortedList<Categoria, TextBox>();
+            Categoria categoria;
             TextBox txtBxCategoria;
             try {
                 for (int i = 0; i < stkCategorias.Children.Count; i++) {
                     txtBxCategoria =(TextBox)stkCategorias.Children[i];
-                    categoria = txtBxCategoria.Text;
+                    categoria = txtBxCategoria.Tag as Categoria;
                     listaDeCategorias.Add(categoria, txtBxCategoria);
 
                 }
-                foreach(KeyValuePair<string,TextBox> txtCategoria in listaDeCategorias)
+                foreach(KeyValuePair<Categoria,TextBox> txtCategoria in listaDeCategorias)
                 {
-                    Lista.CambiarNombreCategoria(txtCategoria.Value.Tag as string, txtCategoria.Key);
-                    txtCategoria.Value.Tag = txtCategoria.Key;
+                    txtCategoria.Key.Nombre = txtCategoria.Value.Text;
                 }
                 MessageBox.Show("Se ha guardado correctamente","Faena guardada",MessageBoxButton.OK,MessageBoxImage.Information);
                 //Activa el temporizador para el autoGuardado

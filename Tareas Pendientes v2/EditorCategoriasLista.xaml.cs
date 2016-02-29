@@ -31,32 +31,30 @@ namespace Tareas_Pendientes_v2
 
         public EditorCategoriasLista(Lista listaActual, MainWindow main) : this(main)
         {
-
-            SortedList<string, string> categoriasLista = listaActual.Categorias().ToSortedList();
-            string[] categorias = Lista.TodasLasCategorias();
+            Categoria[] categorias = Categoria.Categorias();
             List<CheckBox> chks = new List<CheckBox>();
             CheckBox chkAux;
             for (int i = 0; i < categorias.Length; i++)
             {
                 chkAux = new CheckBox();
-                chkAux.IsChecked = categoriasLista.ContainsKey(categorias[i]);
+                chkAux.IsChecked = Categoria.CategoriasList.Existeix(categorias[i].IdUnico);
                 chkAux.Content = categorias[i];
+                chkAux.Tag = categorias[i];
                 chkAux.Checked += AñadirCategoria;
                 chkAux.Unchecked += QuitarCategoria;
                 stkCategorias.Children.Add(chkAux);
             }
             this.listaActual = listaActual;
-            txtNombre.Text ="Lista: "+ listaActual.NombreLista;
+            txtNombre.Text ="Lista: "+ listaActual.Nombre;
         }
 
         private void QuitarCategoria(object sender, RoutedEventArgs e)
         {
-            string categoria = (sender as CheckBox).Content.ToString();
-            if (categoria != MainWindow.TODASLASLISTAS)
+            CheckBox chk = (sender as CheckBox);
+            Categoria categoria = chk.Tag as Categoria;
+            if (categoria.Nombre != MainWindow.TODASLASLISTAS)
             {
-                listaActual.EliminarDeCategoria(categoria);
-                if (!listaActual.EsTemporal)
-                    Lista.QuitarListaDeCategoria(listaActual, categoria);
+                categoria.Quitar(listaActual);
                 //Activa el temporizador para el autoGuardado
                 main.ActivarTemporizadorAutoSave();
             }
@@ -64,10 +62,9 @@ namespace Tareas_Pendientes_v2
 
         private void AñadirCategoria(object sender, RoutedEventArgs e)
         {
-            string categoria = (sender as CheckBox).Content.ToString();
-            listaActual.AñadirHaCategoria(categoria);
-            if (!listaActual.EsTemporal)
-                Lista.AñadirListaHaCategoria(listaActual, categoria);
+            CheckBox chk = (sender as CheckBox);
+            Categoria categoria =chk.Tag as Categoria;
+            categoria.Añadir(listaActual);
             //Activa el temporizador para el autoGuardado
             main.ActivarTemporizadorAutoSave();
         }

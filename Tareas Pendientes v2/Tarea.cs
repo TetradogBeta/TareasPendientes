@@ -10,17 +10,28 @@ namespace Tareas_Pendientes_v2
 {
     public class Tarea : IClauUnicaPerObjecte,IComparable<Tarea>,IComparable
     {
+
         enum TareaXml
         {
             Descripcion,
             IdUnico
         }
-        static LlistaOrdenada<long,LlistaOrdenada<long,Tarea>> tareas=new LlistaOrdenada<long, LlistaOrdenada<long, Tarea>>();
-        string contenido;
-        LlistaOrdenada<Lista,DateTime> fechasHecho;
+        static LlistaOrdenada<long, Tarea> todasLasTareas;
+        static LlistaOrdenada<Lista,Llista<Tarea>> tareasPorLista;//de la lista
+        static Tarea()
+        {
+            tareasPorLista = new LlistaOrdenada<Lista, Llista<Tarea>>();
+            todasLasTareas = new LlistaOrdenada<long, Tarea>();
+        }
         long idUnico;
+        string contenido;
+        LlistaOrdenada<Lista,DateTime> listasTareaHecha;
+        Llista<Lista> listasTareaOculta;//solo si esa lista tiene la tarea por herencia sino la elimina
+       
         public event TareaEventHandler TareaHecha;
         public event TareaEventHandler TareaNoHecha;
+
+
         public Tarea(string contenido)
             : this(contenido, DateTime.Now.Ticks)
         {
@@ -29,7 +40,8 @@ namespace Tareas_Pendientes_v2
         {
             this.contenido = contenido;
             this.idUnico = idUnico;
-            fechasHecho = new LlistaOrdenada<Lista, DateTime>();
+            listasTareaHecha = new LlistaOrdenada<Lista, DateTime>();
+            listasTareaOculta = new Llista<Lista>();
         }
         public Tarea(XmlNode nodo)
             : this(nodo.ChildNodes[(int)TareaXml.Descripcion].InnerText.DescaparCaracteresXML(), Convert.ToInt64(nodo.ChildNodes[(int)TareaXml.IdUnico].InnerText))
@@ -64,40 +76,39 @@ namespace Tareas_Pendientes_v2
                 contenido = value;
             }
         }
+        public bool EstaHecha(Lista lista)
+        {
+            return listasTareaHecha.Existeix(lista);
+        }
+        public bool EstaDisponible(Lista lista)
+        {
+            return tareasPorLista[lista].Existeix(this)||!listasTareaOculta.Existeix(lista);
+        }
+        public void Añadir(Lista lista)
+        {
+            if (!tareasPorLista.Existeix(lista))
+                tareasPorLista.Afegir(lista, new Llista<Tarea>());
+            if(!tareasPorLista[lista].Existeix(lista))
+                 tareasPorLista[lista].Afegir(this);
+        }
+       public void AñadirHecho(Lista lista,DateTime fechaHecho)
+        {
+            listasTareaHecha.AfegirORemplaçar(lista, fechaHecho);
+        }
+        public void QuitarHecho(Lista lista)
+        {
+            listasTareaHecha.Elimina(lista);
+        }
+        public void Quitar(Lista lista)
+        {
+            if (!tareasPorLista.Existeix(lista))
+                tareasPorLista.Afegir(lista, new Llista<Tarea>());
+            if (tareasPorLista[lista].Existeix(this))
+                tareasPorLista[lista].Elimina(this);
+            else  if(!listasTareaOculta.Existeix(lista))
+                listasTareaOculta.Afegir(lista);
+        }
 
-        public DateTime FechaHecho(Lista lista)
-        {
-            return fechasHecho[lista];
-        }
-        public bool Hecho(Lista lista)
-        {
-            return !FechaHecho(lista).Equals(default(DateTime));
-        }
-        public void AñadirTareaHecha(Lista lista,DateTime fechaHecho)
-        {
-            if(!fechasHecho.Existeix(lista))
-            {
-                fechasHecho.Afegir(lista, fechaHecho);
-            }
-        }
-        public void AñadirTareaHecha(Lista lista)
-        {
-            AñadirTareaHecha(lista, DateTime.Now);
-        }
-        public void QuitarTareaHecha(Lista lista)
-        {
-            if (fechasHecho.Existeix(lista))
-            {
-                fechasHecho.Elimina(lista);
-            }
-
-        }
-
-
-        public IComparable Clau()
-        {
-            return idUnico;
-        }
         public XmlNode ToXml()
         {
             //por testear
@@ -109,11 +120,12 @@ namespace Tareas_Pendientes_v2
             return nodo.FirstChild;//mirar si coge el nodo principal
 
         }
-        public override string ToString()
+
+        public IComparable Clau()
         {
-            string toString = Contenido == "" ? "'Sin Contenido'" : Contenido;
-            return toString;
+            return idUnico;
         }
+
 
         public int CompareTo(Tarea other)
         {
@@ -131,27 +143,59 @@ namespace Tareas_Pendientes_v2
         {
             return CompareTo(obj as Tarea);
         }
-        public static void Hacer(Lista lista, long idTarea, DateTime dateTime)
+
+        public override string ToString()
         {
-            if (!tareas.Existeix(lista.IdUnico))
-                tareas.Afegir(lista.IdUnico, new LlistaOrdenada<long, Tarea>());
-            if(tareas[lista.IdUnico].Existeix(idTarea))
-            tareas[lista.IdUnico][idTarea].AñadirTareaHecha(lista, dateTime);
+            string toString = Contenido == "" ? "'Sin Contenido'" : Contenido;
+            return toString;
         }
-        public static void Deshacer(Lista lista,long idTarea)
+
+
+        public static Tarea[] TareasLista(Lista lista)
         {
-            if (tareas.Existeix(lista.IdUnico))
-                if (tareas[lista.IdUnico].Existeix(idTarea))
-                tareas[lista.IdUnico][idTarea].QuitarTareaHecha(lista);
+            Tarea[] tareasLista = { };
+            if (tareasPorLista.Existeix(lista))
+                tareasLista = tareasPorLista[lista].ToArray();
+            return tareasLista;
         }
+
         public static Tarea[] TareasHechas(Lista lista)
         {
             Tarea[] tareasHechas;
-            if (!tareas.Existeix(lista.IdUnico))
-                tareasHechas= new Tarea[0];
+            if (!tareasPorLista.Existeix(lista))
+                tareasHechas = new Tarea[0]; 
             else
-                tareasHechas = tareas[lista.IdUnico].ValuesToArray().Filtra((tarea) => { return tarea.Hecho(lista); }).ToArray();
+               tareasHechas= tareasPorLista[lista].Filtra((tarea) => { return tarea.EstaHecha(lista); }).ToArray();
             return tareasHechas;
+        }
+
+        public DateTime FechaHecho(Lista lista)
+        {
+            return listasTareaHecha[lista];
+        }
+
+        public static Tarea[] TareasOcultas(Lista lista)
+        {
+            Tarea[] tareasOcultas;
+            if (!tareasPorLista.Existeix(lista))
+                tareasOcultas = new Tarea[0];
+            else
+                tareasOcultas = tareasPorLista[lista].Filtra((tarea) => { return !tarea.EstaDisponible(lista); }).ToArray();
+            return tareasOcultas;
+        }
+        public static Tarea Obtener(long idTarea)
+        {
+          return  todasLasTareas[idTarea];
+        }
+
+        public static Tarea[] TareasVisibles(Lista lista)
+        {
+            Llista<Tarea> tareasVisibles = new Llista<Tarea>(Tarea.TareasLista(lista));
+            Lista[] herencia = lista.Herencia();
+            for (int i = 0; i < herencia.Length; i++)
+                tareasVisibles.AfegirMolts(TareasVisibles(herencia[i]));
+            tareasVisibles.Elimina(TareasOcultas(lista));
+            return tareasVisibles.ToArray();
         }
     }
 }

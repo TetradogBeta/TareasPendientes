@@ -98,6 +98,7 @@
     <Compile Include="BuscarTarea.xaml.cs">
       <DependentUpon>BuscarTarea.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Categoria.cs" />
     <Compile Include="CategoriasManager.xaml.cs">
       <DependentUpon>CategoriasManager.xaml</DependentUpon>
     </Compile>

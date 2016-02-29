@@ -36,7 +36,7 @@ namespace Tareas_Pendientes_v2
         {
             if (ckOmitirPregunta.IsChecked.Value || MessageBox.Show("Se va a borrar de forma permanente todas las tareas hechas y ocultas de esa herencia de la lista actual, estas seguro?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
             {
-                listaActual.EliminarHerencia(visor.Object as Lista);
+                listaActual.Desheredar(visor.Object as Lista);
                 stkHerencia.Children.Remove(visor);
                 //Activa el temporizador para el autoGuardado
                 main.ActivarTemporizadorAutoSave();
@@ -48,7 +48,7 @@ namespace Tareas_Pendientes_v2
         private void PonHerenciaValidaAlCmb()
         {
             cmbHerenciaPosible.Items.Clear();
-            cmbHerenciaPosible.Items.AddRange(Lista.HerenciaPosible(listaActual));
+            cmbHerenciaPosible.Items.AddRange(Lista.ListasHeredables(listaActual));
             if (cmbHerenciaPosible.Items.Count > 0)
                 cmbHerenciaPosible.SelectedIndex = 0;
         }
@@ -57,7 +57,7 @@ namespace Tareas_Pendientes_v2
         {
             try
             {
-                listaActual.AñadirHerencia(cmbHerenciaPosible.SelectedItem as Lista);
+                listaActual.Heredar(cmbHerenciaPosible.SelectedItem as Lista);
                 stkHerencia.Children.Add(cmbHerenciaPosible.SelectedItem.ToObjViewer(QuitarHerencia));
                 PonHerenciaValidaAlCmb();
                 //Activa el temporizador para el autoGuardado

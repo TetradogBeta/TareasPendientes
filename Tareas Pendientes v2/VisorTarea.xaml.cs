@@ -34,7 +34,7 @@ namespace Tareas_Pendientes_v2
 
         public VisorTarea(Lista lista):this(lista,null)
         {
-            lista.AñadirTarea(Tarea);
+            Tarea.Añadir(lista);
         }
 
         public Tarea Tarea {
@@ -47,7 +47,7 @@ namespace Tareas_Pendientes_v2
                 tarea = value;
                 if(tarea!=null)
                 {
-                    ckHecho.IsChecked = tarea.Hecho(lista);
+                    ckHecho.IsChecked = tarea.EstaHecha(lista);
                     txtBlFechaHecho.Text = ckHecho.IsChecked.Value ? tarea.FechaHecho(lista).ToString():"";
                     txtBxDescripcionTarea.Text = tarea.Contenido;
                    
@@ -64,7 +64,7 @@ namespace Tareas_Pendientes_v2
             if (txtBlFechaHecho != null && tarea != null)
             {
                 txtBlFechaHecho.Text = DateTime.Now.ToString();
-                tarea.AñadirTareaHecha(lista);
+                tarea.AñadirHecho(lista,DateTime.Now);
                 if (TareaEditada != null)
                     TareaEditada(this, new EventArgs());
             }
@@ -74,7 +74,7 @@ namespace Tareas_Pendientes_v2
         {
             if (txtBlFechaHecho != null && tarea != null)
             {
-                tarea.QuitarTareaHecha(lista);
+                tarea.QuitarHecho(lista);
                 txtBlFechaHecho.Text = "";
                 if (TareaEditada != null)
                     TareaEditada(this, new EventArgs());
