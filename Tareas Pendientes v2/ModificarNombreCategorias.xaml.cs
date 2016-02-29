@@ -19,7 +19,9 @@ namespace Tareas_Pendientes_v2
     /// </summary>
     public partial class ModificarNombreCategorias : Window
     {
-        public ModificarNombreCategorias()
+        private MainWindow main;
+
+        public ModificarNombreCategorias(MainWindow main)
         {
             TextBox txtCategoria;
             String[] categorias;
@@ -35,9 +37,8 @@ namespace Tareas_Pendientes_v2
                     txtCategoria.IsReadOnly = true;//asi no lo modifican :)
                 stkCategorias.Children.Add(txtCategoria);
 
-            }
-
-            
+            }      
+            this.main = main;
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
@@ -59,6 +60,8 @@ namespace Tareas_Pendientes_v2
                     txtCategoria.Value.Tag = txtCategoria.Key;
                 }
                 MessageBox.Show("Se ha guardado correctamente","Faena guardada",MessageBoxButton.OK,MessageBoxImage.Information);
+                //Activa el temporizador para el autoGuardado
+                main.ActivarTemporizadorAutoSave();
             }
             catch
             {

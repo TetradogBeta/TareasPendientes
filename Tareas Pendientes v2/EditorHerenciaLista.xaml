@@ -7,6 +7,23 @@
         mc:Ignorable="d"
         Title="EditorHerencia" Height="300" Width="300">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="9*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="49*"/>
+                <ColumnDefinition Width="24*"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox Grid.Column="0" x:Name="cmbHerenciaPosible" />
+            <Button Grid.Column="1" x:Name="btnAñadirHerencia" Content="Añadir" Click="btnAñadirHerencia_Click"/>
+        </Grid>
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Herencia:" x:Name="txtNombreHerencia"/>
+            <StackPanel x:Name="stkHerencia"/>
+        </StackPanel>
+        <CheckBox Grid.Row="2" Content="Omitir pregunta de seguridad" x:Name="ckOmitirPregunta"/>
     </Grid>
 </Window>

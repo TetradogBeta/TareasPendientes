@@ -265,8 +265,8 @@ namespace Tareas_Pendientes_v2
         {
             if (herencia.Existeix(listaHaHerededar.idUnico))
                 throw new Exception("Ya existe la herencia");
-            if (!ContieneHerencia(listaHaHerededar))
-                throw new Exception("Recursividad infinita, la lista no puede contener a sus herederos");
+            if (ContieneHerencia(listaHaHerededar))
+                throw new Exception("la lista ha heredar no puede coincidir en ninguna tarea que ya este en la lista");
 
             //tener en cuenta si añaden o quitan tareas de las listas heredadas
             herencia.Afegir(listaHaHerededar.idUnico, listaHaHerededar);
@@ -296,6 +296,7 @@ namespace Tareas_Pendientes_v2
             todasLasTareasVisiblesLista.Elimina(listaHaDesHeredar.todasLasTareasVisiblesLista.KeysToArray());
             listaHaDesHeredar.TareaEliminada -= QuitarTareaHeredada;
             listaHaDesHeredar.TareaNueva -= AñadirTareaHeredada;
+            herencia.Elimina(listaHaDesHeredar.idUnico);
         }
         /// <summary>
         /// Mira que no se contenga la herencia la lista actual y las listas de su herencia
@@ -304,9 +305,9 @@ namespace Tareas_Pendientes_v2
         /// <returns></returns>
         public bool ContieneHerencia(Lista listaHaHerededar)
         {
-            bool contiene = listaHaHerededar.todasLasTareasVisiblesLista.Count != 0;
-            if (contiene)
-                contiene = todasLasTareasVisiblesLista.Existeix(listaHaHerededar.todasLasTareasVisiblesLista.ElementAt(0).Key);
+            bool contiene = listaHaHerededar.todasLasTareasVisiblesLista.Count == 0;
+            for(int i=0;i<listaHaHerededar.todasLasTareasVisiblesLista.Count&&!contiene;i++)
+                contiene = todasLasTareasVisiblesLista.Existeix(listaHaHerededar.todasLasTareasVisiblesLista.ElementAt(i).Key);
             return contiene;
         }
         public Lista[] Herencia()
@@ -538,5 +539,20 @@ namespace Tareas_Pendientes_v2
         }
         #endregion
 
+        #region Herencia
+        public static Lista[] HerenciaPosible(Lista listaActual)
+        {
+            List<Lista> listas = new List<Lista>();
+            bool existeHerencia = todasLasListas.Existeix(listaActual);
+            if (existeHerencia)
+                todasLasListas.Elimina(listaActual);
+            for (int i = 0; i < todasLasListas.Count; i++)
+                if (!listaActual.ContieneHerencia(todasLasListas[i]))
+                    listas.Add(todasLasListas[i]);
+            if (existeHerencia)
+                todasLasListas.Afegir(listaActual);//asi no tengo que comprovar de no añadir la misma
+            return listas.ToArray();
+        }
+        #endregion
     }
 }

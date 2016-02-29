@@ -100,10 +100,7 @@ namespace Tareas_Pendientes_v2
         private void HerenciasLista_Click(object sender, RoutedEventArgs e)
         {
             //abre una ventana para poder gestinar las herencias que posee la lista actual
-            new EditorHerenciaLista(listaActual).ShowDialog();
-            PonTareasLista();
-            //Activa el temporizador para el autoGuardado
-            ActivarTemporizadorAutoSave();
+            new EditorHerenciaLista(listaActual,this).ShowDialog();
         }
 
 

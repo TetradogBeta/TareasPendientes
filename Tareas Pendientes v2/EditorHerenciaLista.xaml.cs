@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Gabriel.Cat.Extension;
+using Gabriel.Cat.Wpf;
 
 namespace Tareas_Pendientes_v2
 {
@@ -20,15 +22,52 @@ namespace Tareas_Pendientes_v2
     public partial class EditorHerenciaLista : Window
     {
         private Lista listaActual;
-
-        public EditorHerenciaLista()
+        private MainWindow main;
+        public EditorHerenciaLista(Lista listaActual,MainWindow main)
         {
-            InitializeComponent();
+            this.main = main;
+            InitializeComponent();    
+            this.listaActual = listaActual;
+            stkHerencia.Children.AddRange(listaActual.Herencia().ToObjViewerArray(QuitarHerencia));
+            PonHerenciaValidaAlCmb();
         }
 
-        public EditorHerenciaLista(Lista listaActual)
+        private void QuitarHerencia(ObjViewer visor)
         {
-            this.listaActual = listaActual;
+            if (ckOmitirPregunta.IsChecked.Value || MessageBox.Show("Se va a borrar de forma permanente todas las tareas hechas y ocultas de esa herencia de la lista actual, estas seguro?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+            {
+                listaActual.EliminarHerencia(visor.Object as Lista);
+                stkHerencia.Children.Remove(visor);
+                //Activa el temporizador para el autoGuardado
+                main.ActivarTemporizadorAutoSave();
+                main.PonTareasLista();
+                PonHerenciaValidaAlCmb();
+            }
+        }
+
+        private void PonHerenciaValidaAlCmb()
+        {
+            cmbHerenciaPosible.Items.Clear();
+            cmbHerenciaPosible.Items.AddRange(Lista.HerenciaPosible(listaActual));
+            if (cmbHerenciaPosible.Items.Count > 0)
+                cmbHerenciaPosible.SelectedIndex = 0;
+        }
+
+        private void btnAñadirHerencia_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                listaActual.AñadirHerencia(cmbHerenciaPosible.SelectedItem as Lista);
+                stkHerencia.Children.Add(cmbHerenciaPosible.SelectedItem.ToObjViewer(QuitarHerencia));
+                PonHerenciaValidaAlCmb();
+                //Activa el temporizador para el autoGuardado
+                main.ActivarTemporizadorAutoSave();
+                main.PonTareasLista();
+            }
+            catch(Exception m)
+            {
+                MessageBox.Show(m.Message,"Atención",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
         }
     }
 }

@@ -66,7 +66,7 @@ namespace Tareas_Pendientes_v2
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            new ModificarNombreCategorias().ShowDialog();
+            new ModificarNombreCategorias(main).ShowDialog();
             stkCategorias.Children.Clear();
             stkCategorias.Children.AddRange(Lista.TodasLasCategorias().ToObjViewerArray(EliminarCategoria));
         }
