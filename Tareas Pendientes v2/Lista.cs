@@ -26,7 +26,6 @@ namespace Tareas_Pendientes_v2
         LlistaOrdenada<long, Lista> herencia;
         LlistaOrdenada<long, Tarea> todasLasTareasVisiblesLista;//estan las de la herencia asi no se tienen que ir poniendo siempre
         LlistaOrdenada<long, Tarea> tareasLista;
-        LlistaOrdenada<long, Tarea> tareasHechas;
         LlistaOrdenada<long, Tarea> tareasOcultas;//son las tareas que no tienen que ser visibles asi que las quito de todasLasTareasLista
 
         public event TareaEventHandler TareaNueva;
@@ -46,7 +45,6 @@ namespace Tareas_Pendientes_v2
             herencia = new LlistaOrdenada<long, Lista>();
             todasLasTareasVisiblesLista = new LlistaOrdenada<long, Tarea>();
             tareasLista = new LlistaOrdenada<long, Tarea>();
-            tareasHechas = new LlistaOrdenada<long, Tarea>();
             tareasOcultas = new LlistaOrdenada<long, Tarea>();
 
         }
@@ -113,6 +111,8 @@ namespace Tareas_Pendientes_v2
         }
 
         public bool TieneDescendencia { get { return TareaNueva != null; } }
+
+        public long IdUnico { get { return idUnico; } }
         #region Categoria
         public bool EstaEnLaCategoria(string categoria)
         {
@@ -218,16 +218,16 @@ namespace Tareas_Pendientes_v2
         }
         public void TareaHecha(Tarea tarea)
         {
-            if ((todasLasTareasVisiblesLista.Existeix(tarea.IdUnico) || tareasOcultas.Existeix(tarea.IdUnico)) && !tareasHechas.Existeix(tarea.IdUnico) && tarea.Hecho)
+            if ((todasLasTareasVisiblesLista.Existeix(tarea.IdUnico) || tareasOcultas.Existeix(tarea.IdUnico)))
             {
-                tareasHechas.Afegir(tarea.IdUnico, tarea);
+                tarea.AñadirTareaHecha(this);
             }
         }
         public void TareaNoHecha(Tarea tarea)
         {
-            if ((todasLasTareasVisiblesLista.Existeix(tarea.IdUnico) || tareasOcultas.Existeix(tarea.IdUnico)) && tareasHechas.Existeix(tarea.IdUnico) && !tarea.Hecho)
+            if ((todasLasTareasVisiblesLista.Existeix(tarea.IdUnico) || tareasOcultas.Existeix(tarea.IdUnico)))
             {
-                tareasHechas.Elimina(tarea.IdUnico);
+                tarea.QuitarTareaHecha(this);
             }
         }
         public Tarea[] Filtra(string contenido, bool? estanHechas, DateTime? fecha)
@@ -250,7 +250,7 @@ namespace Tareas_Pendientes_v2
             {
                 if (estanHechas.Value)
                 {
-                    if (!fechaString.Equals(tareas[i].FechaHecho.ToShortDateString()))
+                    if (!fechaString.Equals(tareas[i].FechaHecho(this).ToShortDateString()))
                     {
                         tareasQueNoCoinciden.Afegir(tareas[i]);
                     }
@@ -270,33 +270,55 @@ namespace Tareas_Pendientes_v2
 
             //tener en cuenta si añaden o quitan tareas de las listas heredadas
             herencia.Afegir(listaHaHerededar.idUnico, listaHaHerededar);
-            todasLasTareasVisiblesLista.AfegirMolts(listaHaHerededar.todasLasTareasVisiblesLista);
+            AñadirTareaHeredada(listaHaHerededar.todasLasTareasVisiblesLista.ValuesToArray());
             listaHaHerededar.TareaEliminada += QuitarTareaHeredada;
             listaHaHerededar.TareaNueva += AñadirTareaHeredada;
         }
-
+        private void AñadirTareaHeredada(Tarea[] tareasHeredadas)
+        {
+            if (tareasHeredadas == null)
+                throw new NullReferenceException();
+            for (int i = 0; i < tareasHeredadas.Length; i++)
+                AñadirTareaHeredada(tareasHeredadas[i]);
+        }
+        private void QuitarTareaHeredada(Tarea[] tareasHeredadas)
+        {
+            if (tareasHeredadas == null)
+                throw new NullReferenceException();
+            for (int i = 0; i < tareasHeredadas.Length; i++)
+                QuitarTareaHeredada(tareasHeredadas[i]);
+        }
         private void QuitarTareaHeredada(Tarea tareaHaQuitar)
         {
             if (todasLasTareasVisiblesLista.Existeix(tareaHaQuitar.IdUnico))
+            {
                 todasLasTareasVisiblesLista.Elimina(tareaHaQuitar.IdUnico);
+                tareasOcultas.Elimina(tareaHaQuitar.IdUnico);
+                todasLasTareasVisiblesLista.Elimina(tareaHaQuitar.IdUnico);
+            }
             if (TareaEliminada != null)
                 TareaEliminada(tareaHaQuitar);
         }
         private void AñadirTareaHeredada(Tarea tareaHaAñadir)
         {
             if (!todasLasTareasVisiblesLista.Existeix(tareaHaAñadir.IdUnico))
+            {
                 todasLasTareasVisiblesLista.Afegir(tareaHaAñadir.IdUnico, tareaHaAñadir);
+            }
             if (TareaNueva != null)
                 TareaNueva(tareaHaAñadir);
         }
         public void EliminarHerencia(Lista listaHaDesHeredar)
         {
+            long[] idTareasHaQuitar = listaHaDesHeredar.todasLasTareasVisiblesLista.KeysToArray();
             if (!herencia.Existeix(listaHaDesHeredar.idUnico))
                 throw new Exception("No se hereda de esta lista directamente");
-            todasLasTareasVisiblesLista.Elimina(listaHaDesHeredar.todasLasTareasVisiblesLista.KeysToArray());
+            herencia.Elimina(listaHaDesHeredar.idUnico);
+            QuitarTareaHeredada(listaHaDesHeredar.todasLasTareasVisiblesLista.ValuesToArray());
+
             listaHaDesHeredar.TareaEliminada -= QuitarTareaHeredada;
             listaHaDesHeredar.TareaNueva -= AñadirTareaHeredada;
-            herencia.Elimina(listaHaDesHeredar.idUnico);
+            
         }
         /// <summary>
         /// Mira que no se contenga la herencia la lista actual y las listas de su herencia
@@ -344,8 +366,8 @@ namespace Tareas_Pendientes_v2
             nodo &= "</TareasOcultas>";
             //tareas hechas solo ids
             nodo &= "<TareasHechas>";
-            foreach (KeyValuePair<long, Tarea> tareaHechaId in tareasHechas)
-                nodo &= "<TareasHecha>" + tareaHechaId.Key + "</TareasHecha>";
+            foreach (Tarea tareaHecha in Tarea.TareasHechas(this))
+                nodo &= "<TareasHecha> <Id>" + tareaHecha.IdUnico+ "</Id> <FechaHecho>" + tareaHecha.FechaHecho(this).Ticks+ "</FechaHecho></TareasHecha>";
             nodo &= "</TareasHechas>";
 
             nodo &= "</Lista>";
@@ -452,9 +474,14 @@ namespace Tareas_Pendientes_v2
             }
             for (int j = 0; j < xmlNode.ChildNodes[(int)NodoLista.TareasHechas].ChildNodes.Count; j++)//pongo las tareas hechas
             {
-                listaCargada.TareaHecha(Convert.ToInt64(xmlNode.ChildNodes[(int)NodoLista.TareasHechas].ChildNodes[j].InnerText));//hay solo el id de la lista de la que hereda
+                listaCargada.TareaHecha(Convert.ToInt64(xmlNode.ChildNodes[(int)NodoLista.TareasHechas].ChildNodes[j].ChildNodes[0].InnerText),new DateTime(Convert.ToInt64(xmlNode.ChildNodes[(int)NodoLista.TareasHechas].ChildNodes[j].ChildNodes[1].InnerText)));//hay solo el id de la lista de la que hereda
             }
 
+        }
+
+        private void TareaHecha(long id, DateTime dateTime)
+        {
+            Tarea.Hacer(this, id, dateTime);
         }
 
         public static XmlDocument ToXml(Lista listaTemporal = null)

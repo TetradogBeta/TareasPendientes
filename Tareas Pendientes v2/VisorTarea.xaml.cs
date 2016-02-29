@@ -19,17 +19,23 @@ namespace Tareas_Pendientes_v2
     /// <summary>
     /// Lógica de interacción para VisorTarea.xaml
     /// </summary>
-    public partial class VisorTarea : UserControl
+    public partial class VisorTarea : UserControl,IComparable<VisorTarea>,IComparable
     {
         Tarea tarea;
+        Lista lista;
         public event EventHandler TareaEditada;
-        public VisorTarea()
+        public VisorTarea(Lista lista,Tarea tarea)
         {
             InitializeComponent();
-            Tarea = new Tarea();
+            Tarea = tarea;
+            this.lista = lista;
         }
-        public VisorTarea(Tarea tarea):this()
-        { Tarea = tarea; }
+
+        public VisorTarea(Lista lista):this(lista,null)
+        {
+            lista.AñadirTarea(Tarea);
+        }
+
         public Tarea Tarea {
             get {
                 if (tarea == null)
@@ -40,10 +46,10 @@ namespace Tareas_Pendientes_v2
                 tarea = value;
                 if(tarea!=null)
                 {
-
-                    txtBlFechaHecho.Text =tarea.Hecho?tarea.FechaHecho.ToString():"";
+                    ckHecho.IsChecked = tarea.Hecho(lista);
+                    txtBlFechaHecho.Text = ckHecho.IsChecked.Value ? tarea.FechaHecho(lista).ToString():"";
                     txtBxDescripcionTarea.Text = tarea.Contenido;
-                    ckHecho.IsChecked = tarea.Hecho;
+                   
                 }else
                 {
                     txtBlFechaHecho.Text = "";
@@ -57,7 +63,7 @@ namespace Tareas_Pendientes_v2
             if (txtBlFechaHecho != null && tarea != null)
             {
                 txtBlFechaHecho.Text = DateTime.Now.ToString();
-                tarea.Hecho = true;
+                tarea.AñadirTareaHecha(lista);
                 if (TareaEditada != null)
                     TareaEditada(this, new EventArgs());
             }
@@ -67,7 +73,7 @@ namespace Tareas_Pendientes_v2
         {
             if (txtBlFechaHecho != null && tarea != null)
             {
-                tarea.Hecho = false;
+                tarea.QuitarTareaHecha(lista);
                 txtBlFechaHecho.Text = "";
                 if (TareaEditada != null)
                     TareaEditada(this, new EventArgs());
@@ -82,6 +88,25 @@ namespace Tareas_Pendientes_v2
                 if (TareaEditada != null)
                     TareaEditada(this, new EventArgs());
             }
+        }
+
+        public int CompareTo(object obj)
+        {
+            return CompareTo(obj as VisorTarea);
+        }
+
+        public int CompareTo(VisorTarea other)
+        {
+            int compareTo;
+            if(other!=null)
+            {
+                compareTo = Tarea.CompareTo(other.Tarea);
+            }
+            else
+            {
+                compareTo = -1;
+            }
+            return compareTo;
         }
     }
 }

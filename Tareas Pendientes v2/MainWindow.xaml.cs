@@ -225,7 +225,7 @@ namespace Tareas_Pendientes_v2
         private void AñadirElementoLista_Click(object sender, RoutedEventArgs e)
         {
             //añade al final un elemento
-            VisorTarea visor = new VisorTarea();
+            VisorTarea visor = new VisorTarea(listaActual);
             stkTareas.Children.Add(visor);
             listaActual.AñadirTarea(visor.Tarea);
             //Activa el temporizador para el autoGuardado
@@ -262,7 +262,7 @@ namespace Tareas_Pendientes_v2
                 //cuando seleccionan una lista se visualiza a no ser que haya una lista temporal luego pregunto antes de hacer nada
                 if (listaActual.EsTemporal && (listaActual.Count != 0 || listaActual.NombreLista != "") && MessageBox.Show("Hay una lista sin guardar que se va a perder, deseas Guardarla?", "Se requiere tu atencion", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                 {
-                    listaActual.EsTemporal = false;
+                    AñadirLista_Click(null, null);
                 }
                 listaActual = lista;
                 txboxNombreLista.Text = listaActual.NombreLista;
@@ -285,10 +285,11 @@ namespace Tareas_Pendientes_v2
             stkTareas.Children.Clear();
             foreach (Tarea tarea in listaActual)
             {
-                visor = new VisorTarea(tarea);
+                visor = new VisorTarea(listaActual,tarea);
                 visor.TareaEditada += (sender, e) => { ActivarTemporizadorAutoSave(); };
                 stkTareas.Children.Add(visor);
             }
+            stkTareas.Children.Sort();//las ordeno por fechaHecha
         }
         private void txboxNombreLista_TextChanged(object sender, TextChangedEventArgs e)
         {
