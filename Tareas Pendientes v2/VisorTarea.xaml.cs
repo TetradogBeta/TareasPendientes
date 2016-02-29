@@ -27,8 +27,9 @@ namespace Tareas_Pendientes_v2
         public VisorTarea(Lista lista,Tarea tarea)
         {
             InitializeComponent();
-            Tarea = tarea;
             this.lista = lista;
+            Tarea = tarea;
+            
         }
 
         public VisorTarea(Lista lista):this(lista,null)
@@ -100,13 +101,22 @@ namespace Tareas_Pendientes_v2
             int compareTo;
             if(other!=null)
             {
-                compareTo = Tarea.CompareTo(other.Tarea);
+                compareTo = CompareTo(Tarea,other.Tarea);
             }
             else
             {
                 compareTo = -1;
             }
             return compareTo;
+        }
+
+        private int CompareTo(Tarea tarea1, Tarea tarea2)
+        {
+            int compareTo = tarea1 == null ? tarea2 != null ? -1 : 1 : tarea1 != null ? 1 : 0;
+            if (compareTo == 0)
+                compareTo = tarea1.CompareTo(tarea2);
+            return compareTo;
+
         }
     }
 }

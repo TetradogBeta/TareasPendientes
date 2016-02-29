@@ -227,7 +227,6 @@ namespace Tareas_Pendientes_v2
             //añade al final un elemento
             VisorTarea visor = new VisorTarea(listaActual);
             stkTareas.Children.Add(visor);
-            listaActual.AñadirTarea(visor.Tarea);
             //Activa el temporizador para el autoGuardado
             ActivarTemporizadorAutoSave();
         }
