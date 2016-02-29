@@ -111,6 +111,9 @@
       <DependentUpon>EliminarTareas.xaml</DependentUpon>
     </Compile>
     <Compile Include="Lista.cs" />
+    <Compile Include="ModificarNombreCategorias.xaml.cs">
+      <DependentUpon>ModificarNombreCategorias.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tarea.cs" />
     <Compile Include="VisorTarea.xaml.cs">
       <DependentUpon>VisorTarea.xaml</DependentUpon>
@@ -151,6 +154,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ModificarNombreCategorias.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="VisorTarea.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

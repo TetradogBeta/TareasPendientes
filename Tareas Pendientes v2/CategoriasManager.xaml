@@ -21,6 +21,13 @@
             <Button Grid.Column="1" Content="Añadir" Click="Button_Click"/>
         </Grid>
         <StackPanel Grid.Row="1" x:Name="stkCategorias"/>
-        <CheckBox Grid.Row="2" Content="Omitir pregunta de seguridad" x:Name="ckOmitirPregunta"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="93*"/>
+                <ColumnDefinition Width="53*"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox Grid.Column="0" Content="Omitir pregunta de seguridad" x:Name="ckOmitirPregunta"/>
+            <Button Grid.Column="1" Content="Cambiar Nombre" Click="Button_Click_1"/>
+        </Grid>
     </Grid>
 </Window>

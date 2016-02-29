@@ -53,10 +53,12 @@ namespace Tareas_Pendientes_v2
         public Lista():this(""){}
         private Lista(XmlNode nodo) : this(nodo.ChildNodes[(int)NodoLista.Nombre].InnerText)
         {
+            string categoria;
             idUnico = Convert.ToInt64(nodo.ChildNodes[(int)NodoLista.Id].InnerText);
             for (int i = 0; i < nodo.ChildNodes[(int)NodoLista.Categoria].ChildNodes.Count; i++)//añado la lista en su categoria
             {
-                AñadirCategoria(nodo.ChildNodes[(int)NodoLista.Categoria].ChildNodes[i].InnerText.DescaparCaracteresXML());
+                categoria = nodo.ChildNodes[(int)NodoLista.Categoria].ChildNodes[i].InnerText.DescaparCaracteresXML();
+                AñadirHaCategoria(categoria);
             }
             //la herencia la hago fuera
             //añado las tareas de la Lista
@@ -388,10 +390,11 @@ namespace Tareas_Pendientes_v2
                 AñadirCategoria(xmlNodePrincipal.FirstChild.ChildNodes[i].InnerText.DescaparCaracteresXML());
             //Listas
             for (int i = 0; i < xmlNodePrincipal.LastChild.ChildNodes.Count; i++)
-            {//pum
+            {
                 listaCargada = new Lista(xmlNodePrincipal.LastChild.ChildNodes[i]);
                 listas.Afegir(listaCargada.idUnico, listaCargada);
                 todasLasListas.Afegir(listaCargada);
+                Lista.AñadirListaHaSusCategorias(listaCargada);
             }
             //pongo herencia,tareas hechas y ocultas
             for (int i = 0; i < xmlNodePrincipal.LastChild.ChildNodes.Count; i++)
@@ -411,6 +414,14 @@ namespace Tareas_Pendientes_v2
             }
             return listaCargada;
         }
+     
+        public static void AñadirListaHaSusCategorias(Lista listaCargada)
+        {
+            string[] categorias = listaCargada.Categorias();
+            for (int i = 0; i < categorias.Length; i++)
+                AñadirListaHaCategoria(listaCargada, categorias[i]);
+        }
+
         public static void AñadirCategoria(string categoria)
         {
             if (listasPorCategoria.Existeix(categoria))
@@ -498,11 +509,16 @@ namespace Tareas_Pendientes_v2
         }
         public static void CambiarNombreCategoria(string nombreAnt, string nombreNuevo)
         {
-            listasPorCategoria.CanviClau(nombreAnt, nombreNuevo);
-            foreach (KeyValuePair<long, Lista> lista in listasPorCategoria[nombreNuevo])
+            if (nombreAnt != nombreNuevo)
             {
-                lista.Value.categorias.Elimina(nombreAnt);
-                lista.Value.categorias.Afegir(nombreNuevo, nombreNuevo);
+                if (listasPorCategoria.Existeix(nombreNuevo))
+                    throw new Exception("El nombre para la categoria ya esta en uso");
+                listasPorCategoria.CanviClau(nombreAnt, nombreNuevo);
+                foreach (KeyValuePair<long, Lista> lista in listasPorCategoria[nombreNuevo])
+                {
+                    lista.Value.categorias.Elimina(nombreAnt);
+                    lista.Value.categorias.Afegir(nombreNuevo, nombreNuevo);
+                }
             }
         }
 
