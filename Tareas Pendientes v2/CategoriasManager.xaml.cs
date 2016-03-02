@@ -40,8 +40,6 @@ namespace Tareas_Pendientes_v2
                 categoriaNuevaView = new ObjViewer(txtNombreCategoria.Text);
                 categoriaNueva = new Categoria(categoriaNuevaView.Object as string);
                 categoriaNuevaView.Tag = categoriaNueva;
-                //Añado
-                Categoria.CategoriasList.Añadir(categoriaNueva);
                 stkCategorias.Children.Add(categoriaNuevaView);
                 categoriaNuevaView.ObjSelected += EliminarCategoria;
                 //Activa el temporizador para el autoGuardado

@@ -40,6 +40,11 @@ namespace Tareas_Pendientes_v2
             this.lista = lista;
         }
 
+        public VisorTarea(Lista lista, Tarea tarea) : this(lista)
+        {
+            this.Tarea = tarea;
+        }
+
         public Tarea Tarea {
             get {
                 if (tarea == null)

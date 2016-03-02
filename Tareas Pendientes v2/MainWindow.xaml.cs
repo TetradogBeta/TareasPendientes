@@ -75,7 +75,6 @@ namespace Tareas_Pendientes_v2
             else {
                 todasLasCategorias = new Categoria(0, TODASLASLISTAS);
                 cmbCategorias.Items.Add(todasLasCategorias);
-                Categoria.CategoriasList.Añadir(todasLasCategorias);
                 cmbCategorias.SelectedIndex = 0;
             }
         }

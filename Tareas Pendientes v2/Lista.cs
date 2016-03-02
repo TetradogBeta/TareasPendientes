@@ -283,11 +283,11 @@ namespace Tareas_Pendientes_v2
         }
         private static void PonTareasHechasYOclutasXml(XmlNode nodoListaTemporal, Lista lista)
         {
-            for (int i = 0; i < nodoListaTemporal.ChildNodes[(int)NodoLista.TareasOcultas].ChildNodes.Count; i++)//añado la lista en su categoria
+            for (int i = 0; i < nodoListaTemporal.ChildNodes[(int)NodoLista.TareasOcultas].ChildNodes.Count; i++)
             {
-                Tarea.Obtener(Convert.ToInt64(nodoListaTemporal.ChildNodes[(int)NodoLista.TareasOcultas].ChildNodes[i].InnerText)).Quitar(lista);
+                Tarea.Obtener(Convert.ToInt64(nodoListaTemporal.ChildNodes[(int)NodoLista.TareasOcultas].ChildNodes[i].InnerText)).Ocultar(lista);
             }
-            for (int i = 0; i < nodoListaTemporal.ChildNodes[(int)NodoLista.TareasHechas].ChildNodes.Count; i++)//añado la lista en su categoria
+            for (int i = 0; i < nodoListaTemporal.ChildNodes[(int)NodoLista.TareasHechas].ChildNodes.Count; i++)
             {
                 Tarea.Obtener(Convert.ToInt64(nodoListaTemporal.ChildNodes[(int)NodoLista.TareasHechas].ChildNodes[i].ChildNodes[0].InnerText)).AñadirHecho(lista, new DateTime(Convert.ToInt64(nodoListaTemporal.ChildNodes[(int)NodoLista.TareasHechas].ChildNodes[i].ChildNodes[1].InnerText)));
             }

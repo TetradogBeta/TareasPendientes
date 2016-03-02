@@ -86,7 +86,7 @@ namespace Tareas_Pendientes_v2
         }
         public IComparable Clau()
         {
-            return IdUnico;
+            return Nombre;//porque no quiero repetidos :)
         }
 
         public int CompareTo(object obj)
@@ -109,12 +109,12 @@ namespace Tareas_Pendientes_v2
         }
         public static Categoria ObtenerCategoria(long idCategoria)
         {
-            return categorias[idCategoria];
+            return CategoriasLista[idCategoria];
         }
         public static Categoria ObtenerCategoria(string nombre)
         {
             Categoria categoria=null;
-             categorias.WhileEach((categoriaHaMirar) => {
+            CategoriasLista.WhileEach((categoriaHaMirar) => {
                  if ( categoriaHaMirar.Nombre== nombre)
                      categoria =categoriaHaMirar;
                  return categoria == null;
@@ -128,18 +128,18 @@ namespace Tareas_Pendientes_v2
         }
         public static bool ExisteCategoria(long idCategoria)
         {
-            return categorias.ExisteClave(idCategoria);
+            return CategoriasLista.ExisteClave(idCategoria);
         }
         public static Categoria[] Categorias()
         {
-            return categorias.ToArray();
+            return CategoriasLista.ToArray();
         }
         public static Categoria[] Categorias(Lista lista)
         {
             Llista<Categoria> categoriasLista = new Llista<Categoria>();
-           for(int i=0;i<categorias.Count;i++)
-                if (categorias[i].listasDeLaCategoria.Existeix(lista))
-                    categoriasLista.Afegir(categorias[i]);
+           for(int i=0;i< CategoriasLista.Count;i++)
+                if (CategoriasLista[i].listasDeLaCategoria.Existeix(lista))
+                    categoriasLista.Afegir(CategoriasLista[i]);
             return categoriasLista.ToArray();
 
         }
@@ -150,20 +150,20 @@ namespace Tareas_Pendientes_v2
         }
         public static void Añadir(long idCategoria, Lista lista)
         {
-            if (!categorias.ExisteClave(idCategoria)&&!categorias[idCategoria].listasDeLaCategoria.Existeix(lista))
-                categorias[idCategoria].Añadir(lista);
+            if (!CategoriasLista.ExisteClave(idCategoria)&&!CategoriasLista[idCategoria].listasDeLaCategoria.Existeix(lista))
+                CategoriasLista[idCategoria].Añadir(lista);
         }
         public static void Quitar(long idCategoria, Lista lista)
         {
-            if (categorias.ExisteClave(idCategoria) && categorias[idCategoria].listasDeLaCategoria.Existeix(lista))
-                categorias[idCategoria].Quitar(lista);
+            if (CategoriasLista.ExisteClave(idCategoria) && CategoriasLista[idCategoria].listasDeLaCategoria.Existeix(lista))
+                CategoriasLista[idCategoria].Quitar(lista);
         }
         public static XmlNode SaveXmlNodo()
         {
             XmlDocument xmldoc = new XmlDocument();
             text txtNodo = "<Categorias>";
-            for (int i = 0; i < categorias.Count; i++)
-                txtNodo &= categorias[i].ToXml().OuterXml;
+            for (int i = 0; i < CategoriasLista.Count; i++)
+                txtNodo &= CategoriasLista[i].ToXml().OuterXml;
             txtNodo &= "</Categorias>";
             xmldoc.LoadXml(txtNodo);
             xmldoc.Normalize();
@@ -175,7 +175,6 @@ namespace Tareas_Pendientes_v2
             for (int i = 0; i < nodoCategorias.ChildNodes.Count; i++)
             {
                 categoria = new Categoria(nodoCategorias.ChildNodes[i]);
-                categorias.Añadir(categoria);
             }
         }
         public static void Eliminar(Categoria categoria)

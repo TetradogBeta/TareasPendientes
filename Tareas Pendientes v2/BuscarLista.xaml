@@ -5,8 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tareas_Pendientes_v2"
         mc:Ignorable="d"
-        Title="BuscarLista" Height="300" Width="300">
+        Title="BuscarLista" Height="266.006" Width="471.671" ResizeMode="CanMinimize">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="13*"/>
+            <RowDefinition Height="77*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="137*"/>
+                <ColumnDefinition Width="56*"/>
+                <ColumnDefinition Width="39*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" x:Name="txtBxTextoHaBuscar"/>
+            <StackPanel Grid.Column="1">
+                <RadioButton x:Name="rdBtnNombreLista" Content="Nombre lista" IsChecked="True"/>
+                <RadioButton x:Name="rdBtnDescripcionTarea" Content="Descripcion tarea" IsChecked="False"/>
+            </StackPanel>
+            <Button Grid.Column="2" x:Name="btnBuscar" Content="Buscar" Click="btnBuscar_Click"/>
+        </Grid>
+        <StackPanel x:Name="stkListasEncontradas"/>
     </Grid>
 </Window>
