@@ -124,7 +124,7 @@ namespace Tareas_Pendientes_v2
 
         public bool EsHeredable(Lista lista)
         {
-            bool esHeredable = !Equals(lista)&&!herencia.Existeix(lista);
+            bool esHeredable = !Equals(lista)&&!herencia.Existeix(lista)&&!HerederosDirectos(this).Contains(lista);
             //solo no es heredable si ya se esta heredando de el en cualquier linea
             for (int i = 0; i < herencia.Count && esHeredable; i++)
             {
@@ -319,7 +319,7 @@ namespace Tareas_Pendientes_v2
         }
         public static void QuitarHerederos(Lista listaActual)
         {
-            Lista[] herederos = Herederos(listaActual);
+            Lista[] herederos = HerederosDirectos(listaActual);
             Tarea[] tareasLista = Tarea.TareasLista(listaActual);
             DateTime fechaHecho;
             for (int i = 0; i < herederos.Length; i++)
@@ -340,9 +340,28 @@ namespace Tareas_Pendientes_v2
             }
         }
 
+        public static Lista[] HerederosDirectos(Lista lista)
+        {
+            return listasGuardadas.Filtra((listaHeredera) => { return listaHeredera.Value.herencia.Existeix(lista); }).ValuesToArray();
+        }
         public static Lista[] Herederos(Lista lista)
         {
-            return listasGuardadas.ValuesToArray().Filtra((listaActual) => { return listaActual.herencia.Existeix(lista); }).ToArray();
+            return IHerederos(lista).ToArray();
+        }
+        private static IEnumerable<Lista> IHerederos(Lista lista)
+        {
+            //de momento es infinita si el abuelo tiene al nieto
+            //contemplar todos!
+            ListaUnica<Lista> listas = new ListaUnica<Lista>();
+            listas.Añadir(listasGuardadas.Filtra((listaHeredera) => { return listaHeredera.Value.herencia.Existeix(lista); }).ValuesToArray());
+            foreach(Lista listaHeredera in listas)
+            {
+                foreach (Lista listaVenidaRecursiva in IHerederos(listaHeredera))
+                    if (!listas.ExisteObjeto(listaVenidaRecursiva))
+                        listas.Añadir(listaVenidaRecursiva);
+            }
+            return listas;
+
         }
         #endregion
         /// <summary>

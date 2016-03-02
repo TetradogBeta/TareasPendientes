@@ -28,6 +28,8 @@ namespace Tareas_Pendientes_v2
         	this.main=main;
             this.listaActual = listaActual;
             InitializeComponent();
+            if(listaActual.ToArray().Length==0)
+            	throw new Exception("Cerrar");
         }
 		void TxtBxTextoHaBuscar_TextChanged(object sender, TextChangedEventArgs e)
 		{

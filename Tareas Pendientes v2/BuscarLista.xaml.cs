@@ -114,7 +114,7 @@ namespace Tareas_Pendientes_v2
             List<ListaTareaHeredada> listasTarea = new List<ListaTareaHeredada>();
             if (tarea.Lista != null && !tarea.Lista.EsTemporal)
             {
-                listas = Lista.Herederos(tarea.Lista);
+                listas = Lista.HerederosDirectos(tarea.Lista);
                 for (int i = 0; i < listas.Length; i++)
                     listasTarea.Add(new ListaTareaHeredada(listas[i], tarea, mostrarLista));
                 listasTarea.Add(new ListaTareaHeredada(tarea.Lista, tarea, mostrarLista));

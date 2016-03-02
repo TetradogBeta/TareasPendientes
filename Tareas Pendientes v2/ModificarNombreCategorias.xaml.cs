@@ -50,11 +50,12 @@ namespace Tareas_Pendientes_v2
             {
                 txtBxCategoria = (TextBox)stkCategorias.Children[i];
                 categoria = txtBxCategoria.Tag as Categoria;
-                categoria.Nombre = txtBxCategoria.Text;
-                if (!listaDeCategorias.ContainsKey(categoria.Nombre))
-                    listaDeCategorias.Add(categoria.Nombre, categoria);
+               
+                if (!listaDeCategorias.ContainsKey(txtBxCategoria.Text)){
+                	 categoria.Nombre = txtBxCategoria.Text;
+                	listaDeCategorias.Add(categoria.Nombre, categoria);}
                 else {
-                    Categoria.Añadir(listaDeCategorias[categoria.Nombre], listaDeCategorias[categoria.Nombre].Listas());
+                    Categoria.JuntarSiCoincideNombreNuevo(categoria,txtBxCategoria.Text);
                     Categoria.Eliminar(categoria);
                 }
 

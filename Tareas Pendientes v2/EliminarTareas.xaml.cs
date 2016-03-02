@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Gabriel.Cat;
 using Gabriel.Cat.Extension;
 using Gabriel.Cat.Wpf;
 using System.Threading;
@@ -24,16 +25,19 @@ namespace Tareas_Pendientes_v2
     {
         MainWindow main;
         Lista listaHaEditar;
+        ListaUnica<Tarea> listaTareas;
         public EliminarTareas(Lista listaHaEditar,MainWindow main)
         {
          
             InitializeComponent();
             this.main = main;
             this.listaHaEditar = listaHaEditar;
+            listaTareas=Tarea.TareasLista(listaHaEditar).ToListaUnica();
             txblNombreLista.Text ="Lista: "+ listaHaEditar.Nombre;
             ckOmitirPregunta.IsChecked = false;
-            stkTareasLista.Children.Clear();
             stkTareasLista.Children.AddRange(listaHaEditar.ToObjViewerArray(TareaHaEliminar));
+            if(stkTareasLista.Children.Count==0)
+            	throw new Exception("Cerrar");
         }
 
         private void CerrarSiNoHayTareasHaEliminar()
@@ -48,10 +52,10 @@ namespace Tareas_Pendientes_v2
 
         private void TareaHaEliminar(ObjViewer visor)
         {
-            Tarea tarea;
-            if (ckOmitirPregunta.IsChecked.Value || MessageBox.Show("Se va a borrar de forma permanente, estas seguro?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+            Tarea tarea = visor.Object as Tarea;
+            if (ckOmitirPregunta.IsChecked.Value||!listaTareas.ExisteObjeto(tarea) || MessageBox.Show("Se va a borrar de forma permanente, estas seguro?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
             {
-                tarea = visor.Object as Tarea;
+                
                 try {
                     tarea.Ocultar(listaHaEditar);
                 }

@@ -68,7 +68,13 @@ namespace Tareas_Pendientes_v2
 		{
 			return listasDeLaCategoria.Existeix(listaActual);
 		}
-
+		public void AñadirExistentes(Lista[] listas)
+		{
+			if (listas != null)
+				for (int i = 0; i < listas.Length; i++)
+					if (!listasDeLaCategoria.Existeix(listas[i]))
+						Añadir(listas[i]);
+		}
 		public void Añadir(Lista lista)
 		{
 			if (!listasDeLaCategoria.Existeix(lista))
@@ -150,11 +156,20 @@ namespace Tareas_Pendientes_v2
 		public static Categoria[] Categorias(Lista lista)
 		{
 			Llista<Categoria> categoriasLista = new Llista<Categoria>();
-			foreach(Categoria categoria in categorias)
+			foreach (Categoria categoria in categorias)
 				if (categoria.listasDeLaCategoria.Existeix(lista))
 					categoriasLista.Afegir(categoria);
 			return categoriasLista.ToArray();
 
+		}
+		public static bool JuntarSiCoincideNombreNuevo(Categoria categoria,string nombreNuevo)
+		{
+			Categoria old=ObtenerCategoria(nombreNuevo);
+			bool coincide = categorias.ExisteClave(old.idUnico);
+			if (coincide) {
+				old.AñadirExistentes(categoria.Listas());
+			}
+			return coincide;
 		}
 		public static void Añadir(Categoria categoria, IEnumerable<Lista> listas)
 		{
@@ -163,7 +178,7 @@ namespace Tareas_Pendientes_v2
 		}
 		public static void Añadir(long idCategoria, Lista lista)
 		{
-			if (!categorias.ExisteClave(idCategoria) && !categorias[idCategoria].listasDeLaCategoria.Existeix(lista))
+			if (categorias.ExisteClave(idCategoria) && !categorias[idCategoria].listasDeLaCategoria.Existeix(lista))
 				categorias[idCategoria].Añadir(lista);
 		}
 		public static void Quitar(long idCategoria, Lista lista)
@@ -175,7 +190,7 @@ namespace Tareas_Pendientes_v2
 		{
 			XmlDocument xmldoc = new XmlDocument();
 			text txtNodo = "<Categorias>";
-			foreach(Categoria categoria in categorias)
+			foreach (Categoria categoria in categorias)
 				txtNodo &= categoria.ToXml().OuterXml;
 			txtNodo &= "</Categorias>";
 			xmldoc.LoadXml(txtNodo);

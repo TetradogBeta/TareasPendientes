@@ -102,6 +102,10 @@
     <Compile Include="CategoriasManager.xaml.cs">
       <DependentUpon>CategoriasManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DesocultarTareas.xaml.cs">
+      <DependentUpon>DesocultarTareas.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EditorCategoriasLista.xaml.cs">
       <DependentUpon>EditorCategoriasLista.xaml</DependentUpon>
     </Compile>
@@ -131,6 +135,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DesocultarTareas.xaml" />
     <Page Include="EditorCategoriasLista.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

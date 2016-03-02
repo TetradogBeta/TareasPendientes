@@ -204,7 +204,7 @@ namespace Tareas_Pendientes_v2
             if (!tareasPorLista.Existeix(lista))
                 tareasHechas = new Tarea[0];
             else
-                tareasHechas = tareasPorLista[lista].Filtra((tarea) =>
+                tareasHechas = todasLasTareas.Filtra((tarea) =>
                 {
                     return tarea.EstaHecha(lista);
                 }).ToArray();
