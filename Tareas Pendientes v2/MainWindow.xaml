@@ -30,7 +30,6 @@
                     </MenuItem>
                     <MenuItem Header="Categorias" Click="CategoriasManager_Click"/>
                     <MenuItem Header="Buscar Lista" Click="BuscarLista_Click"/>
-                    <MenuItem Header="Limpiar Campos" Click="LimpiarCamposLista_Click"/>
                 </MenuItem>
                 <MenuItem Header="Elementos" Height="22" Width="73">
                     <MenuItem Header="Añadir" Click="AñadirElementoLista_Click"/>

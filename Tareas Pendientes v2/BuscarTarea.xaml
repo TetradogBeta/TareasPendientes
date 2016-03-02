@@ -1,12 +1,26 @@
-﻿<Window x:Class="Tareas_Pendientes_v2.BuscarTarea"
+<Window x:Class="Tareas_Pendientes_v2.BuscarTarea"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tareas_Pendientes_v2"
         mc:Ignorable="d"
-        Title="BuscarTarea" Height="300" Width="300">
-    <Grid>
-        
+        Title="BuscarTarea" Height="266.006" Width="471.671" ResizeMode="CanMinimize">
+     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="13*"/>
+            <RowDefinition Height="77*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="137*"/>
+                <ColumnDefinition Width="56*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" x:Name="txtBxTextoHaBuscar" TextChanged="TxtBxTextoHaBuscar_TextChanged"/>
+            <StackPanel Grid.Column="1">
+                <TextBlock x:Name="txtBlDescripcionTarea" Text="Descripcion tarea"/>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1" x:Name="stkTareasEncontradas"/>
     </Grid>
 </Window>

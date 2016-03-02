@@ -37,11 +37,13 @@ namespace Tareas_Pendientes_v2
             for (int i = 0; i < categorias.Length; i++)
             {
                 chkAux = new CheckBox();
-                chkAux.IsChecked = Categoria.CategoriasLista.ExisteObjeto(categorias[i]);
+                chkAux.IsChecked = categorias[i].EstaDentro(listaActual);
                 chkAux.Content = categorias[i];
                 chkAux.Tag = categorias[i];
                 chkAux.Checked += AñadirCategoria;
                 chkAux.Unchecked += QuitarCategoria;
+                if(MainWindow.TODASLASLISTAS.Equals(categorias[i].Nombre))
+                	chkAux.IsEnabled=false;
                 stkCategorias.Children.Add(chkAux);
             }
             this.listaActual = listaActual;

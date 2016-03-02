@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using Gabriel.Cat.Extension;
 namespace Tareas_Pendientes_v2
 {
     /// <summary>
@@ -20,16 +20,27 @@ namespace Tareas_Pendientes_v2
     public partial class BuscarTarea : Window
     {
         private Lista listaActual;
-
+        private MainWindow main;
         //filtra las tareas por: fecha,texto contenido,hecho o no hecho,herencia(muestra cmb con las posibilidades)
-        public BuscarTarea()
+
+        public BuscarTarea(Lista listaActual,MainWindow main)
         {
+        	this.main=main;
+            this.listaActual = listaActual;
             InitializeComponent();
         }
+		void TxtBxTextoHaBuscar_TextChanged(object sender, TextChangedEventArgs e)
+		{
+            string texto = txtBxTextoHaBuscar.Text.ToLowerInvariant();
+            stkTareasEncontradas.Children.Clear();
+			stkTareasEncontradas.Children.AddRange(ListaTareaHeredada.ToLista(listaActual.Filtra((tarea)=>{
+                return tarea.Contenido.ToLowerInvariant().Contains(texto);
+            }),listaActual,false).ToObjViewerArray(VisualizaLista));
+		}
 
-        public BuscarTarea(Lista listaActual)
-        {
-            this.listaActual = listaActual;
-        }
+		void VisualizaLista(Gabriel.Cat.Wpf.ObjViewer visor)
+		{
+			main.PonLista(visor.Object as Lista);
+		}
     }
 }

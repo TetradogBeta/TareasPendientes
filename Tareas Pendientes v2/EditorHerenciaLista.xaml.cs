@@ -57,12 +57,15 @@ namespace Tareas_Pendientes_v2
         {
             try
             {
-                listaActual.Heredar(cmbHerenciaPosible.SelectedItem as Lista);
-                stkHerencia.Children.Add(cmbHerenciaPosible.SelectedItem.ToObjViewer(QuitarHerencia));
-                PonHerenciaValidaAlCmb();
-                //Activa el temporizador para el autoGuardado
-                main.ActivarTemporizadorAutoSave();
-                main.PonTareasLista();
+                if (cmbHerenciaPosible.SelectedItem != null)
+                {
+                    listaActual.Heredar(cmbHerenciaPosible.SelectedItem as Lista);
+                    stkHerencia.Children.Add(cmbHerenciaPosible.SelectedItem.ToObjViewer(QuitarHerencia));
+                    PonHerenciaValidaAlCmb();
+                    //Activa el temporizador para el autoGuardado
+                    main.ActivarTemporizadorAutoSave();
+                    main.PonTareasLista();
+                }
             }
             catch(Exception m)
             {

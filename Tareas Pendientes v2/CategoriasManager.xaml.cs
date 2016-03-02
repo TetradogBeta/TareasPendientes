@@ -37,9 +37,9 @@ namespace Tareas_Pendientes_v2
             //miro que no exista
             if (!Categoria.ExisteCategoria(txtNombreCategoria.Text))
             {
-                categoriaNuevaView = new ObjViewer(txtNombreCategoria.Text);
-                categoriaNueva = new Categoria(categoriaNuevaView.Object as string);
-                categoriaNuevaView.Tag = categoriaNueva;
+                
+                categoriaNueva = new Categoria(txtNombreCategoria.Text);
+                categoriaNuevaView = new ObjViewer(categoriaNueva);
                 stkCategorias.Children.Add(categoriaNuevaView);
                 categoriaNuevaView.ObjSelected += EliminarCategoria;
                 //Activa el temporizador para el autoGuardado
@@ -58,7 +58,7 @@ namespace Tareas_Pendientes_v2
             if (visor.Object.ToString() != MainWindow.TODASLASLISTAS)
                 if (ckOmitirPregunta.IsChecked.Value || MessageBox.Show("Se va a borrar de forma permanente, estas seguro?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                 {
-                    Categoria.Eliminar((visor.Tag as Categoria));
+                    Categoria.Eliminar((visor.Object as Categoria));
                     stkCategorias.Children.Remove(visor);
                     //Activa el temporizador para el autoGuardado
                     main.ActivarTemporizadorAutoSave();

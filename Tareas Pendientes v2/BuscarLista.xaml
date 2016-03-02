@@ -15,15 +15,13 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="137*"/>
                 <ColumnDefinition Width="56*"/>
-                <ColumnDefinition Width="39*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" x:Name="txtBxTextoHaBuscar"/>
+            <TextBox Grid.Column="0" x:Name="txtBxTextoHaBuscar" TextChanged="TxtBxTextoHaBuscar_TextChanged"/>
             <StackPanel Grid.Column="1">
-                <RadioButton x:Name="rdBtnNombreLista" Content="Nombre lista" IsChecked="True"/>
-                <RadioButton x:Name="rdBtnDescripcionTarea" Content="Descripcion tarea" IsChecked="False"/>
+                <RadioButton x:Name="rdBtnNombreLista" Content="Nombre lista" IsChecked="True" Checked="RdBtnNombreLista_Checked"/>
+                <RadioButton x:Name="rdBtnDescripcionTarea" Content="Descripcion tarea" IsChecked="False" Checked="RdBtnNombreLista_Checked"/>
             </StackPanel>
-            <Button Grid.Column="2" x:Name="btnBuscar" Content="Buscar" Click="btnBuscar_Click"/>
         </Grid>
-        <StackPanel x:Name="stkListasEncontradas"/>
+        <StackPanel Grid.Row="1" x:Name="stkListasEncontradas"/>
     </Grid>
 </Window>

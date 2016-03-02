@@ -34,15 +34,17 @@ namespace Tareas_Pendientes_v2
             }            
         }
 
-        public VisorTarea(Lista lista)
+        public VisorTarea(Lista lista):this(lista,null)
         {
-            InitializeComponent();
-            this.lista = lista;
+        	Tarea=Tarea;
         }
 
-        public VisorTarea(Lista lista, Tarea tarea) : this(lista)
+        public VisorTarea(Lista lista, Tarea tarea)
         {
+        	InitializeComponent();
+        	this.lista = lista;
             this.Tarea = tarea;
+            
         }
 
         public Tarea Tarea {

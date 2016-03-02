@@ -58,8 +58,8 @@ namespace Tareas_Pendientes_v2
             {
                 XmlDocument xmlTareas = new XmlDocument();
                 xmlTareas.Load(NOMBREARCHIVO);
-                Categoria.LoadXmlNodo(xmlTareas.ChildNodes[0]);
-                listaActual = Lista.LoadNodoXml(xmlTareas.ChildNodes[1]);
+                Categoria.LoadXmlNodo(xmlTareas.FirstChild.ChildNodes[0]);
+                listaActual = Lista.LoadNodoXml(xmlTareas.FirstChild.ChildNodes[1]);
                 if (listaActual != null)
                 {
                     act = () =>
@@ -70,10 +70,10 @@ namespace Tareas_Pendientes_v2
                     Dispatcher.BeginInvoke(act);
                 }
                 PonCategoriasCmb();
-                todasLasCategorias = Categoria.ObtenerCategoria(0);
+                todasLasCategorias = Categoria.ObtenerCategoria(TODASLASLISTAS);
             }
             else {
-                todasLasCategorias = new Categoria(0, TODASLASLISTAS);
+                todasLasCategorias = new Categoria(TODASLASLISTAS);
                 cmbCategorias.Items.Add(todasLasCategorias);
                 cmbCategorias.SelectedIndex = 0;
             }
@@ -91,9 +91,11 @@ namespace Tareas_Pendientes_v2
                 xml.LoadXml(txtXml);
                 xml.Save(NOMBREARCHIVO);
                 guardado = true;
+                
+            }
+            finally {
                 temporizadorAutoSave.StopAndAbort();
             }
-            catch { }
         }
         private void Save()
         {
@@ -138,7 +140,7 @@ namespace Tareas_Pendientes_v2
 
         private bool EsListaActualGuardable()
         {
-            return listaActual != null && (!listaActual.EsTemporal || listaActual.EsTemporal && (Tarea.TareasLista(listaActual).Length != 0 || listaActual.Nombre != ""));
+            return listaActual != null && (!listaActual.EsTemporal || listaActual.EsTemporal && (Tarea.TareasLista(listaActual).Length != 0 || listaActual.Nombre != ""||Categoria.Categorias(listaActual).Length!=0||listaActual.Herencia().Length!=0));
         }
 
         private void AñadirLista_Click(object sender, RoutedEventArgs e)
@@ -209,6 +211,7 @@ namespace Tareas_Pendientes_v2
         {
             //añade al final un elemento
             VisorTarea visor = new VisorTarea(listaActual);
+           
             stkTareas.Children.Add(visor);
             //Activa el temporizador para el autoGuardado
             ActivarTemporizadorAutoSave();
@@ -217,7 +220,7 @@ namespace Tareas_Pendientes_v2
         {
             //sale una ventana con un comboBox con todas las tareas
             //tiene un boton que pone View. si le da lo posiciona aunque de momento no se mover la lista...
-            new BuscarTarea(listaActual).Show();
+            new BuscarTarea(listaActual,this).ShowDialog();
         }
         #endregion
         private void cmbCategorias_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -255,6 +258,7 @@ namespace Tareas_Pendientes_v2
 
         private void LimpiarCampos()
         {
+            listaActual = null;//lo pongo para que al asignar el texto no se quite de la lista
             txboxNombreLista.Text = "";
             CreaListaNueva();
             stkTareas.Children.Clear();
