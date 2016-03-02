@@ -5,13 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tareas_Pendientes_v2"
         mc:Ignorable="d"
-        Title="ModificarNombreCategorias" Height="300" Width="300">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="25"/>
-        </Grid.RowDefinitions>
+        Title="ModificarNombreCategorias" Height="300" Width="300" Closing="Window_Closing">
     <StackPanel x:Name="stkCategorias"/>
-        <Button Grid.Row="1" x:Name="btnGuardar" Content="Guardar" Click="btnGuardar_Click"/>
-    </Grid>
-</Window>
+   </Window>

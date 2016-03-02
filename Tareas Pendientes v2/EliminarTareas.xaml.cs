@@ -48,9 +48,17 @@ namespace Tareas_Pendientes_v2
 
         private void TareaHaEliminar(ObjViewer visor)
         {
+            Tarea tarea;
             if (ckOmitirPregunta.IsChecked.Value || MessageBox.Show("Se va a borrar de forma permanente, estas seguro?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
             {
-                (visor.Object as Tarea).Quitar(listaHaEditar);
+                tarea = visor.Object as Tarea;
+                try {
+                    tarea.Ocultar(listaHaEditar);
+                }
+                catch
+                {
+                    Tarea.Eliminar(tarea);
+                }
                 main.ActivarTemporizadorAutoSave();
                 main.PonTareasLista();
                 stkTareasLista.Children.Remove(visor);

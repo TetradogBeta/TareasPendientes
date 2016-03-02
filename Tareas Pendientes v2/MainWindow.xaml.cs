@@ -75,7 +75,7 @@ namespace Tareas_Pendientes_v2
             else {
                 todasLasCategorias = new Categoria(0, TODASLASLISTAS);
                 cmbCategorias.Items.Add(todasLasCategorias);
-                Categoria.CategoriasList.Afegir(todasLasCategorias.IdUnico,todasLasCategorias);
+                Categoria.CategoriasList.Añadir(todasLasCategorias);
                 cmbCategorias.SelectedIndex = 0;
             }
         }
@@ -170,15 +170,9 @@ namespace Tareas_Pendientes_v2
 
             if (EsListaActualGuardable() && (!listaActual.TieneDescendencia || MessageBox.Show("Esta lista esta siendo usada por otras como herencia, sigues queriendo borrarla?", "Se requiere su atencion", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes))
             {
-                if (listaActual.TieneDescendencia)
-                {
-                    //quito la descendencia
-                    Lista.QuitarHerederos(listaActual);
-                }
-                listaActual.EsTemporal = true;
+                Lista.Elimina(listaActual);
+                lstListasPendientes.Items.Remove(listaActual);
                 LimpiarCamposLista_Click(null, null);//limpio los campos
-                cmbCategorias_SelectionChanged(null, null);
-
                 //Activa el temporizador para el autoGuardado
                 ActivarTemporizadorAutoSave();
 
@@ -212,9 +206,6 @@ namespace Tareas_Pendientes_v2
             //abre una ventana para editar el contenido de la lista, los elementos de la herencia se ocultaran al "eliminarse de la lista"
             new EliminarTareas(listaActual, this).ShowDialog();
         }
-
-
-
         private void AñadirElementoLista_Click(object sender, RoutedEventArgs e)
         {
             //añade al final un elemento
@@ -265,7 +256,6 @@ namespace Tareas_Pendientes_v2
 
         private void LimpiarCampos()
         {
-            listaActual = null;
             txboxNombreLista.Text = "";
             CreaListaNueva();
             stkTareas.Children.Clear();

@@ -27,7 +27,7 @@ namespace Tareas_Pendientes_v2
             Categoria[] categorias;
             InitializeComponent();
             categorias = Categoria.Categorias();
-            for(int i=0;i<categorias.Length;i++)
+            for (int i = 0; i < categorias.Length; i++)
             {
                 txtCategoria = new TextBox();
                 txtCategoria.Text = categorias[i].Nombre;
@@ -37,35 +37,33 @@ namespace Tareas_Pendientes_v2
                     txtCategoria.IsReadOnly = true;//asi no lo modifican :)
                 stkCategorias.Children.Add(txtCategoria);
 
-            }      
+            }
             this.main = main;
         }
-
-        private void btnGuardar_Click(object sender, RoutedEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //comprueba que sean diferentes y luego lo aplica, sino avisa
-            SortedList<Categoria, TextBox> listaDeCategorias = new SortedList<Categoria, TextBox>();
+            SortedList<string, Categoria> listaDeCategorias = new SortedList<string, Categoria>();
             Categoria categoria;
             TextBox txtBxCategoria;
-            try {
-                for (int i = 0; i < stkCategorias.Children.Count; i++) {
-                    txtBxCategoria =(TextBox)stkCategorias.Children[i];
-                    categoria = txtBxCategoria.Tag as Categoria;
-                    listaDeCategorias.Add(categoria, txtBxCategoria);
 
-                }
-                foreach(KeyValuePair<Categoria,TextBox> txtCategoria in listaDeCategorias)
-                {
-                    txtCategoria.Key.Nombre = txtCategoria.Value.Text;
-                }
-                MessageBox.Show("Se ha guardado correctamente","Faena guardada",MessageBoxButton.OK,MessageBoxImage.Information);
-                //Activa el temporizador para el autoGuardado
-                main.ActivarTemporizadorAutoSave();
-            }
-            catch
+            for (int i = 0; i < stkCategorias.Children.Count; i++)
             {
-                MessageBox.Show("Hay categorias con el mismo nombre","No se ha podido guardar",MessageBoxButton.OK,MessageBoxImage.Error);
+                txtBxCategoria = (TextBox)stkCategorias.Children[i];
+                categoria = txtBxCategoria.Tag as Categoria;
+                categoria.Nombre = txtBxCategoria.Text;
+                if (!listaDeCategorias.ContainsKey(categoria.Nombre))
+                    listaDeCategorias.Add(categoria.Nombre, categoria);
+                else {
+                    Categoria.Añadir(listaDeCategorias[categoria.Nombre], listaDeCategorias[categoria.Nombre].Listas());
+                    Categoria.Eliminar(categoria);
+                }
+
             }
+
+            //Activa el temporizador para el autoGuardado
+            main.ActivarTemporizadorAutoSave();
+
+
         }
     }
 }

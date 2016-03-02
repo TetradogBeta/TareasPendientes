@@ -24,23 +24,26 @@ namespace Tareas_Pendientes_v2
         Tarea tarea;
         Lista lista;
         public event EventHandler TareaEditada;
-        public VisorTarea(Lista lista,Tarea tarea)
+        public VisorTarea(Tarea tarea)
+        {
+            InitializeComponent();
+            if (tarea != null)
+            {
+                this.lista = tarea.Lista;
+                Tarea = tarea;
+            }            
+        }
+
+        public VisorTarea(Lista lista)
         {
             InitializeComponent();
             this.lista = lista;
-            Tarea = tarea;
-            
-        }
-
-        public VisorTarea(Lista lista):this(lista,null)
-        {
-            Tarea.Añadir(lista);
         }
 
         public Tarea Tarea {
             get {
                 if (tarea == null)
-                    tarea = new Tarea(txtBxDescripcionTarea.Text);
+                    tarea = new Tarea(lista,txtBxDescripcionTarea.Text);
                 return tarea;
             }
             set {
@@ -64,7 +67,7 @@ namespace Tareas_Pendientes_v2
             if (txtBlFechaHecho != null && tarea != null)
             {
                 txtBlFechaHecho.Text = DateTime.Now.ToString();
-                tarea.AñadirHecho(lista,DateTime.Now);
+                Tarea.AñadirHecho(lista,DateTime.Now);
                 if (TareaEditada != null)
                     TareaEditada(this, new EventArgs());
             }
@@ -74,7 +77,7 @@ namespace Tareas_Pendientes_v2
         {
             if (txtBlFechaHecho != null && tarea != null)
             {
-                tarea.QuitarHecho(lista);
+                Tarea.QuitarHecho(lista);
                 txtBlFechaHecho.Text = "";
                 if (TareaEditada != null)
                     TareaEditada(this, new EventArgs());
@@ -85,7 +88,7 @@ namespace Tareas_Pendientes_v2
         {
             if (txtBxDescripcionTarea != null && tarea != null)
             {
-                tarea.Contenido = txtBxDescripcionTarea.Text;
+                Tarea.Contenido = txtBxDescripcionTarea.Text;
                 if (TareaEditada != null)
                     TareaEditada(this, new EventArgs());
             }
@@ -101,7 +104,7 @@ namespace Tareas_Pendientes_v2
             int compareTo;
             if(other!=null)
             {
-                compareTo = CompareTo(Tarea,other.Tarea);
+                compareTo = Tarea.CompareTo(Tarea,other.Tarea);
             }
             else
             {
@@ -110,13 +113,6 @@ namespace Tareas_Pendientes_v2
             return compareTo;
         }
 
-        private int CompareTo(Tarea tarea1, Tarea tarea2)
-        {
-            int compareTo = tarea1 == null ? tarea2 != null ? -1 : 1 : tarea1 != null ? 1 : 0;
-            if (compareTo == 0)
-                compareTo = tarea1.CompareTo(tarea2);
-            return compareTo;
 
-        }
     }
 }
