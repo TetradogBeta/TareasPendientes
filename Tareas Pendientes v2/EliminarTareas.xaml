@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tareas_Pendientes_v2"
         mc:Ignorable="d"
-        Title="EliminarTareas" Height="300" Width="300">
+        Title="EliminarTareas" Height="300" Width="300" ResizeMode="CanMinimize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="7*"/>
