@@ -5,17 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tareas_Pendientes_v2"
         mc:Ignorable="d"
-        Title="Tareas Pendientes" Height="288.527" Width="530.949" ResizeMode="CanMinimize" Closed="Save">
+        Title="Tareas Pendientes" Height="288.527" Width="530.949" Closed="Save">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="59*"/>
-            <ColumnDefinition Width="98*"/>
+            <ColumnDefinition Width="59"/>
+            <ColumnDefinition Width="98"/>
             <ColumnDefinition Width="368*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="22*"/>
-                <RowDefinition Height="23*"/>
+                <RowDefinition Height="22"/>
+                <RowDefinition Height="23"/>
                 <RowDefinition Height="216*"/>
             </Grid.RowDefinitions>
 
@@ -44,7 +44,7 @@
         </Grid>
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="26*"/>
+                <RowDefinition Height="26"/>
                 <RowDefinition Height="235*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
