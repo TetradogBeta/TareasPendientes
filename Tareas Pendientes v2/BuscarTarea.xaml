@@ -21,6 +21,8 @@
                 <TextBlock x:Name="txtBlDescripcionTarea" Text="Descripcion tarea"/>
             </StackPanel>
         </Grid>
-        <StackPanel Grid.Row="1" x:Name="stkTareasEncontradas"/>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel  x:Name="stkTareasEncontradas"/>
+            </ScrollViewer>
     </Grid>
 </Window>

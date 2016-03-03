@@ -210,7 +210,12 @@ namespace Tareas_Pendientes_v2
             return tareasHechas;
         }
 
+        public static void AñadirLista(Lista lista)
+        {
+            if (!tareasPorLista.Existeix(lista))
+                tareasPorLista.Afegir(lista, new ListaUnica<Tarea>());
 
+        }
         public static Tarea[] TareasOcultas(Lista lista)
         {
             List<Tarea> tareasOcultas = new List<Tarea>();

@@ -22,7 +22,9 @@
         </Grid>
         <StackPanel Grid.Row="1">
             <TextBlock Text="Herencia:" x:Name="txtNombreHerencia"/>
-            <StackPanel x:Name="stkHerencia"/>
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="stkHerencia"/>
+            </ScrollViewer>
         </StackPanel>
         <CheckBox Grid.Row="2" Content="Omitir pregunta de seguridad" x:Name="ckOmitirPregunta"/>
     </Grid>

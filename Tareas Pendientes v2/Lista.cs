@@ -43,6 +43,7 @@ namespace Tareas_Pendientes_v2
 			this.nombre = nombreLista;
 			this.idUnico = idUnico;
 			herencia = new Llista<Lista>();
+            Tarea.AñadirLista(this);
 		}
 		public Lista()
 			: this("")

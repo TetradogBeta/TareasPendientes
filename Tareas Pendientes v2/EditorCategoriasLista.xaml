@@ -8,7 +8,9 @@
         Title="Editor Categorias Lista" Height="300" Width="300" ResizeMode="CanMinimize">
     <StackPanel>
         <TextBlock x:Name="txtNombre"/>
-        <StackPanel  x:Name="stkCategorias"/>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel  x:Name="stkCategorias"/>
+        </ScrollViewer>
     </StackPanel>
 
 </Window>
