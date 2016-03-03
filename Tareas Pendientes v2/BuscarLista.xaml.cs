@@ -112,9 +112,9 @@ namespace Tareas_Pendientes_v2
         {
             Lista[] listas;
             List<ListaTareaHeredada> listasTarea = new List<ListaTareaHeredada>();
-            if (tarea.Lista != null && !tarea.Lista.EsTemporal)
+            if (tarea!=null&&tarea.Lista != null && !tarea.Lista.EsTemporal)
             {
-                listas = Lista.HerederosDirectos(tarea.Lista);
+            	listas = Lista.Herederos(tarea.Lista).Filtra((lista)=>{return tarea.EstaVisible(lista);}).ToArray();
                 for (int i = 0; i < listas.Length; i++)
                     listasTarea.Add(new ListaTareaHeredada(listas[i], tarea, mostrarLista));
                 listasTarea.Add(new ListaTareaHeredada(tarea.Lista, tarea, mostrarLista));

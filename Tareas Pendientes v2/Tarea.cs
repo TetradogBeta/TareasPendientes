@@ -57,6 +57,7 @@ namespace Tareas_Pendientes_v2
         public Tarea(Lista lista)
             : this(lista, "")
         {
+
         }
         public long IdUnico
         {
@@ -93,9 +94,7 @@ namespace Tareas_Pendientes_v2
             private set
             {
                 lista = value;
-                if (!tareasPorLista.Existeix(lista))
-                    tareasPorLista.Afegir(lista, new ListaUnica<Tarea>());
-                tareasPorLista[lista].Añadir(this);
+
             }
         }
 
@@ -105,7 +104,7 @@ namespace Tareas_Pendientes_v2
         }
         public bool EstaVisible(Lista lista)
         {
-            return tareasPorLista[lista].ExisteObjeto(this) || !listasTareaOculta.ExisteObjeto(lista);
+            return tareasPorLista.Existeix(lista)&&(tareasPorLista[lista].ExisteObjeto(this) || !listasTareaOculta.ExisteObjeto(lista));
         }
 
         public DateTime FechaHecho(Lista lista)
@@ -191,7 +190,7 @@ namespace Tareas_Pendientes_v2
             Tarea[] tareasLista = { };
             if (tareasPorLista.Existeix(lista))
                 tareasLista = tareasPorLista[lista].ToArray();
-            return tareasLista;
+            return tareasLista; 
         }
 
         public static Tarea[] TareasHeredadas(Lista lista)
