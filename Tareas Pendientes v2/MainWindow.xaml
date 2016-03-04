@@ -58,7 +58,7 @@
                     <TextBox Grid.Column="2" x:Name="txboxNombreLista" Text="" TextAlignment="Left" TextChanged="txboxNombreLista_TextChanged"/>
                 </Grid>
             </Grid>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" >
                 <StackPanel x:Name="stkTareas"/>
             </ScrollViewer>
         </Grid>
