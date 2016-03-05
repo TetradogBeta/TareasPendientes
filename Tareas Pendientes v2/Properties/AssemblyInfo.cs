@@ -7,13 +7,13 @@ using System.Windows;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("Tareas Pendientes v2")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Tareas Pendientes")]
+[assembly: AssemblyDescription("Sirve para tener las tareas organizadas y facilita la creacion de listas con tareas iguales gracias a la herencia.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Tareas Pendientes v2")]
+[assembly: AssemblyCompany("github.com/tetradog")]
+[assembly: AssemblyProduct("Tareas Pendientes v2.1")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("Tetradog")]
 [assembly: AssemblyCulture("")]
 
 // Si establece ComVisible en false, los tipos de este ensamblado no estarán visibles 
@@ -53,3 +53,5 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: NeutralResourcesLanguage("es")]
+
