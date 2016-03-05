@@ -127,7 +127,16 @@ namespace Tareas_Pendientes_v2
 
 		public void Desheredar(Lista lista)
 		{
-			herencia.Elimina(lista);
+            if (herencia.Existeix(lista))
+            {
+                herencia.Elimina(lista);
+                //quitar tareas lista
+                foreach (Tarea tareaHaDesheredar in Tarea.TareasLista(lista))
+                {
+                    tareaHaDesheredar.QuitarHecho(this);
+                    tareaHaDesheredar.Desocultar(this);
+                }
+            }
 		}
 		#endregion
 		#region Xml NodoLista
