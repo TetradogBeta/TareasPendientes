@@ -58,11 +58,13 @@ namespace Tareas_Pendientes_v2
                 
                 try {
                     tarea.Ocultar(listaHaEditar);
+                   
                 }
                 catch
                 {
                     Tarea.Eliminar(tarea);
                 }
+                finally { tarea.QuitarHecho(listaHaEditar); }
                 main.ActivarTemporizadorAutoSave();
                 main.PonTareasLista();
                 stkTareasLista.Children.Remove(visor);
