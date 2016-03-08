@@ -57,7 +57,13 @@ namespace Tareas_Pendientes_v2
                 tarea = value;
                 if(tarea!=null)
                 {
+                    DateTime temps = tarea.FechaHecho(lista);
                     ckHecho.IsChecked = tarea.EstaHecha(lista);
+                    if(tarea.EstaHecha(lista))
+                    {
+                        tarea.QuitarHecho(lista);
+                        tarea.AñadirHecho(lista, temps);
+                    }
                     txtBlFechaHecho.Text = ckHecho.IsChecked.Value ? tarea.FechaHecho(lista).ToString():"";
                     txtBxDescripcionTarea.Text = tarea.Contenido;
                    
