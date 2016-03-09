@@ -120,15 +120,24 @@ namespace Tareas_Pendientes_v2
 
 		private void LimpiarCamposLista_Click(object sender, RoutedEventArgs e)
 		{
-			if (EsListaActualGuardable()) {
-				if (!listaActual.EsTemporal || MessageBox.Show("La lista no esta guardada, quieres borrar sus datos?", "Atencion", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes) {
+            bool guardable =  EsListaActualGuardable();
+
+            if (guardable)
+            {
+                if(listaActual.EsTemporal)
+                {
+                    guardable = MessageBox.Show("Hay una lista sin guardar que se va a perder, deseas Guardarla?", "Se requiere tu atencion", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes;
+                    if (guardable)
+                        AñadirLista_Click(null, null);
+                }
+               
 					//limpia los campos
 					LimpiarCampos();
 					CreaListaNueva();
 					lstListasPendientes.SelectedIndex = -1;
 					//Activa el temporizador para el autoGuardado
 					ActivarTemporizadorAutoSave();
-				}
+				
 			} else {//limpia los campos
 				LimpiarCampos();
 			}
