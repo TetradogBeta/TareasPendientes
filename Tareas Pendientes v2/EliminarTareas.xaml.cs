@@ -26,23 +26,23 @@ namespace Tareas_Pendientes_v2
         MainWindow main;
         Lista listaHaEditar;
         ListaUnica<Tarea> listaTareas;
-        public EliminarTareas(Lista listaHaEditar,MainWindow main)
+        public EliminarTareas(Lista listaHaEditar, MainWindow main)
         {
-         
+
             InitializeComponent();
             this.main = main;
             this.listaHaEditar = listaHaEditar;
-            listaTareas=Tarea.TareasLista(listaHaEditar).ToListaUnica();
-            txblNombreLista.Text ="Lista: "+ listaHaEditar.Nombre;
+            listaTareas = Tarea.TareasLista(listaHaEditar).ToListaUnica();
+            txblNombreLista.Text = "Lista: " + listaHaEditar.Nombre;
             ckOmitirPregunta.IsChecked = false;
             stkTareasLista.Children.AddRange(listaHaEditar.ToObjViewerArray(TareaHaEliminar));
-            if(stkTareasLista.Children.Count==0)
-            	throw new Exception("Cerrar");
+            if (stkTareasLista.Children.Count == 0)
+                throw new Exception("Cerrar");
         }
 
         private void CerrarSiNoHayTareasHaEliminar()
         {
-           
+
             if (stkTareasLista.Children.Count == 0)
             {
                 MessageBox.Show("No hay tareas ha eliminar", "Cerrando ventana", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -53,22 +53,39 @@ namespace Tareas_Pendientes_v2
         private void TareaHaEliminar(ObjViewer visor)
         {
             Tarea tarea = visor.Object as Tarea;
-            if (ckOmitirPregunta.IsChecked.Value||!listaTareas.ExisteObjeto(tarea) || MessageBox.Show("Se va a borrar de forma permanente, estas seguro?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+            bool hacer = false,esHeredada= !listaTareas.ExisteObjeto(tarea);
+            if (ckOmitirPregunta.IsChecked.Value  || !esHeredada&&MessageBox.Show("Se va a borrar de forma permanente, estas seguro?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes ||esHeredada&&MessageBox.Show("Se va ocultar", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information) == MessageBoxResult.OK)
             {
-                
-                try {
-                    tarea.Ocultar(listaHaEditar);
-                   
-                }
-                catch
+                if (esHeredada)
                 {
-                    Tarea.Eliminar(tarea);
+                    hacer = Lista.Herederos(listaHaEditar).Length == 0;
+                    if (ckOmitirPregunta.IsChecked.Value || !hacer && MessageBox.Show("Esta lista tiene herederos  y se quitara la tarea  tambien de ellos (si esta hecha o oculta), estas conforme?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                    {
+                        hacer = true;
+                    }
+
                 }
-                finally { tarea.QuitarHecho(listaHaEditar); }
-                main.ActivarTemporizadorAutoSave();
-                main.PonTareasLista();
-                stkTareasLista.Children.Remove(visor);
-                CerrarSiNoHayTareasHaEliminar();
+                else
+                {
+                    hacer = true;
+                }
+
+                if (hacer)
+                {
+                    try
+                    {
+                        tarea.Ocultar(listaHaEditar);
+                    }
+                    catch
+                    {
+                        Tarea.Eliminar(tarea);
+                    }
+
+                    main.ActivarTemporizadorAutoSave();
+                    main.PonTareasLista();
+                    stkTareasLista.Children.Remove(visor);
+                    CerrarSiNoHayTareasHaEliminar();
+                }
             }
         }
     }

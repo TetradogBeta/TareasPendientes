@@ -124,8 +124,15 @@ namespace Tareas_Pendientes_v2
         {
             if (this.lista.Equals(lista))
                 throw new Exception("No se puede ocultar de la propia lista");
-
+            //quitar herederos hechos y ocultos
+            Lista[] herederos = Lista.Herederos(lista);
+            for (int i = 0; i < herederos.Length; i++)
+            {
+                QuitarHecho(herederos[i]);
+                Desocultar(herederos[i]);
+            }
             listasTareaOculta.Añadir(lista);
+            QuitarHecho(lista);
         }
         public void Desocultar(Lista lista)
         {
