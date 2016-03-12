@@ -36,7 +36,7 @@ namespace Tareas_Pendientes_v2
             string texto = txtBxTextoHaBuscar.Text.ToLowerInvariant();
             stkTareasEncontradas.Children.Clear();
 			stkTareasEncontradas.Children.AddRange(ListaTareaHeredada.ToLista(listaActual.Filtra((tarea)=>{
-                return tarea.Contenido.ToLowerInvariant().Contains(texto);
+                return tarea.ContenidoSinFormato().ToLowerInvariant().Contains(texto);
             }),listaActual,false).ToObjViewerArray(VisualizaLista));
 		}
 

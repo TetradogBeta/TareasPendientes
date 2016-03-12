@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tareas_Pendientes_v2"
+        xmlns:Wpf="clr-namespace:Gabriel.Cat.Wpf;assembly=Gabriel.Cat.Wpf"
         mc:Ignorable="d"
         Title="Tareas Pendientes" Height="288.527" Width="530.949" Closed="Save">
     <Grid>
@@ -55,7 +56,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Nombre Lista" Grid.ColumnSpan="2"/>
-                    <TextBox Grid.Column="2" x:Name="txboxNombreLista" Text="" TextAlignment="Left" TextChanged="txboxNombreLista_TextChanged"/>
+                    <TextBox Grid.Column="2" x:Name="txboxNombreLista" TextChanged="txboxNombreLista_TextChanged"/>
                 </Grid>
             </Grid>
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" >

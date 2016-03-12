@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Gabriel.Cat;
 using System.Xml;
 using Gabriel.Cat.Extension;
+using Gabriel.Cat.Wpf;
+
 namespace Tareas_Pendientes_v2
 {
     public class Tarea : IClauUnicaPerObjecte, IComparable<Tarea>, IComparable
@@ -83,7 +85,21 @@ namespace Tareas_Pendientes_v2
                 contenido = value;
             }
         }
-
+        public string ContenidoSinFormato()
+        {
+            string contendioSinFormato;
+            RicoTextBox rtb = new RicoTextBox();
+            try
+            {
+                rtb.TextWithFormat = Contenido;
+                contendioSinFormato = rtb.Text;
+            }
+            catch
+            {
+                contendioSinFormato = contenido;
+            }
+            return contendioSinFormato;
+        }
         public Lista Lista
         {
             get
@@ -179,7 +195,8 @@ namespace Tareas_Pendientes_v2
 
         public override string ToString()
         {
-            string toString = Contenido == "" ? "'Sin Contenido'" : Contenido;
+            string contenido = ContenidoSinFormato();
+            string toString = contenido == "" ? "'Sin Contenido'" : contenido;
             return toString;
         }
 
@@ -188,7 +205,7 @@ namespace Tareas_Pendientes_v2
             text = text.ToLowerInvariant();
             return todasLasTareas.Filtra((tarea) =>
             {
-                return tarea.Contenido.ToLowerInvariant().Contains(text);
+                return tarea.ContenidoSinFormato().ToLowerInvariant().Contains(text);
             }).ToArray();
         }
 

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Tareas_Pendientes_v2"
+             xmlns:Wpf="clr-namespace:Gabriel.Cat.Wpf;assembly=Gabriel.Cat.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="25" d:DesignWidth="350">
     <Grid>
@@ -12,7 +13,10 @@
             <ColumnDefinition Width="52*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" x:Name="txtBxDescripcionTarea" Text="Descripcion" TextChanged="txtBxDescripcionTarea_TextChanged"/>
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" MaxHeight="50" >
+
+            <Wpf:RicoTextBox x:Name="txtBxDescripcionTarea"  TextoCambiado="txtBxDescripcionTarea_TextChanged"/>
+        </ScrollViewer>
         <TextBlock Grid.Column="1" x:Name="txtBlFechaHecho" Text="fecha hecho" TextAlignment="Right"/>
         <CheckBox Grid.Column="2" x:Name="ckHecho" Checked="ckHecho_Checked" Unchecked="ckHecho_Unchecked"/>
     </Grid>

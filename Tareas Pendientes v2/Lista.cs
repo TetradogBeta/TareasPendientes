@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Gabriel.Cat;
 using Gabriel.Cat.Extension;
 using System.Xml;
+using Gabriel.Cat.Wpf;
 
 namespace Tareas_Pendientes_v2
 {
@@ -40,7 +41,7 @@ namespace Tareas_Pendientes_v2
 		}
 		public Lista(string nombreLista, long idUnico)
 		{
-			this.nombre = nombreLista;
+			this.Nombre= nombreLista;
 			this.idUnico = idUnico;
 			herencia = new Llista<Lista>();
             Tarea.AñadirLista(this);
@@ -69,11 +70,12 @@ namespace Tareas_Pendientes_v2
 				return nombre;
 			}
 
-			set {
-				nombre = value;
+			set
+            {
+               nombre = value;
 			}
 		}
-		public bool EsTemporal {
+        public bool EsTemporal {
 			get { return !listasGuardadas.Existeix(IdUnico); }
 			set {
 				if (value) {
@@ -150,7 +152,7 @@ namespace Tareas_Pendientes_v2
 			text nodo = "<Lista>";
 
 			//nombre
-			nodo &= "<Nombre>" + Nombre.EscaparCaracteresXML() + "</Nombre>";
+			nodo &= "<Nombre>" + nombre.EscaparCaracteresXML() + "</Nombre>";
 			//id
 			nodo &= "<IdUnico>" + idUnico + "</IdUnico>";
 			//categorias
@@ -216,7 +218,7 @@ namespace Tareas_Pendientes_v2
 		#endregion
 		public override string ToString()
 		{
-			return String.IsNullOrEmpty(nombre) || String.IsNullOrWhiteSpace(nombre) ? "'Sin nombre'" : Nombre;
+			return String.IsNullOrEmpty(Nombre) || String.IsNullOrWhiteSpace(Nombre) ? "'Sin nombre'" : Nombre;
 		}
 		public override bool Equals(object obj)
 		{

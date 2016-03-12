@@ -34,9 +34,11 @@ namespace Tareas_Pendientes_v2
 		const int TIEMPOAUTOSAVE = 5 * 1000;
 		bool guardado;
 		Categoria todasLasCategorias;
+        ListaUnica<VisorTarea> tareasCargadas;
 		public MainWindow()
 		{
 			guardado = true;
+            tareasCargadas = new ListaUnica<VisorTarea>();
 			InitializeComponent();
 			Load();
 			if (listaActual == null)
@@ -275,10 +277,19 @@ namespace Tareas_Pendientes_v2
 			VisorTarea visor;
 			stkTareas.Children.Clear();
 			foreach (Tarea tarea in listaActual) {
-				visor = new VisorTarea(listaActual, tarea);
-				visor.TareaEditada += (sender, e) => {
-					ActivarTemporizadorAutoSave();
-				};
+                if (!tareasCargadas.ExisteClave(tarea.IdUnico+tarea.FechaHecho(listaActual).ToString()))
+                {
+                    visor = new VisorTarea(listaActual, tarea);
+                    visor.TareaEditada += (sender, e) =>
+                    {
+                        ActivarTemporizadorAutoSave();
+                    };
+                    tareasCargadas.Añadir(visor);
+                }
+                else
+                {
+                    visor = tareasCargadas[tarea.Clau()];
+                }
 				stkTareas.Children.Add(visor);
 			}
 			stkTareas.Children.Sort();//las ordeno por fechaHecha
@@ -287,7 +298,7 @@ namespace Tareas_Pendientes_v2
 		{
 			if (listaActual != null) {
 				//se a modificado el nombre de la lista.
-				listaActual.Nombre = txboxNombreLista.Text;
+				listaActual.Nombre= txboxNombreLista.Text;
 				//cambia de la lista
 				if (!listaActual.EsTemporal)
 					lstListasPendientes.Items.Refresh();

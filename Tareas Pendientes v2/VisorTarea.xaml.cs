@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using Gabriel.Cat;
 namespace Tareas_Pendientes_v2
 {
 
     /// <summary>
     /// Lógica de interacción para VisorTarea.xaml
     /// </summary>
-    public partial class VisorTarea : UserControl,IComparable<VisorTarea>,IComparable
+    public partial class VisorTarea : UserControl,IComparable<VisorTarea>,IComparable,IClauUnicaPerObjecte
     {
         Tarea tarea;
         Lista lista;
@@ -44,13 +44,12 @@ namespace Tareas_Pendientes_v2
         	InitializeComponent();
         	this.lista = lista;
             this.Tarea = tarea;
-            
         }
 
         public Tarea Tarea {
             get {
                 if (tarea == null)
-                    tarea = new Tarea(lista,txtBxDescripcionTarea.Text);
+                    tarea = new Tarea(lista,txtBxDescripcionTarea.TextWithFormat);
                 return tarea;
             }
             set {
@@ -65,12 +64,12 @@ namespace Tareas_Pendientes_v2
                         tarea.AñadirHecho(lista, temps);
                     }
                     txtBlFechaHecho.Text = ckHecho.IsChecked.Value ? tarea.FechaHecho(lista).ToString():"";
-                    txtBxDescripcionTarea.Text = tarea.Contenido;
+                    txtBxDescripcionTarea.TextWithFormat = tarea.Contenido;
                    
                 }else
                 {
                     txtBlFechaHecho.Text = "";
-                    txtBxDescripcionTarea.Text = "";
+                    txtBxDescripcionTarea.Text="";
                     ckHecho.IsChecked = false;
                 }
             } }
@@ -101,7 +100,7 @@ namespace Tareas_Pendientes_v2
         {
             if (txtBxDescripcionTarea != null && tarea != null)
             {
-                Tarea.Contenido = txtBxDescripcionTarea.Text;
+                Tarea.Contenido = txtBxDescripcionTarea.TextWithFormat;
                 if (TareaEditada != null)
                     TareaEditada(this, new EventArgs());
             }
@@ -126,6 +125,9 @@ namespace Tareas_Pendientes_v2
             return compareTo;
         }
 
-
+        public IComparable Clau()
+        {
+            return tarea.IdUnico+txtBlFechaHecho.Text;
+        }
     }
 }
