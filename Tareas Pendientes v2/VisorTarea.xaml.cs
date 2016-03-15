@@ -19,7 +19,7 @@ namespace Tareas_Pendientes_v2
     /// <summary>
     /// Lógica de interacción para VisorTarea.xaml
     /// </summary>
-    public partial class VisorTarea : UserControl,IComparable<VisorTarea>,IComparable,IClauUnicaPerObjecte
+    public partial class VisorTarea : UserControl,IComparable<VisorTarea>,IComparable
     {
         Tarea tarea;
         Lista lista;
@@ -31,7 +31,8 @@ namespace Tareas_Pendientes_v2
             {
                 this.lista = tarea.Lista;
                 Tarea = tarea;
-            }            
+            }
+
         }
 
         public VisorTarea(Lista lista):this(lista,null)
@@ -44,6 +45,7 @@ namespace Tareas_Pendientes_v2
         	InitializeComponent();
         	this.lista = lista;
             this.Tarea = tarea;
+
         }
 
         public Tarea Tarea {
@@ -125,9 +127,6 @@ namespace Tareas_Pendientes_v2
             return compareTo;
         }
 
-        public IComparable Clau()
-        {
-            return tarea.IdUnico+txtBlFechaHecho.Text;
-        }
+
     }
 }
