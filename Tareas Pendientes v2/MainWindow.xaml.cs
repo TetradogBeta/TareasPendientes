@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using Gabriel.Cat.Extension;
 using Gabriel.Cat;
+using System.Reflection;
 
 namespace Tareas_Pendientes_v2
 {
@@ -47,7 +48,7 @@ namespace Tareas_Pendientes_v2
 			temporizadorAutoSave.Elapsed += (temp) => {
 				Save();
 			};
-		}
+        }
 
 		private void CreaListaNueva()
 		{
