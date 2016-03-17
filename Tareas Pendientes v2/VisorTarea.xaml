@@ -13,7 +13,7 @@
             <ColumnDefinition Width="52*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" >
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" MaxHeight="200">
 
             <Wpf:RicoTextBox x:Name="txtBxDescripcionTarea"  TextoCambiado="txtBxDescripcionTarea_TextChanged"/>
         </ScrollViewer>
