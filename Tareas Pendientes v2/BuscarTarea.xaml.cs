@@ -21,7 +21,7 @@ namespace Tareas_Pendientes_v2
     {
         private Lista listaActual;
         private MainWindow main;
-        //filtra las tareas por: fecha,texto contenido,hecho o no hecho,herencia(muestra cmb con las posibilidades)
+        //filtra las tareas por: fecha,texto contenidoConFormato,hecho o no hecho,herencia(muestra cmb con las posibilidades)
 
         public BuscarTarea(Lista listaActual,MainWindow main)
         {
@@ -36,7 +36,8 @@ namespace Tareas_Pendientes_v2
             string texto = txtBxTextoHaBuscar.Text.ToLowerInvariant();
             stkTareasEncontradas.Children.Clear();
 			stkTareasEncontradas.Children.AddRange(ListaTareaHeredada.ToLista(listaActual.Filtra((tarea)=>{
-                return tarea.ContenidoSinFormato().ToLowerInvariant().Contains(texto);
+                tarea.ActualizarTexto();
+                return tarea.ContenidoSinFormato.ToLowerInvariant().Contains(texto);
             }),listaActual,false).ToObjViewerArray(VisualizaLista));
 		}
 

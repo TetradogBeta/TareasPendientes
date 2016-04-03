@@ -95,7 +95,14 @@ namespace Tareas_Pendientes_v2
 				return idUnico;
 			}
 		}
-
+        public bool ActualizarTextoTareas()
+        {
+            bool hayCambios = false;
+            foreach (Tarea tarea in this)
+                if (tarea.ActualizarTexto() && !hayCambios)
+                    hayCambios = true;
+            return  hayCambios;
+        }
 		#region Herencia Obj
 		public bool TieneDescendencia {
 			get {

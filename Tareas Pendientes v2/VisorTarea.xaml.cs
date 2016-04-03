@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Gabriel.Cat;
+using Gabriel.Cat.Wpf;
 namespace Tareas_Pendientes_v2
 {
 
@@ -23,7 +24,6 @@ namespace Tareas_Pendientes_v2
     {
         Tarea tarea;
         Lista lista;
-        public event EventHandler TareaEditada;
         public VisorTarea(Tarea tarea)
         {
             InitializeComponent();
@@ -32,6 +32,7 @@ namespace Tareas_Pendientes_v2
                 this.lista = tarea.Lista;
                 Tarea = tarea;
             }
+
 
         }
 
@@ -48,14 +49,21 @@ namespace Tareas_Pendientes_v2
 
         }
 
+
         public Tarea Tarea {
             get {
                 if (tarea == null)
-                    tarea = new Tarea(lista,txtBxDescripcionTarea.TextWithFormat);
+                {
+                    tarea = new Tarea(lista, "");
+                }
                 return tarea;
             }
             set {
                 tarea = value;
+                gRtb.Children.Clear();
+                if(Tarea.RtbContenido.Parent!=null)
+                     (Tarea.RtbContenido.Parent as Grid).Children.Remove(Tarea.RtbContenido);
+                gRtb.Children.Add(Tarea.RtbContenido);
                 if(tarea!=null)
                 {
                     DateTime temps = tarea.FechaHecho(lista);
@@ -66,12 +74,10 @@ namespace Tareas_Pendientes_v2
                         tarea.AñadirHecho(lista, temps);
                     }
                     txtBlFechaHecho.Text = ckHecho.IsChecked.Value ? tarea.FechaHecho(lista).ToString():"";
-                    txtBxDescripcionTarea.TextWithFormat = tarea.Contenido;
-                   
+
                 }else
                 {
                     txtBlFechaHecho.Text = "";
-                    txtBxDescripcionTarea.Text="";
                     ckHecho.IsChecked = false;
                 }
             } }
@@ -82,8 +88,7 @@ namespace Tareas_Pendientes_v2
             {
                 txtBlFechaHecho.Text = DateTime.Now.ToString();
                 Tarea.AñadirHecho(lista,DateTime.Now);
-                if (TareaEditada != null)
-                    TareaEditada(this, new EventArgs());
+             
             }
         }
 
@@ -93,21 +98,8 @@ namespace Tareas_Pendientes_v2
             {
                 Tarea.QuitarHecho(lista);
                 txtBlFechaHecho.Text = "";
-                if (TareaEditada != null)
-                    TareaEditada(this, new EventArgs());
             }
         }
-
-        private void txtBxDescripcionTarea_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (txtBxDescripcionTarea != null && tarea != null)
-            {
-                Tarea.Contenido = txtBxDescripcionTarea.TextWithFormat;
-                if (TareaEditada != null)
-                    TareaEditada(this, new EventArgs());
-            }
-        }
-
         public int CompareTo(object obj)
         {
             return CompareTo(obj as VisorTarea);

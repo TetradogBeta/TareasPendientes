@@ -35,9 +35,10 @@ namespace Tareas_Pendientes_v2
         const int TIEMPOAUTOSAVE = 5 * 1000;
         bool guardado;
         Categoria todasLasCategorias;
-
         public MainWindow()
         {
+
+            Tarea.Dispatcher = Dispatcher;
             guardado = true;
             InitializeComponent();
             Load();
@@ -78,7 +79,8 @@ namespace Tareas_Pendientes_v2
                 PonCategoriasCmb();
                 todasLasCategorias = Categoria.ObtenerCategoria(TODASLASLISTAS);
             }
-            else {
+            else
+            {
                 todasLasCategorias = new Categoria(TODASLASLISTAS);
                 cmbCategorias.Items.Add(todasLasCategorias);
                 cmbCategorias.SelectedIndex = 0;
@@ -87,21 +89,29 @@ namespace Tareas_Pendientes_v2
 
         private void Save(object sender, EventArgs e)
         {
-            try
+            if (Dispatcher.InvokeRequired())
             {
-                XmlDocument xml = new XmlDocument();
-                text txtXml = "<TareasPendientes>";
-                txtXml &= Categoria.SaveXmlNodo().OuterXml;
-                txtXml &= Lista.SaveNodoXml(listaActual.EsTemporal ? listaActual : null).OuterXml;
-                txtXml &= "</TareasPendientes>";
-                xml.LoadXml(txtXml);
-                xml.Save(NOMBREARCHIVO);
-                guardado = true;
-
+                Action act = () => Save(sender, e);
+                Dispatcher.BeginInvoke(act).Wait();
             }
-            finally
+            else
             {
-                temporizadorAutoSave.StopAndAbort();
+                try
+                {
+                    XmlDocument xml = new XmlDocument();
+                    text txtXml = "<TareasPendientes>";
+                    txtXml &= Categoria.SaveXmlNodo().OuterXml;
+                    txtXml &= Lista.SaveNodoXml(listaActual.EsTemporal ? listaActual : null).OuterXml;
+                    txtXml &= "</TareasPendientes>";
+                    xml.LoadXml(txtXml);
+                    xml.Save(NOMBREARCHIVO);
+                    guardado = true;
+
+                }
+                finally
+                {
+                    temporizadorAutoSave.StopAndAbort();
+                }
             }
         }
         private void Save()
@@ -149,7 +159,8 @@ namespace Tareas_Pendientes_v2
                 ActivarTemporizadorAutoSave();
 
             }
-            else {//limpia los campos
+            else
+            {//limpia los campos
                 LimpiarCampos();
             }
 
@@ -175,7 +186,8 @@ namespace Tareas_Pendientes_v2
                     //Activa el temporizador para el autoGuardado
                     ActivarTemporizadorAutoSave();
                 }
-                else {
+                else
+                {
                     MessageBox.Show("La lista ya esta añadida.", "Atencion", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
             }
@@ -191,7 +203,7 @@ namespace Tareas_Pendientes_v2
                 lstListasPendientes.Items.Remove(listaActual);
                 listaActual = null;
                 LimpiarCamposLista_Click(null, null);//limpio los campos
-                                                     //Activa el temporizador para el autoGuardado
+                //Activa el temporizador para el autoGuardado
                 ActivarTemporizadorAutoSave();
 
             }
@@ -221,7 +233,7 @@ namespace Tareas_Pendientes_v2
         #region Tareas
         private void EliminarElementoLista_Click(object sender, RoutedEventArgs e)
         {
-            //abre una ventana para editar el contenido de la lista, los elementos de la herencia se ocultaran al "eliminarse de la lista"
+            //abre una ventana para editar el contenidoConFormato de la lista, los elementos de la herencia se ocultaran al "eliminarse de la lista"
             try
             {
                 new EliminarTareas(listaActual, this).ShowDialog();
@@ -301,10 +313,6 @@ namespace Tareas_Pendientes_v2
             foreach (Tarea tarea in listaActual)
             {
                 visor = new VisorTarea(listaActual, tarea);
-                visor.TareaEditada += (sender, e) =>
-                {
-                    ActivarTemporizadorAutoSave();
-                };
                 stkTareas.Children.Add(visor);
             }
 

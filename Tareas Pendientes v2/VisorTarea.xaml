@@ -14,8 +14,7 @@
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" MaxHeight="200">
-
-            <Wpf:RicoTextBox x:Name="txtBxDescripcionTarea"  TextoCambiado="txtBxDescripcionTarea_TextChanged"/>
+            <Grid x:Name="gRtb"/>
         </ScrollViewer>
         <TextBlock Grid.Column="1" x:Name="txtBlFechaHecho" Text="fecha hecho" TextAlignment="Right"/>
         <CheckBox Grid.Column="2" x:Name="ckHecho" Checked="ckHecho_Checked" Unchecked="ckHecho_Unchecked"/>

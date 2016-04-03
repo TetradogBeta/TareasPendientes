@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Gabriel.Cat;
 using System.Xml;
 using Gabriel.Cat.Extension;
 using Gabriel.Cat.Wpf;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace Tareas_Pendientes_v2
 {
-    public class Tarea : IClauUnicaPerObjecte, IComparable<Tarea>, IComparable
+    public class Tarea :IClauUnicaPerObjecte, IComparable<Tarea>, IComparable
     {
 
         enum TareaXml
@@ -18,8 +21,10 @@ namespace Tareas_Pendientes_v2
             Descripcion,
             IdUnico
         }
+        public static Dispatcher Dispatcher;
         static ListaUnica<Tarea> todasLasTareas;
         static LlistaOrdenada<Lista, ListaUnica<Tarea>> tareasPorLista;
+
         //de la lista
         static Tarea()
         {
@@ -28,7 +33,10 @@ namespace Tareas_Pendientes_v2
         }
         Lista lista;
         long idUnico;
-        string contenido;
+        RicoTextBox rtbContenido;
+        string contenidoConFormato;
+        string contenidoSinFormato;
+        ulong lastSavedTime;
         LlistaOrdenada<Lista, DateTime> listasTareaHecha;
         ListaUnica<Lista> listasTareaOculta;
         //solo si esa lista tiene la tarea por herencia sino la elimina
@@ -39,7 +47,7 @@ namespace Tareas_Pendientes_v2
         }
         public Tarea(Lista lista, string contenido, long idUnico)
         {
-            this.contenido = contenido;
+            this.contenidoConFormato = contenido;
             this.idUnico = idUnico;
             this.Lista = lista;
             listasTareaHecha = new LlistaOrdenada<Lista, DateTime>();
@@ -73,32 +81,70 @@ namespace Tareas_Pendientes_v2
                 idUnico = value;
             }
         }
-        public string Contenido
+        public string ContenidoConFormato
         {
             get
             {
-                return contenido;
+                return contenidoConFormato;
             }
 
             set
             {
-                contenido = value;
+                contenidoConFormato = value;
+                if(rtbContenido!=null)
+                   RtbContenido.TextWithFormat = value;
             }
         }
-        public string ContenidoSinFormato()
+        
+        public RicoTextBox RtbContenido
         {
-            string contendioSinFormato;
-            RicoTextBox rtb = new RicoTextBox();
-            try
+            get {
+                Action act;
+                if (rtbContenido == null)
+                {
+                    act = () =>
+                    {
+                        rtbContenido = new RicoTextBox();
+                        rtbContenido.TextWithFormat = contenidoConFormato;
+                    };
+                    Dispatcher.BeginInvoke(act).Wait();
+                }
+                return rtbContenido; }
+            private set { rtbContenido = value; }
+        }
+
+        public string ContenidoSinFormato
+        {
+            get
             {
-                rtb.TextWithFormat = Contenido;
-                contendioSinFormato = rtb.Text;
+                return contenidoSinFormato;
             }
-            catch
+            set
             {
-                contendioSinFormato = contenido;
+                contenidoSinFormato = value;
+                if (rtbContenido != null)
+                    RtbContenido.Text= value;
             }
-            return contendioSinFormato;
+        }
+        public bool Actualizable {
+            get {
+                bool actualizable = false;
+                if(rtbContenido!=null)
+                actualizable= lastSavedTime < RtbContenido.TextChangedTimes;
+                return actualizable;
+            }
+        }
+        public bool ActualizarTexto()
+        {
+            bool actualizado = false;
+            if (Actualizable)
+            {
+                contenidoSinFormato = RtbContenido.Text;
+                contenidoConFormato = RtbContenido.TextWithFormat;
+                lastSavedTime = RtbContenido.TextChangedTimes;
+                actualizado = true;
+            }
+            return actualizado;
         }
         public Lista Lista
         {
@@ -159,7 +205,8 @@ namespace Tareas_Pendientes_v2
             //por testear
             text nodeText = "<Tarea>";
             XmlDocument nodo = new XmlDocument();
-            nodeText &= "<Descripcion>" + Contenido.EscaparCaracteresXML() + "</Descripcion>";
+            ActualizarTexto();
+            nodeText &= "<Descripcion>" + ContenidoConFormato.EscaparCaracteresXML() + "</Descripcion>";
             nodeText &= "<IdUnico>" + IdUnico + "</IdUnico></Tarea>";
             nodo.LoadXml(nodeText);
             return nodo.FirstChild;//mirar si coge el nodo principal
@@ -195,8 +242,8 @@ namespace Tareas_Pendientes_v2
 
         public override string ToString()
         {
-            string contenido = ContenidoSinFormato();
-            string toString = contenido == "" ? "'Sin Contenido'" : contenido;
+            string contenido = ContenidoSinFormato;
+            string toString = contenido == "" ? "'Sin ContenidoConFormato'" : contenido;
             return toString;
         }
 
@@ -205,7 +252,8 @@ namespace Tareas_Pendientes_v2
             text = text.ToLowerInvariant();
             return todasLasTareas.Filtra((tarea) =>
             {
-                return tarea.ContenidoSinFormato().ToLowerInvariant().Contains(text);
+                tarea.ActualizarTexto();
+                return tarea.ContenidoSinFormato.ToLowerInvariant().Contains(text);
             }).ToArray();
         }
 
