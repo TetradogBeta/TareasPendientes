@@ -117,10 +117,15 @@ namespace Tareas_Pendientes_v2
         {
             get
             {
+                if (contenidoSinFormato == null)
+                {
+                    contenidoSinFormato = RtbContenido.Text;
+                }
                 return contenidoSinFormato;
             }
             set
             {
+                if (value == null) value = "";
                 contenidoSinFormato = value;
                 if (rtbContenido != null)
                     RtbContenido.Text= value;
