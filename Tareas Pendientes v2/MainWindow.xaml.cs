@@ -17,6 +17,7 @@ using System.Xml;
 using Gabriel.Cat.Extension;
 using Gabriel.Cat;
 using System.Reflection;
+using System.Threading;
 
 namespace Tareas_Pendientes_v2
 {
@@ -78,6 +79,12 @@ namespace Tareas_Pendientes_v2
                 }
                 PonCategoriasCmb();
                 todasLasCategorias = Categoria.ObtenerCategoria(TODASLASLISTAS);
+                new Thread(() => {
+                  Tarea[] todas=Tarea.Todas();
+                  string aux = "";
+                  for (int i = 0; i < todas.Length; i++)
+                     aux= todas[i].ContenidoSinFormato;
+                }).Start();
             }
             else
             {

@@ -347,5 +347,10 @@ namespace Tareas_Pendientes_v2
         }
 
 
+
+        public static Tarea[] Todas()
+        {
+            return todasLasTareas.ToArray();
+        }
     }
 }
