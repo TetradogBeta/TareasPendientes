@@ -36,6 +36,7 @@ namespace Tareas_Pendientes_v2
         const int TIEMPOAUTOSAVE = 5 * 1000;
         bool guardado;
         Categoria todasLasCategorias;
+        Thread hiloCargarTareas;
         public MainWindow()
         {
 
@@ -80,14 +81,15 @@ namespace Tareas_Pendientes_v2
                 }
                 PonCategoriasCmb();
                 todasLasCategorias = Categoria.ObtenerCategoria(TODASLASLISTAS);
-                new Thread(() => {
+              hiloCargarTareas=  new Thread(() => {
                   Tarea[] todas=Tarea.Todas();
                   string aux = "";
                   for (int i = 0; i < todas.Length; i++)
                      aux= todas[i].ContenidoSinFormato;
                   act = () => Title = "Tareas Pendientes";
                   Dispatcher.BeginInvoke(act);
-                }).Start();
+                });
+                hiloCargarTareas.Start();
             }
             else
             {
@@ -108,6 +110,7 @@ namespace Tareas_Pendientes_v2
             {
                 try
                 {
+                    hiloCargarTareas.Abort();
                     XmlDocument xml = new XmlDocument();
                     text txtXml = "<TareasPendientes>";
                     txtXml &= Categoria.SaveXmlNodo().OuterXml;

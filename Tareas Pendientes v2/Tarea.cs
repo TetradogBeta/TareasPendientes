@@ -105,7 +105,14 @@ namespace Tareas_Pendientes_v2
                     act = () =>
                     {
                         rtbContenido = new RicoTextBox();
-                        rtbContenido.TextWithFormat = contenidoConFormato;
+                        try
+                        {
+                            rtbContenido.TextWithFormat = contenidoConFormato;
+                        }
+                        catch {
+                            rtbContenido.Text = contenidoSinFormato;
+                            contenidoConFormato = rtbContenido.TextWithFormat;
+                        }
                     };
                     Dispatcher.BeginInvoke(act).Wait();
                 }
