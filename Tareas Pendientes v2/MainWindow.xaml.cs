@@ -64,6 +64,7 @@ namespace Tareas_Pendientes_v2
 
             if (File.Exists(NOMBREARCHIVO))
             {
+                Title = "Tareas Pendientes Cargando";
                 XmlDocument xmlTareas = new XmlDocument();
                 xmlTareas.Load(NOMBREARCHIVO);
                 Categoria.LoadXmlNodo(xmlTareas.FirstChild.ChildNodes[0]);
@@ -84,6 +85,8 @@ namespace Tareas_Pendientes_v2
                   string aux = "";
                   for (int i = 0; i < todas.Length; i++)
                      aux= todas[i].ContenidoSinFormato;
+                  act = () => Title = "Tareas Pendientes";
+                  Dispatcher.BeginInvoke(act);
                 }).Start();
             }
             else
