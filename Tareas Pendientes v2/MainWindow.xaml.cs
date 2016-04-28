@@ -62,7 +62,8 @@ namespace Tareas_Pendientes_v2
         private void Load()
         {
             Action act;
-
+            Tarea[] todas;
+            string aux;
             if (File.Exists(NOMBREARCHIVO))
             {
                 Title = "Tareas Pendientes Cargando";
@@ -82,8 +83,8 @@ namespace Tareas_Pendientes_v2
                 PonCategoriasCmb();
                 todasLasCategorias = Categoria.ObtenerCategoria(TODASLASLISTAS);
               hiloCargarTareas=  new Thread(() => {
-                  Tarea[] todas=Tarea.Todas();
-                  string aux = "";
+                  todas=Tarea.Todas();
+                   aux = "";
                   for (int i = 0; i < todas.Length; i++)
                      aux= todas[i].ContenidoSinFormato;
                   act = () => Title = "Tareas Pendientes";
@@ -101,18 +102,22 @@ namespace Tareas_Pendientes_v2
 
         private void Save(object sender, EventArgs e)
         {
+            Action act;
+            XmlDocument xml;
+            text txtXml;
             if (Dispatcher.InvokeRequired())
             {
-                Action act = () => Save(sender, e);
+                act = () => Save(sender, e);
                 Dispatcher.BeginInvoke(act).Wait();
             }
             else
             {
                 try
                 {
-                    hiloCargarTareas.Abort();
-                    XmlDocument xml = new XmlDocument();
-                    text txtXml = "<TareasPendientes>";
+                    if(hiloCargarTareas!=null)
+                       hiloCargarTareas.Abort();
+                    xml = new XmlDocument();
+                    txtXml = "<TareasPendientes>";
                     txtXml &= Categoria.SaveXmlNodo().OuterXml;
                     txtXml &= Lista.SaveNodoXml(listaActual.EsTemporal ? listaActual : null).OuterXml;
                     txtXml &= "</TareasPendientes>";
