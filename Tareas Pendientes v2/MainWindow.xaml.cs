@@ -37,9 +37,10 @@ namespace Tareas_Pendientes_v2
         bool guardado;
         Categoria todasLasCategorias;
         Thread hiloCargarTareas;
+        bool verHechos;
         public MainWindow()
         {
-
+            verHechos = true;
             Tarea.Dispatcher = Dispatcher;
             guardado = true;
             InitializeComponent();
@@ -331,7 +332,8 @@ namespace Tareas_Pendientes_v2
             foreach (Tarea tarea in listaActual)
             {
                 visor = new VisorTarea(listaActual, tarea);
-                stkTareas.Children.Add(visor);
+                if(visor.ckHecho.IsChecked.HasValue&& visor.ckHecho.IsChecked.Value&&verHechos|| !(visor.ckHecho.IsChecked.HasValue && visor.ckHecho.IsChecked.Value))
+                  stkTareas.Children.Add(visor);
             }
 
             stkTareas.Children.Sort();//las ordeno por fechaHecha
@@ -358,6 +360,12 @@ namespace Tareas_Pendientes_v2
             catch
             {
             }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            verHechos = !verHechos;
+            PonTareasLista();
         }
     }
 }

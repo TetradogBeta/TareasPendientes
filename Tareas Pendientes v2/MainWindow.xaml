@@ -33,6 +33,7 @@
                     <MenuItem Header="Buscar Lista" Click="BuscarLista_Click"/>
                 </MenuItem>
                 <MenuItem Header="Elementos" Height="22" Width="73">
+                    <MenuItem Header="Ver/Ocultar hechos" Click="MenuItem_Click"/>
                     <MenuItem Header="Añadir" Click="AñadirElementoLista_Click"/>
                     <MenuItem Header="Eliminar/Ocultar herencia" Click="EliminarElementoLista_Click"/>
                 	<MenuItem Header="Desocultar herencia" Click="DesocultarItem_Click"/>
