@@ -13,7 +13,7 @@
             <ColumnDefinition Width="52*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" MaxHeight="200">
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" >
             <Grid x:Name="gRtb"/>
         </ScrollViewer>
         <TextBlock Grid.Column="1" x:Name="txtBlFechaHecho" Text="fecha hecho" TextAlignment="Right"/>
