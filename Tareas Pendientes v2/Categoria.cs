@@ -174,10 +174,10 @@ namespace Tareas_Pendientes_v2
 			}
 			return coincide;
 		}
-		public static void Añadir(Categoria categoria, IEnumerable<Lista> listas)
+		public static void Añadir(Categoria categoria, IList<Lista> listas)
 		{
-			foreach (Lista lista in listas)
-				Añadir(categoria.IdUnico, lista);
+			for(int i=0;i<listas.Count;i++)
+				Añadir(categoria.IdUnico, listas[i]);
 		}
 		public static void Añadir(long idCategoria, Lista lista)
 		{

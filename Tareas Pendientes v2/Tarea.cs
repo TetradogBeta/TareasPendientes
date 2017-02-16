@@ -306,9 +306,10 @@ namespace Tareas_Pendientes_v2
         public static Tarea[] TareasOcultas(Lista lista)
         {
             List<Tarea> tareasOcultas = new List<Tarea>();
-            foreach (Tarea tarea in todasLasTareas.ToArray())
-                if (tarea.listasTareaOculta.Contains(lista))
-                    tareasOcultas.Add(tarea);
+            Tarea[] tareas = todasLasTareas.ToArray();
+            for(int i=0;i<tareas.Length;i++)
+                if (tareas[i].listasTareaOculta.Contains(lista))
+                    tareasOcultas.Add(tareas[i]);
             return tareasOcultas.ToArray();
         }
 

@@ -122,13 +122,13 @@ namespace Tareas_Pendientes_v2
             return listasTarea.ToArray();
         }
 
-        public static IEnumerable<ListaTareaHeredada> ToLista(IEnumerable<Tarea> tareas, Lista lista, bool mostrarLista = true)
+        public static List<ListaTareaHeredada> ToLista(IList<Tarea> tareas, Lista lista, bool mostrarLista = true)
         {
             List<ListaTareaHeredada> listaTareas = new List<ListaTareaHeredada>();
-            foreach (Tarea tarea in tareas)
+            for(int i=0;i<tareas.Count;i++)
             {
 
-                listaTareas.Add(new ListaTareaHeredada(lista, tarea, mostrarLista));
+                listaTareas.Add(new ListaTareaHeredada(lista, tareas[i], mostrarLista));
             }
             return listaTareas;
         }
