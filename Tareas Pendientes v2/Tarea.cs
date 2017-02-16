@@ -21,6 +21,7 @@ namespace Tareas_Pendientes_v2
             Descripcion,
             IdUnico
         }
+        public static MainWindow main;
         public static Dispatcher Dispatcher;
         static ListaUnica<Tarea> todasLasTareas;
         static LlistaOrdenada<Lista, ListaUnica<Tarea>> tareasPorLista;
@@ -85,7 +86,7 @@ namespace Tareas_Pendientes_v2
         {
             get
             {
-                return contenidoConFormato;
+                return rtbContenido.TextWithFormat ?? contenidoConFormato;
             }
 
             set
@@ -112,6 +113,10 @@ namespace Tareas_Pendientes_v2
                         catch {
                             rtbContenido.Text = contenidoSinFormato;
                             contenidoConFormato = rtbContenido.TextWithFormat;
+                        }
+                        finally
+                        {
+                            rtbContenido.TextChanged += (s, e) => main.ActivarTemporizadorAutoSave();
                         }
                     };
                     Dispatcher.BeginInvoke(act).Wait();

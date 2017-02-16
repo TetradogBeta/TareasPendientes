@@ -28,7 +28,8 @@ namespace Tareas_Pendientes_v2
     {
         //cada x tiempo se guarda si hay cambios :) asi si hay algun problema cuando cierra no se perdera mucho :)//guarda las listas temporales
         //al abrir mira si hay un autoGuardado si lo hay mira la fecha de editado y si es mas reciente que la del guardadoNormal pregunta si quiere carga esa si dice que si la pone sino la elimina.
-        string NOMBREARCHIVO = "tareasPendientes.xml";
+        const string NOMBREARCHIVO = "tareasPendientes.xml";
+        const string NOMBREARCHIVOAUTOGUARDADO = "tareasPendientesAuto.xml";
         public const string TODASLASLISTAS = "Todas las listas";
         Lista listaActual;
         Temporizador temporizadorAutoSave;
@@ -38,8 +39,13 @@ namespace Tareas_Pendientes_v2
         Categoria todasLasCategorias;
         Thread hiloCargarTareas;
         bool verHechos;
+        bool autoGuardando;
+        bool cerrando;
         public MainWindow()
         {
+            Tarea.main = this;
+            cerrando = false;
+            autoGuardando = false;
             verHechos = true;
             Tarea.Dispatcher = Dispatcher;
             guardado = true;
@@ -50,7 +56,13 @@ namespace Tareas_Pendientes_v2
             temporizadorAutoSave = new Temporizador(TIEMPOAUTOSAVE);
             temporizadorAutoSave.Elapsed += (temp) =>
             {
-                Save();
+                try
+                {
+                    autoGuardando = true;
+                    Save();
+                }
+                catch { }
+                finally { autoGuardando = false; }
             };
         }
 
@@ -69,7 +81,9 @@ namespace Tareas_Pendientes_v2
             {
                 Title = "Tareas Pendientes Cargando";
                 XmlDocument xmlTareas = new XmlDocument();
-                xmlTareas.Load(NOMBREARCHIVO);
+                if (!File.Exists(NOMBREARCHIVOAUTOGUARDADO))
+                    xmlTareas.Load(NOMBREARCHIVO);
+                else xmlTareas.Load(NOMBREARCHIVOAUTOGUARDADO);
                 Categoria.LoadXmlNodo(xmlTareas.FirstChild.ChildNodes[0]);
                 listaActual = Lista.LoadNodoXml(xmlTareas.FirstChild.ChildNodes[1]);
                 if (listaActual != null)
@@ -103,46 +117,70 @@ namespace Tareas_Pendientes_v2
 
         private void Save(object sender, EventArgs e)
         {
+            cerrando = true;
+            temporizadorAutoSave.StopAndAbort();
+            ISave(NOMBREARCHIVO);
+            if (File.Exists(NOMBREARCHIVOAUTOGUARDADO))
+                File.Delete(NOMBREARCHIVOAUTOGUARDADO);
+        }
+        private void  ISave(string nombre)
+        {
             Action act;
             XmlDocument xml;
-            StringBuilder strSave=new StringBuilder();
+            StringBuilder strSave = new StringBuilder();
             if (Dispatcher.InvokeRequired())
             {
-                act = () => Save(sender, e);
+                act = () => ISave(nombre);
                 Dispatcher.BeginInvoke(act).Wait();
             }
             else
             {
                 try
                 {
-                    if(hiloCargarTareas!=null)
-                       hiloCargarTareas.Abort();
+                    if (hiloCargarTareas != null)
+                        hiloCargarTareas.Abort();
+
                     xml = new XmlDocument();
-                    strSave.Append( "<TareasPendientes>");
+                    strSave.Append("<TareasPendientes>");
                     strSave.Append(Categoria.SaveXmlNodo().OuterXml);
                     strSave.Append(Lista.SaveNodoXml(listaActual.EsTemporal ? listaActual : null).OuterXml);
                     strSave.Append("</TareasPendientes>");
                     xml.LoadXml(strSave.ToString());
-                    xml.Save(NOMBREARCHIVO);
+                    xml.Normalize();
+                    xml.Save(nombre);
                     guardado = true;
 
                 }
                 finally
                 {
-                    temporizadorAutoSave.StopAndAbort();
+               //     temporizadorAutoSave.StopAndAbort();
                 }
             }
         }
         private void Save()
         {
-            if (!guardado)
-                Save(null, null);
+            Action act;
+            if (!guardado && !cerrando)
+            {
+                act = () => Title = "Autoguardando...un momento";
+                Dispatcher.BeginInvoke(act);
+                ISave(NOMBREARCHIVOAUTOGUARDADO);
+                act = () => Title = "Tareas Pendientes";
+                Dispatcher.BeginInvoke(act);
+                temporizadorAutoSave.Stop();
+            }
         }
         public void ActivarTemporizadorAutoSave()
         {
-            guardado = false;
-            temporizadorAutoSave.StopAndAbort();
-            temporizadorAutoSave.Start();
+           
+            if (!cerrando)
+            {
+             
+                guardado = false;
+                temporizadorAutoSave.StopAndAbort();
+                temporizadorAutoSave.Start();
+              
+            }
         }
         private void HerenciasLista_Click(object sender, RoutedEventArgs e)
         {
