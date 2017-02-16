@@ -158,39 +158,61 @@ namespace Tareas_Pendientes_v2
 			Tarea[] tareasLista = Tarea.TareasLista(this);
 			Tarea[] tareasHechas = Tarea.TareasHechas(this);
 			Tarea[] tareasOcultas = Tarea.TareasOcultas(this);
-			text nodo = "<Lista>";
+			StringBuilder strNodo =new StringBuilder( "<Lista>");
 
-			//nombre
-			nodo &= "<Nombre>" + nombre.EscaparCaracteresXML() + "</Nombre>";
-			//id
-			nodo &= "<IdUnico>" + idUnico + "</IdUnico>";
-			//categorias
-			nodo &= "<Categorias>";
-			for (int i = 0; i < categorias.Length; i++)
-				nodo &= "<IdCategoria>" + categorias[i].IdUnico + "</IdCategoria>";
-			nodo &= "</Categorias>";
-			//tareas lista todo el nodo
-			nodo &= "<TareasLista>";
+            //nombre
+            strNodo.Append("<Nombre>");
+            strNodo.Append(nombre.EscaparCaracteresXML());
+            strNodo.Append("</Nombre>");
+            //id
+            strNodo.Append("<IdUnico>");
+            strNodo.Append(idUnico);
+            strNodo.Append("</IdUnico>");
+            //categorias
+            strNodo.Append("<Categorias>");
+            for (int i = 0; i < categorias.Length; i++)
+            {
+                strNodo.Append("<IdCategoria>");
+                strNodo.Append(categorias[i].IdUnico);
+                strNodo.Append("</IdCategoria>");
+            }
+            strNodo.Append("</Categorias>");
+            //tareas lista todo el nodo
+            strNodo.Append("<TareasLista>");
 			for (int i = 0; i < tareasLista.Length; i++)
-				nodo &= tareasLista[i].ToXml().OuterXml;
-			nodo &= "</TareasLista>";
-			//tareas hechas solo ids y fecha
-			nodo &= "<TareasHechas>";
-			for (int i = 0; i < tareasHechas.Length; i++)
-				nodo &= "<TareaHecha><IdTareaHecha>" + tareasHechas[i].IdUnico + "</IdTareaHecha><FechaHecho>" + tareasHechas[i].FechaHecho(this).Ticks + "</FechaHecho></TareaHecha>";
-			nodo &= "</TareasHechas>";
-			//herencia solo ids
-			nodo &= "<Herencias>";
-			for (int i = 0; i < herencia.Count; i++)
-				nodo &= "<IdHerencia>" + herencia[i].IdUnico + "</IdHerencia>";
-			nodo &= "</Herencias>";
-			//tareas ocultas solo ids
-			nodo &= "<TareasOcultas>";
-			for (int i = 0; i < tareasOcultas.Length; i++)
-				nodo &= "<TareaOculta>" + tareasOcultas[i].IdUnico + "</TareaOculta>";
-			nodo &= "</TareasOcultas>";
-			nodo &= "</Lista>";
-			xml.LoadXml(nodo);
+                strNodo.Append(tareasLista[i].ToXml().OuterXml);
+            strNodo.Append("</TareasLista>");
+            //tareas hechas solo ids y fecha
+            strNodo.Append("<TareasHechas>");
+            for (int i = 0; i < tareasHechas.Length; i++)
+            {
+                strNodo.Append("<TareaHecha><IdTareaHecha>");
+                strNodo.Append(tareasHechas[i].IdUnico);
+                strNodo.Append("</IdTareaHecha><FechaHecho>");
+                strNodo.Append(tareasHechas[i].FechaHecho(this).Ticks);
+                strNodo.Append("</FechaHecho></TareaHecha>");
+            }
+            strNodo.Append("</TareasHechas>");
+            //herencia solo ids
+            strNodo.Append("<Herencias>");
+            for (int i = 0; i < herencia.Count; i++)
+            {
+                strNodo.Append("<IdHerencia>");
+                strNodo.Append(herencia[i].IdUnico);
+                strNodo.Append("</IdHerencia>");
+            }
+            strNodo.Append("</Herencias>");
+            //tareas ocultas solo ids
+            strNodo.Append("<TareasOcultas>");
+            for (int i = 0; i < tareasOcultas.Length; i++)
+            {
+                strNodo.Append("<TareaOculta>");
+                strNodo.Append(tareasOcultas[i].IdUnico);
+                strNodo.Append("</TareaOculta>");
+            }
+            strNodo.Append("</TareasOcultas>");
+            strNodo.Append("</Lista>");
+			xml.LoadXml(strNodo.ToString());
 			xml.Normalize();
 			return xml.FirstChild;//mirar si coge el nodo principal
 		}
@@ -256,17 +278,17 @@ namespace Tareas_Pendientes_v2
 		public static XmlNode SaveNodoXml(Lista listaTemporal = null)
 		{
 			XmlDocument xmldoc = new XmlDocument();
-			text txtNodo = "<Listas>";
-			txtNodo &= "<ListaTemporal>";
+			StringBuilder strNodo = new StringBuilder("<Listas>");
+			strNodo.Append( "<ListaTemporal>");
 			if (listaTemporal != null)
-				txtNodo &= listaTemporal.ToXml().OuterXml;
-			txtNodo &= "</ListaTemporal>";
-			txtNodo &= "<ListasGuardadas>";
+                strNodo.Append(listaTemporal.ToXml().OuterXml);
+            strNodo.Append("</ListaTemporal>");
+            strNodo.Append("<ListasGuardadas>");
 			foreach (KeyValuePair<long,Lista> lista in listasGuardadas)
-				txtNodo &= lista.Value.ToXml().OuterXml;
-			txtNodo &= "</ListasGuardadas>";
-			txtNodo &= "</Listas>";
-			xmldoc.LoadXml(txtNodo);
+                strNodo.Append(lista.Value.ToXml().OuterXml);
+            strNodo.Append("</ListasGuardadas>");
+            strNodo.Append("</Listas>");
+			xmldoc.LoadXml(strNodo.ToString());
 			xmldoc.Normalize();
 			return xmldoc.FirstChild;
 		}

@@ -105,7 +105,7 @@ namespace Tareas_Pendientes_v2
         {
             Action act;
             XmlDocument xml;
-            text txtXml;
+            StringBuilder strSave=new StringBuilder();
             if (Dispatcher.InvokeRequired())
             {
                 act = () => Save(sender, e);
@@ -118,11 +118,11 @@ namespace Tareas_Pendientes_v2
                     if(hiloCargarTareas!=null)
                        hiloCargarTareas.Abort();
                     xml = new XmlDocument();
-                    txtXml = "<TareasPendientes>";
-                    txtXml &= Categoria.SaveXmlNodo().OuterXml;
-                    txtXml &= Lista.SaveNodoXml(listaActual.EsTemporal ? listaActual : null).OuterXml;
-                    txtXml &= "</TareasPendientes>";
-                    xml.LoadXml(txtXml);
+                    strSave.Append( "<TareasPendientes>");
+                    strSave.Append(Categoria.SaveXmlNodo().OuterXml);
+                    strSave.Append(Lista.SaveNodoXml(listaActual.EsTemporal ? listaActual : null).OuterXml);
+                    strSave.Append("</TareasPendientes>");
+                    xml.LoadXml(strSave.ToString());
                     xml.Save(NOMBREARCHIVO);
                     guardado = true;
 
