@@ -76,16 +76,16 @@ namespace Tareas_Pendientes_v2
 			}
 		}
         public bool EsTemporal {
-			get { return !listasGuardadas.Existeix(IdUnico); }
+			get { return !listasGuardadas.ContainsKey(IdUnico); }
 			set {
 				if (value) {
-					if (listasGuardadas.Existeix(IdUnico)) {
-						listasGuardadas.Elimina(IdUnico);
+					if (listasGuardadas.ContainsKey(IdUnico)) {
+						listasGuardadas.Remove(IdUnico);
 						QuitarHerederos(this);
 					}
 				} else {
-					if (!listasGuardadas.Existeix(IdUnico)) {
-						listasGuardadas.Afegir(IdUnico, this);
+					if (!listasGuardadas.ContainsKey(IdUnico)) {
+						listasGuardadas.Add(IdUnico, this);
 					}
 				}
 			}
@@ -107,11 +107,11 @@ namespace Tareas_Pendientes_v2
 		public bool TieneDescendencia {
 			get {
 				bool tieneHijos = false;
-				listasGuardadas.WhileEach((hijoList) => {
+				listasGuardadas.WhileEach((MetodoWhileEach<KeyValuePair<long,Lista>>)((hijoList) => {
 				                          	if (this != hijoList.Value)
-				                          		tieneHijos = hijoList.Value.herencia.Existeix(this);
+				                          		tieneHijos = hijoList.Value.herencia.Contains(this);
 				                          	return !tieneHijos;
-				                          });
+				                          }));
 				return tieneHijos;
 			}
 		}
@@ -125,25 +125,27 @@ namespace Tareas_Pendientes_v2
 
 		public void Heredar(Lista lista)
 		{
-			if (!herencia.Existeix(lista) && EsHeredable(lista))
-				herencia.Afegir(lista);
+			if (!herencia.Contains(lista) && EsHeredable(lista))
+				herencia.Add(lista);
 		}
 
 		public bool EsHeredable(Lista lista)
 		{
-			return ListasHeredables(this).Contains(lista);
+			return ((IList<Lista>)ListasHeredables(this)).Contains(lista);
 		}
 
 		public void Desheredar(Lista lista)
 		{
-            if (herencia.Existeix(lista))
+            Tarea[] tareas;
+            if (herencia.Contains(lista))
             {
-                herencia.Elimina(lista);
+                herencia.Remove(lista);
+                tareas = Tarea.TareasLista(lista);
                 //quitar tareas lista
-                foreach (Tarea tareaHaDesheredar in Tarea.TareasLista(lista))
+                for(int i=0;i<tareas.Length;i++)
                 {
-                    tareaHaDesheredar.QuitarHecho(this);
-                    tareaHaDesheredar.Desocultar(this);
+                    tareas[i].QuitarHecho(this);
+                    tareas[i].Desocultar(this);
                 }
             }
 		}
@@ -207,9 +209,12 @@ namespace Tareas_Pendientes_v2
 				compareTo = -1;
 			return compareTo;
 		}
-		public IComparable Clau()
+		public IComparable Clau
 		{
-			return idUnico;
+            get
+            {
+                return idUnico;
+            }
 		}
 		public IEnumerator<Tarea> GetEnumerator()
 		{
@@ -271,13 +276,13 @@ namespace Tareas_Pendientes_v2
 			XmlNode nodo, nodoListaTemporal = nodoListas.ChildNodes[0].FirstChild;
 			Lista lista;
 			long idLista;
-			listasGuardadas.Buida();
+			listasGuardadas.Clear();
 			//pongo las listas guardadas
 			nodoListas = nodoListas.ChildNodes[1];
 			//creo las listas
 			for (int i = 0; i < nodoListas.ChildNodes.Count; i++) {
 				lista = new Lista(nodoListas.ChildNodes[i]);
-				listasGuardadas.Afegir(lista.IdUnico, lista);
+				listasGuardadas.Add(lista.IdUnico, lista);
 			}
 			//pongo la herencia
 			for (int i = 0; i < nodoListas.ChildNodes.Count; i++) {
@@ -303,7 +308,7 @@ namespace Tareas_Pendientes_v2
 		private static void PonHerenciaXml(XmlNode subNodoHerencia, Lista lista)
 		{
 			for (int j = 0; j < subNodoHerencia.ChildNodes.Count; j++)//añado la herencia que tenga
-				listasGuardadas[lista.IdUnico].herencia.Afegir(listasGuardadas[Convert.ToInt64(subNodoHerencia.ChildNodes[j].InnerText)]);
+				listasGuardadas[lista.IdUnico].herencia.Add(listasGuardadas[Convert.ToInt64(subNodoHerencia.ChildNodes[j].InnerText)]);
 		}
 		private static void PonTareasHechasYOclutasXml(XmlNode nodoListaTemporal, Lista lista)
 		{
@@ -319,10 +324,10 @@ namespace Tareas_Pendientes_v2
 		public static Lista[] ListasHeredables(Lista listaActual)
 		{
 			ListaUnica<Lista> listasHeredables = new ListaUnica<Lista>();
-			listasHeredables.Añadir(listasGuardadas.ValuesToArray());
-			listasHeredables.Elimina(Lista.Herencias(listaActual));
-			listasHeredables.Elimina(Lista.Herederos(listaActual));
-			listasHeredables.Elimina(listaActual);
+			listasHeredables.AddRange(listasGuardadas.ValuesToArray());
+			listasHeredables.RemoveRange(Lista.Herencias(listaActual));
+			listasHeredables.RemoveRange(Lista.Herederos(listaActual));
+			listasHeredables.Remove(listaActual);
 			
 			return listasHeredables.ToArray();
 		}
@@ -348,7 +353,7 @@ namespace Tareas_Pendientes_v2
 			Tarea[] tareasLista = Tarea.TareasLista(listaActual);
 			DateTime fechaHecho;
 			for (int i = 0; i < herederos.Length; i++) {
-				herederos[i].herencia.Elimina(listaActual);
+				herederos[i].herencia.Remove(listaActual);
 
 			}
 			for (int i = 0; i < tareasLista.Length; i++) {
@@ -365,7 +370,7 @@ namespace Tareas_Pendientes_v2
 		public static Lista[] HerederosDirectos(Lista lista)
 		{
 			return listasGuardadas.Filtra((listaHeredera) =>
-			                              listaHeredera.Value.herencia.Existeix(lista)
+			                              listaHeredera.Value.herencia.Contains(lista)
 			                             ).ValuesToArray();
 		}
 		public static Lista[] Herederos(Lista lista)

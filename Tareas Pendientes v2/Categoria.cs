@@ -31,7 +31,7 @@ namespace Tareas_Pendientes_v2
 			this.IdUnico = idUnico;
 			this.Nombre = nombre;
 			listasDeLaCategoria = new Llista<Lista>();
-			categorias.Añadir(this);
+			categorias.Add(this);
 		}
 
 
@@ -66,24 +66,24 @@ namespace Tareas_Pendientes_v2
 
 		public bool EstaDentro(Lista listaActual)
 		{
-			return listasDeLaCategoria.Existeix(listaActual);
+			return listasDeLaCategoria.Contains(listaActual);
 		}
 		public void AñadirExistentes(Lista[] listas)
 		{
 			if (listas != null)
 				for (int i = 0; i < listas.Length; i++)
-					if (!listasDeLaCategoria.Existeix(listas[i]))
+					if (!listasDeLaCategoria.Contains(listas[i]))
 						Añadir(listas[i]);
 		}
 		public void Añadir(Lista lista)
 		{
-			if (!listasDeLaCategoria.Existeix(lista))
-				listasDeLaCategoria.Afegir(lista);
+			if (!listasDeLaCategoria.Contains(lista))
+				listasDeLaCategoria.Add(lista);
 		}
 
 		public void Quitar(Lista lista)
 		{
-			listasDeLaCategoria.Elimina(lista);
+			listasDeLaCategoria.Remove(lista);
 		}
 
 		public Lista[] Listas()
@@ -103,9 +103,12 @@ namespace Tareas_Pendientes_v2
 			return nodo.FirstChild;
 
 		}
-		public IComparable Clau()
+		public IComparable Clau
 		{
-			return IdUnico;
+            get
+            {
+                return IdUnico;
+            }
 		}
 
 		public int CompareTo(object obj)
@@ -147,7 +150,7 @@ namespace Tareas_Pendientes_v2
 		}
 		public static bool ExisteCategoria(long idCategoria)
 		{
-			return categorias.ExisteClave(idCategoria);
+			return categorias.Contains(idCategoria);
 		}
 		public static Categoria[] Categorias()
 		{
@@ -157,15 +160,15 @@ namespace Tareas_Pendientes_v2
 		{
 			Llista<Categoria> categoriasLista = new Llista<Categoria>();
 			foreach (Categoria categoria in categorias)
-				if (categoria.listasDeLaCategoria.Existeix(lista))
-					categoriasLista.Afegir(categoria);
+				if (categoria.listasDeLaCategoria.Contains(lista))
+					categoriasLista.Add(categoria);
 			return categoriasLista.ToArray();
 
 		}
 		public static bool JuntarSiCoincideNombreNuevo(Categoria categoria,string nombreNuevo)
 		{
 			Categoria old=ObtenerCategoria(nombreNuevo);
-			bool coincide = categorias.ExisteClave(old.idUnico);
+			bool coincide = categorias.Contains(old.idUnico);
 			if (coincide) {
 				old.AñadirExistentes(categoria.Listas());
 			}
@@ -178,12 +181,12 @@ namespace Tareas_Pendientes_v2
 		}
 		public static void Añadir(long idCategoria, Lista lista)
 		{
-			if (categorias.ExisteClave(idCategoria) && !categorias[idCategoria].listasDeLaCategoria.Existeix(lista))
+			if (categorias.Contains(idCategoria) && !categorias[idCategoria].listasDeLaCategoria.Contains(lista))
 				categorias[idCategoria].Añadir(lista);
 		}
 		public static void Quitar(long idCategoria, Lista lista)
 		{
-			if (categorias.ExisteClave(idCategoria) && categorias[idCategoria].listasDeLaCategoria.Existeix(lista))
+			if (categorias.Contains(idCategoria) && categorias[idCategoria].listasDeLaCategoria.Contains(lista))
 				categorias[idCategoria].Quitar(lista);
 		}
 		public static XmlNode SaveXmlNodo()
@@ -209,7 +212,7 @@ namespace Tareas_Pendientes_v2
 			if (categoria != null) {
 				for (int i = 0; i < categoria.listasDeLaCategoria.Count; i++)
 					Quitar(categoria.IdUnico, categoria.listasDeLaCategoria[i]);
-				CategoriasLista.Elimina(categoria);
+				CategoriasLista.Remove(categoria);
 			}
 		}
 

@@ -105,7 +105,7 @@ namespace Tareas_Pendientes_v2
             string toString = lista != null && mostrarLista ? lista.ToString() + "->" : "";
             toString += tarea != null ? tarea.ToString() : "";
             if (lista != null && tarea != null)
-                toString += !Tarea.TareasLista(lista).Contains(tarea) ? " #heredada" : "";
+                toString += !((IList<Tarea>)Tarea.TareasLista(lista)).Contains(tarea) ? " #heredada" : "";
             return toString;
         }
         public static ListaTareaHeredada[] ListasTarea(Tarea tarea, bool mostrarLista = true)

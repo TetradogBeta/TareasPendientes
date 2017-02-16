@@ -53,7 +53,7 @@ namespace Tareas_Pendientes_v2
         private void TareaHaEliminar(ObjViewer visor)
         {
             Tarea tarea = visor.Object as Tarea;
-            bool hacer = false,esHeredada= !listaTareas.ExisteObjeto(tarea);
+            bool hacer = false,esHeredada= !listaTareas.Contains(tarea);
             if (ckOmitirPregunta.IsChecked.Value  || !esHeredada&&MessageBox.Show("Se va a borrar de forma permanente, estas seguro?", "se requiere su atención", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes ||esHeredada&&MessageBox.Show("Se va ocultar", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information) == MessageBoxResult.OK)
             {
                 if (esHeredada)
