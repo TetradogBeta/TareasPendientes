@@ -95,11 +95,15 @@ namespace Tareas_Pendientes_v2
 		public XmlNode ToXml()
 		{
 			XmlDocument nodo = new XmlDocument();
-			text nodeText = "<Categoria>";	
-			nodeText &= "<Nombre>" + Nombre.EscaparCaracteresXML() + "</Nombre>";
-			nodeText &= "<IdUnico>" + IdUnico + "</IdUnico>";
-			nodeText &= "</Categoria>";
-			nodo.LoadXml(nodeText);
+			StringBuilder nodeText =new StringBuilder( "<Categoria>");
+            nodeText.Append("<Nombre>");
+            nodeText.Append(Nombre.EscaparCaracteresXML());
+            nodeText.Append("</Nombre>");
+            nodeText.Append("<IdUnico>");
+            nodeText.Append(IdUnico);
+            nodeText.Append("</IdUnico>");
+            nodeText.Append("</Categoria>");
+			nodo.LoadXml(nodeText.ToString());
 			return nodo.FirstChild;
 
 		}
@@ -192,11 +196,11 @@ namespace Tareas_Pendientes_v2
 		public static XmlNode SaveXmlNodo()
 		{
 			XmlDocument xmldoc = new XmlDocument();
-			text txtNodo = "<Categorias>";
+			StringBuilder strNodo =new StringBuilder( "<Categorias>");
 			foreach (Categoria categoria in categorias)
-				txtNodo &= categoria.ToXml().OuterXml;
-			txtNodo &= "</Categorias>";
-			xmldoc.LoadXml(txtNodo);
+				strNodo.Append(categoria.ToXml().OuterXml);
+            strNodo.Append("</Categorias>");
+			xmldoc.LoadXml(strNodo.ToString());
 			xmldoc.Normalize();
 			return xmldoc.FirstChild;
 		}

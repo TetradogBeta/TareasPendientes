@@ -215,12 +215,16 @@ namespace Tareas_Pendientes_v2
         public XmlNode ToXml()
         {
             //por testear
-            text nodeText = "<Tarea>";
+            StringBuilder nodeText =new StringBuilder( "<Tarea>");
             XmlDocument nodo = new XmlDocument();
             ActualizarTexto();
-            nodeText &= "<Descripcion>" + ContenidoConFormato.EscaparCaracteresXML() + "</Descripcion>";
-            nodeText &= "<IdUnico>" + IdUnico + "</IdUnico></Tarea>";
-            nodo.LoadXml(nodeText);
+            nodeText.Append("<Descripcion>");
+            nodeText.Append(ContenidoConFormato.EscaparCaracteresXML());
+            nodeText.Append( "</Descripcion>");
+            nodeText.Append("<IdUnico>");
+            nodeText.Append(IdUnico);
+            nodeText.Append("</IdUnico></Tarea>");
+            nodo.LoadXml(nodeText.ToString());
             return nodo.FirstChild;//mirar si coge el nodo principal
 
         }
