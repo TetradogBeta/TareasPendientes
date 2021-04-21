@@ -1,0 +1,22 @@
+﻿@if (!Equals(Listas, default))
+{
+    @foreach (Lista lista in Listas)
+    {
+        <p @onclick="()=>OnClick.InvokeAsync(lista)">@lista.Nombre</p>
+    }
+    @if (Listas.Count == 0)
+    {
+        <p>Sin Listas a mostrar</p>
+    }
+
+
+}
+else
+{
+    <p>NULL LISTAS</p>
+}
+
+@code {
+    [Parameter] public EventCallback<Lista> OnClick { get; set; }
+    [Parameter] public List<Lista> Listas { get; set; }
+}

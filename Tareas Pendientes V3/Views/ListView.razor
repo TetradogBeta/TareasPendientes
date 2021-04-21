@@ -1,0 +1,17 @@
+﻿@if (!Equals(ListaValue, default))
+{
+    <p>@ListaValue.Nombre</p>
+    @foreach (Tarea tarea in ListaValue.GetVisibles())
+    {
+        <VisorTarea TareaValue="tarea" />
+    }
+}
+else
+{
+    <p>NULL LISTA</p>
+}
+
+@code {
+    [Parameter] public Lista ListaValue { get; set; }
+
+}

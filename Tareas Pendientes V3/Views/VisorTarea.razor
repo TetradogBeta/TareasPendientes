@@ -1,0 +1,16 @@
+﻿
+@if (!Equals(TareaValue, default))
+{
+
+    <InputText @bind-Value="TareaValue.ContenidoConFormato" />
+}
+else
+{
+    <p>NULL TAREA</p>
+}
+
+@code {
+
+    [Parameter] public Tarea TareaValue { get; set; }
+
+}

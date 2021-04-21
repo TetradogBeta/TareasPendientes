@@ -1,0 +1,17 @@
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\Tareas Pendientes v2.csprojAssemblyReference.cache
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\DesocultarTareas.baml
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\DispatcherHide.baml
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\BuscarLista.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\BuscarTarea.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\CategoriasManager.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\DesocultarTareas.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\DispatcherHide.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\EditorCategoriasLista.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\EditorHerenciaLista.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\EliminarTareas.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\MainWindow.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\ModificarNombreCategorias.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\VisorTarea.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\App.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\Tareas Pendientes v2_MarkupCompile.cache
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes v2\obj\Debug\Tareas Pendientes v2_MarkupCompile.lref

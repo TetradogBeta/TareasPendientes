@@ -1,0 +1,16 @@
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\Tareas Pendientes V3.csprojAssemblyReference.cache
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\Tareas Pendientes V3.AssemblyInfoInputs.cache
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\Tareas Pendientes V3.AssemblyInfo.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\Tareas Pendientes V3.RazorComponent.input.cache
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\App.razor.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\Pages\Counter.razor.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\Pages\FetchData.razor.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\Pages\Index.razor.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\Shared\MainLayout.razor.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\Shared\NavMenu.razor.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\Shared\SurveyPrompt.razor.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\_Imports.razor.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\Tareas Pendientes V3.RazorComponent.output.cache
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\Views\ListasViewer.razor.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\Views\ListView.razor.g.cs
+C:\Users\tetra\Source\Repos\TetradogBeta\TareasPendientes\Tareas Pendientes V3\obj\Debug\netstandard2.1\RazorDeclaration\Views\VisorTarea.razor.g.cs
