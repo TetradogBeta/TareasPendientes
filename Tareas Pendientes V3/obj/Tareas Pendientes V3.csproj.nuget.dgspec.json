@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tetra\\Source\\Repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj": {}
+    "C:\\Users\\tetra\\source\\repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tetra\\Source\\Repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj": {
+    "C:\\Users\\tetra\\source\\repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tetra\\Source\\Repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj",
+        "projectUniqueName": "C:\\Users\\tetra\\source\\repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj",
         "projectName": "Tareas Pendientes V3",
-        "projectPath": "C:\\Users\\tetra\\Source\\Repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj",
+        "projectPath": "C:\\Users\\tetra\\source\\repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj",
         "packagesPath": "C:\\Users\\tetra\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tetra\\Source\\Repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\obj\\",
+        "outputPath": "C:\\Users\\tetra\\source\\repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
@@ -69,6 +69,10 @@
             "System.Net.Http.Json": {
               "target": "Package",
               "version": "[3.2.0, )"
+            },
+            "TG.Blazor.IndexedDB": {
+              "target": "Package",
+              "version": "[1.5.0-preview, )"
             }
           },
           "imports": [

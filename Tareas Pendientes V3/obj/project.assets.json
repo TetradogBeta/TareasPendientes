@@ -487,6 +487,25 @@
         "runtime": {
           "lib/netstandard2.0/System.Threading.Tasks.Extensions.dll": {}
         }
+      },
+      "TG.Blazor.IndexedDB/1.5.0-preview": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "3.1.0",
+          "Microsoft.AspNetCore.Components.Web": "3.1.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/TG.Blazor.IndexedDB.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/TG.Blazor.IndexedDB.dll": {}
+        },
+        "build": {
+          "buildTransitive/TG.Blazor.IndexedDB.props": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/TG.Blazor.IndexedDB.props": {}
+        }
       }
     }
   },
@@ -1829,6 +1848,23 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "TG.Blazor.IndexedDB/1.5.0-preview": {
+      "sha512": "wvqdZZqpwOuNJ1gW3KXvEugPlT4UiAhrnhIlGnWv18lf/H9iEaMGPbEZUdy/uzejyYC3541AXsKlX2ZhoW0QUA==",
+      "type": "package",
+      "path": "tg.blazor.indexeddb/1.5.0-preview",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/Microsoft.AspNetCore.StaticWebAssets.props",
+        "build/TG.Blazor.IndexedDB.props",
+        "buildMultiTargeting/TG.Blazor.IndexedDB.props",
+        "buildTransitive/TG.Blazor.IndexedDB.props",
+        "lib/netstandard2.0/TG.Blazor.IndexedDB.dll",
+        "staticwebassets/indexedDb.Blazor.js",
+        "tg.blazor.indexeddb.1.5.0-preview.nupkg.sha512",
+        "tg.blazor.indexeddb.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -1838,7 +1874,8 @@
       "Microsoft.AspNetCore.Components.WebAssembly >= 3.2.1",
       "Microsoft.AspNetCore.Components.WebAssembly.Build >= 3.2.1",
       "Microsoft.AspNetCore.Components.WebAssembly.DevServer >= 3.2.1",
-      "System.Net.Http.Json >= 3.2.0"
+      "System.Net.Http.Json >= 3.2.0",
+      "TG.Blazor.IndexedDB >= 1.5.0-preview"
     ]
   },
   "packageFolders": {
@@ -1848,11 +1885,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tetra\\Source\\Repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj",
+      "projectUniqueName": "C:\\Users\\tetra\\source\\repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj",
       "projectName": "Tareas Pendientes V3",
-      "projectPath": "C:\\Users\\tetra\\Source\\Repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj",
+      "projectPath": "C:\\Users\\tetra\\source\\repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj",
       "packagesPath": "C:\\Users\\tetra\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tetra\\Source\\Repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\obj\\",
+      "outputPath": "C:\\Users\\tetra\\source\\repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
@@ -1910,6 +1947,10 @@
           "System.Net.Http.Json": {
             "target": "Package",
             "version": "[3.2.0, )"
+          },
+          "TG.Blazor.IndexedDB": {
+            "target": "Package",
+            "version": "[1.5.0-preview, )"
           }
         },
         "imports": [

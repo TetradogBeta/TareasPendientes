@@ -1,4 +1,6 @@
 ﻿using Gabriel.Cat.S.Binaris;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +10,19 @@ namespace Tareas_Pendientes_V3
 {
     public class Data:IElementoBinarioComplejo
     {
+        class DataHelper
+        {
+            [Inject]
+            public IJSRuntime JavaScript { get; set; }
+        }
         public const string BDNAME = "bdTareasPendientes";
         public static readonly ElementoBinario Serializador = ElementoBinario.GetSerializador<Data>();
+        [IgnoreSerialitzer]
+        public static Data DataBase { get; set; }
+
+
+
+
         public SortedList<long, Categoria> Categorias { get; set; } = new SortedList<long, Categoria>();
         public SortedList<long, Lista> Listas { get; set; } = new SortedList<long, Lista>();
         public SortedList<long, Tarea> Tareas { get; set; } = new SortedList<long, Tarea>();
@@ -19,18 +32,18 @@ namespace Tareas_Pendientes_V3
 
 
         public static Data Get(byte[] dataBytes) => (Data)Serializador.GetObject(dataBytes);
-        public static Data Load()
+        public static async Task Load()
         {
-            Data data;
-            if (false)
+            DataHelper dataHelper = new DataHelper();
+            if (await dataHelper.JavaScript.InvokeAsync<bool>("ExistBD",BDNAME))
             {
 
             }
             else
             {
-                data = new Data();
+                DataBase = new Data();
             }
-            return data;
+
         }
         public static void Save(Data bd)
         {

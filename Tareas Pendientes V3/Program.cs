@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using TG.Blazor.IndexedDB;
 
 namespace Tareas_Pendientes_V3
 {
@@ -18,7 +19,19 @@ namespace Tareas_Pendientes_V3
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddIndexedDB(dbStore =>
+            {
+                dbStore.DbName = "BD"; //example name
+                dbStore.Version = 1;
 
+                dbStore.Stores.Add(new StoreSchema
+                {
+                    Name = "StringSave",
+                    PrimaryKey = new IndexSpec { Auto = true }
+
+                }
+                    );
+            });
             await builder.Build().RunAsync();
         }
     }

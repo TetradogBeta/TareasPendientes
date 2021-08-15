@@ -10,15 +10,17 @@
     </div>
 
     <div class="content px-4">
-        <CascadingValue Value="@DataBase">
+    
             @Body
-        </CascadingValue>
+ 
     </div>
 </div>
 
 @code{
-
-    public Data DataBase { get; set; } = Data.Load();
-
+        protected override Task OnInitializedAsync()
+        {
+            await Data.Load();
+            return base.OnInitializedAsync();
+        }
 
 }

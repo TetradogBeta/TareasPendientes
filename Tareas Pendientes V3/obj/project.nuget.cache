@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OaKUK1sGDvqk65kM7hl/aL1YEd/byBwIZbUuubFENKU9b03n4Sh4HydPkRTW+CaU4EQ+8qsxTZ90xirUE+hf2Q==",
+  "dgSpecHash": "UGQ5x88sBWnVW3G+lol/IjchBp6M1GZWSEC0Ikw70eBl/ZZJTD5zavlkWdfPQc7Z43vdSTyz/2xJEOsOlYRAsA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\tetra\\Source\\Repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj",
+  "projectFilePath": "C:\\Users\\tetra\\source\\repos\\TetradogBeta\\TareasPendientes\\Tareas Pendientes V3\\Tareas Pendientes V3.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tetra\\.nuget\\packages\\gabriel.cat.s.binaris\\1.1.4\\gabriel.cat.s.binaris.1.1.4.nupkg.sha512",
     "C:\\Users\\tetra\\.nuget\\packages\\gabriel.cat.s.seguretat\\1.0.2.2-preview1.0.7\\gabriel.cat.s.seguretat.1.0.2.2-preview1.0.7.nupkg.sha512",
@@ -45,7 +45,8 @@
     "C:\\Users\\tetra\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.7.1\\system.runtime.compilerservices.unsafe.4.7.1.nupkg.sha512",
     "C:\\Users\\tetra\\.nuget\\packages\\system.text.encodings.web\\4.7.1\\system.text.encodings.web.4.7.1.nupkg.sha512",
     "C:\\Users\\tetra\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512",
-    "C:\\Users\\tetra\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512"
+    "C:\\Users\\tetra\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
+    "C:\\Users\\tetra\\.nuget\\packages\\tg.blazor.indexeddb\\1.5.0-preview\\tg.blazor.indexeddb.1.5.0-preview.nupkg.sha512"
   ],
   "logs": []
 }
